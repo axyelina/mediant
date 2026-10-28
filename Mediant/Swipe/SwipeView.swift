@@ -159,7 +159,6 @@ struct SwipeView: View {
                 HStack {
                     Chip("‹ Back") { dismiss() }
                     Spacer()
-                    Chip("👹 \(model.store.trashCount)") { model.openTrash() }
                 }
                 .padding(.horizontal, 12)
                 .padding(.top, proxy.safeAreaInsets.top + 52)
@@ -177,7 +176,12 @@ struct SwipeView: View {
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundStyle(.white.opacity(0.75))
                             .monospacedDigit()
-                        Spacer()
+                            // On a video row the chips come first; the size shrinks before they do.
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                            .layoutPriority(-1)
+                        Spacer(minLength: 0)
+                        trashChip
                         Chip("↶ Undo") { undo(session, width: proxy.size.width) }
                             .opacity(session.canUndo ? 1 : 0.4)
                             .disabled(!session.canUndo)
@@ -207,8 +211,14 @@ struct SwipeView: View {
             Text("All done").font(.title2.bold())
             HStack(spacing: 10) {
                 Chip("↶ Undo") { undo(session, width: width) }
+                trashChip
                 Chip("Back to album") { dismiss() }
             }
         }
+    }
+
+    /// 👹 with the Trash count; a tap opens the Trash tab.
+    private var trashChip: some View {
+        Chip("👹 \(model.store.trashCount)") { model.openTrash() }
     }
 }
