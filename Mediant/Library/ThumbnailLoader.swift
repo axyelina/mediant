@@ -7,25 +7,26 @@ final class ThumbnailLoader {
     private let manager = PHCachingImageManager()
     private var assets: [String: PHAsset] = [:]
 
-    func image(for id: String, target: CGSize, contentMode: PHImageContentMode = .aspectFill) async -> UIImage? {
-        guard let asset = asset(for: id) else { return nil }
+    /// A quick low-quality image first (when PhotoKit has one), then the full-quality image.
+    /// Downloads from iCloud when needed. Ending the iteration cancels the request.
+    func images(for id: String, target: CGSize,
+                contentMode: PHImageContentMode = .aspectFill) -> AsyncStream<UIImage> {
+        guard let asset = asset(for: id) else { return AsyncStream { $0.finish() } }
         let options = PHImageRequestOptions()
-        options.deliveryMode = .highQualityFormat
+        options.deliveryMode = .opportunistic
         options.resizeMode = .fast
         options.isNetworkAccessAllowed = true
         let scale = UIScreen.main.scale
         let pixels = CGSize(width: target.width * scale, height: target.height * scale)
         let manager = manager
-        let request = RequestBox()
-        return await withTaskCancellationHandler {
-            await withCheckedContinuation { continuation in
-                request.id = manager.requestImage(for: asset, targetSize: pixels, contentMode: contentMode,
-                                                  options: options) { image, _ in
-                    continuation.resume(returning: image)
-                }
+        return AsyncStream { continuation in
+            let requestID = manager.requestImage(for: asset, targetSize: pixels, contentMode: contentMode,
+                                                 options: options) { image, info in
+                if let image { continuation.yield(image) }
+                let degraded = (info?[PHImageResultIsDegradedKey] as? Bool) ?? false
+                if !degraded { continuation.finish() }
             }
-        } onCancel: {
-            if let id = request.id { manager.cancelImageRequest(id) }
+            continuation.onTermination = { _ in manager.cancelImageRequest(requestID) }
         }
     }
 
@@ -56,15 +57,4 @@ final class ThumbnailLoader {
 /// PHAsset is immutable but not marked Sendable.
 private struct AssetBox: @unchecked Sendable {
     let assets: [PHAsset]
-}
-
-/// Holds a request id that the cancel handler reads from another thread.
-private final class RequestBox: @unchecked Sendable {
-    private let lock = NSLock()
-    private var value: PHImageRequestID?
-
-    var id: PHImageRequestID? {
-        get { lock.withLock { value } }
-        set { lock.withLock { value = newValue } }
-    }
 }

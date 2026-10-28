@@ -26,9 +26,13 @@ struct AssetImage: View {
             .contentShape(Rectangle())
             .task(id: TaskKey(id: id, size: proxy.size)) {
                 guard proxy.size.width > 0 else { return }
-                image = await model.thumbs.image(
+                let stream = model.thumbs.images(
                     for: id, target: proxy.size,
                     contentMode: contentMode == .fill ? .aspectFill : .aspectFit)
+                for await next in stream {
+                    guard !Task.isCancelled else { return }
+                    image = next
+                }
             }
         }
     }

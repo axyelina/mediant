@@ -21,7 +21,7 @@ struct SwipeView: View {
                 Color.black
                 if let session {
                     if session.isFinished {
-                        finished
+                        finished(session, width: width)
                     } else {
                         pages(session, width: width)
                             .gesture(drag(session, width: width))
@@ -57,17 +57,17 @@ struct SwipeView: View {
     // MARK: Pages
 
     /// The current photo follows the finger; the next one slides in from the other side.
+    /// Pages are keyed by photo id, so the next page keeps its loaded image when it becomes current.
     private func pages(_ session: SwipeSession, width: CGFloat) -> some View {
-        let next = session.index + 1
+        let current = route.assets[session.index]
+        let next = route.assets.indices.contains(session.index + 1) ? [route.assets[session.index + 1]] : []
         return ZStack {
-            if route.assets.indices.contains(next) {
-                PhotoPage(asset: route.assets[next])
-                    .offset(x: dragX <= 0 ? width + dragX : -width + dragX)
+            ForEach(next + [current]) { asset in
+                PhotoPage(asset: asset)
+                    .offset(x: asset.id == current.id ? dragX
+                            : (dragX <= 0 ? width + dragX : -width + dragX))
             }
-            PhotoPage(asset: route.assets[session.index])
-                .offset(x: dragX)
         }
-        .id(session.index)
     }
 
     private func drag(_ session: SwipeSession, width: CGFloat) -> some Gesture {
@@ -112,10 +112,13 @@ struct SwipeView: View {
             // Start where the photo left the screen, then slide it back.
             dragX = last == .trashed ? -width : width
         }
-        withAnimation(.easeOut(duration: 0.25)) {
-            dragX = 0
-        } completion: {
-            isAnimating = false
+        // Next run loop, so the start position is rendered before the slide.
+        DispatchQueue.main.async {
+            withAnimation(.easeOut(duration: 0.25)) {
+                dragX = 0
+            } completion: {
+                isAnimating = false
+            }
         }
     }
 
@@ -172,11 +175,14 @@ struct SwipeView: View {
         return "▶ \(seconds / 60):\(String(format: "%02d", seconds % 60))  \(size)"
     }
 
-    private var finished: some View {
+    private func finished(_ session: SwipeSession, width: CGFloat) -> some View {
         VStack(spacing: 12) {
             Text("✨").font(.system(size: 52))
             Text("All done").font(.title2.bold())
-            Chip("Back to album") { dismiss() }
+            HStack(spacing: 10) {
+                Chip("↶ Undo") { undo(session, width: width) }
+                Chip("Back to album") { dismiss() }
+            }
         }
     }
 }
