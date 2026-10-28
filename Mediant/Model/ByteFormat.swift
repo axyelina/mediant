@@ -18,3 +18,8 @@ enum ByteFormat {
         return "\(number) \(units[unit])"
     }
 }
+
+/// "1 photo", "3 photos".
+func counted(_ count: Int, _ singular: String, _ plural: String) -> String {
+    "\(count.formatted()) \(count == 1 ? singular : plural)"
+}

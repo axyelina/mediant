@@ -29,3 +29,8 @@ struct ByteFormatTests {
         #expect(ByteFormat.string(nil) == "—")
     }
 }
+
+struct CountedTests {
+    @Test func singular() { #expect(counted(1, "photo", "photos") == "1 photo") }
+    @Test func plural() { #expect(counted(3, "photo", "photos") == "3 photos") }
+}

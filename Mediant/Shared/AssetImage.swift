@@ -18,9 +18,12 @@ struct AssetImage: View {
                         .resizable()
                         .aspectRatio(contentMode: contentMode)
                         .frame(width: proxy.size.width, height: proxy.size.height)
+                        // A filled image overflows its frame; .clipped() hides that part but it would still take taps.
+                        .allowsHitTesting(false)
                 }
             }
             .clipped()
+            .contentShape(Rectangle())
             .task(id: TaskKey(id: id, size: proxy.size)) {
                 guard proxy.size.width > 0 else { return }
                 image = await model.thumbs.image(

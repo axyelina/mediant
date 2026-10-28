@@ -20,7 +20,7 @@ struct AlbumRow: View {
                 Text(album.title)
                     .font(.body.weight(.semibold))
                     .lineLimit(1)
-                Text("\(album.count.formatted()) items · \(size.map { ByteFormat.string($0) } ?? "…")")
+                Text("\(counted(album.count, "item", "items")) · \(size.map { ByteFormat.string($0) } ?? "…")")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .monospacedDigit()

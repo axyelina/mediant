@@ -23,6 +23,7 @@ struct AlbumGridView: View {
                             .aspectRatio(1, contentMode: .fit)
                             .overlay { AssetImage(id: asset.id) }
                             .clipped()
+                            .contentShape(Rectangle())
                             .overlay(alignment: .bottomTrailing) {
                                 DecisionBadge(decision: model.store.decision(for: asset.id))
                                     .padding(3)

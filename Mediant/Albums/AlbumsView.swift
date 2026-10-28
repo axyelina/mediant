@@ -9,7 +9,7 @@ struct AlbumsView: View {
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Albums").font(.largeTitle.bold())
-                    Text("\(model.albums.count) albums · \(ByteFormat.string(model.sizes.total))")
+                    Text("\(counted(model.albums.count, "album", "albums")) · \(ByteFormat.string(model.sizes.total))")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }

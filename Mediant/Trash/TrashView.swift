@@ -13,7 +13,7 @@ struct TrashView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Trash").font(.largeTitle.bold())
                     Text(ids.isEmpty ? "Nothing to delete"
-                         : "\(ids.count) photos · \(ByteFormat.string(trash.totalBytes)) to free")
+                         : "\(counted(ids.count, "photo", "photos")) · \(ByteFormat.string(trash.totalBytes)) to free")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
