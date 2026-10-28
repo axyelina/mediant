@@ -7,6 +7,8 @@ struct SwipeView: View {
 
     @State private var session: SwipeSession?
     @State private var dragX: CGFloat = 0
+    /// How far the top card has moved up on a skip (a tap on the photo).
+    @State private var skipY: CGFloat = 0
     @State private var isAnimating = false
     @State private var justDecidedID: String?
     @State private var currentSize: Int64?
@@ -23,7 +25,8 @@ struct SwipeView: View {
                     if session.isFinished {
                         finished(session, width: width)
                     } else {
-                        pages(session, width: width)
+                        pages(session, width: width, height: proxy.size.height)
+                            .onTapGesture { skip(session, height: proxy.size.height) }
                             .gesture(drag(session, width: width))
                         SparkleEdge(side: .leading, color: Color(red: 0x47 / 255, green: 0x01 / 255, blue: 0x12 / 255), // #470112
                                     progress: dragX < 0 ? progress : 0)
@@ -59,10 +62,10 @@ struct SwipeView: View {
     /// The current photo is a card on top: it follows the finger and tilts. The next one waits
     /// behind it, smaller and darker, and comes forward as the top card leaves.
     /// Pages are keyed by photo id, so the next page keeps its loaded image when it becomes current.
-    private func pages(_ session: SwipeSession, width: CGFloat) -> some View {
+    private func pages(_ session: SwipeSession, width: CGFloat, height: CGFloat) -> some View {
         let current = route.assets[session.index]
         let next = route.assets.indices.contains(session.index + 1) ? [route.assets[session.index + 1]] : []
-        let lift = min(abs(dragX) / width, 1)
+        let lift = min(max(abs(dragX) / width, -skipY / height), 1)
         return ZStack {
             ForEach(next + [current]) { asset in
                 let isCurrent = asset.id == current.id
@@ -71,7 +74,7 @@ struct SwipeView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 44, style: .continuous))
                     .scaleEffect(isCurrent ? 1 : 0.9 + 0.1 * lift)
                     .rotationEffect(.degrees(isCurrent ? Double(dragX / width) * 12 : 0), anchor: .bottom)
-                    .offset(x: isCurrent ? dragX : 0)
+                    .offset(x: isCurrent ? dragX : 0, y: isCurrent ? skipY : 0)
             }
         }
     }
@@ -107,6 +110,21 @@ struct SwipeView: View {
                 session.commit(decision)
                 dragX = 0
                 justDecidedID = id
+            }
+            isAnimating = false
+        }
+    }
+
+    /// A tap skips the photo without a decision: the card slides up and away.
+    private func skip(_ session: SwipeSession, height: CGFloat) {
+        guard !isAnimating else { return }
+        isAnimating = true
+        withAnimation(.easeOut(duration: 0.26)) {
+            skipY = -height
+        } completion: {
+            withTransaction(Transaction(animation: nil)) {
+                session.skip()
+                skipY = 0
             }
             isAnimating = false
         }
