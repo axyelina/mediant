@@ -182,7 +182,7 @@ struct SwipeView: View {
                             .layoutPriority(-1)
                         Spacer(minLength: 0)
                         trashChip
-                        Chip("↶ Undo") { undo(session, width: proxy.size.width) }
+                        Chip("Undo", systemImage: "arrow.uturn.backward") { undo(session, width: proxy.size.width) }
                             .opacity(session.canUndo ? 1 : 0.4)
                             .disabled(!session.canUndo)
                     }
@@ -210,7 +210,7 @@ struct SwipeView: View {
             Text("✨").font(.system(size: 52))
             Text("All done").font(.title2.bold())
             HStack(spacing: 10) {
-                Chip("↶ Undo") { undo(session, width: width) }
+                Chip("Undo", systemImage: "arrow.uturn.backward") { undo(session, width: width) }
                 trashChip
                 Chip("Back to album") { dismiss() }
             }
