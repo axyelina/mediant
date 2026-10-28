@@ -55,6 +55,7 @@
 		EB27CD0DC0A0B7FE0F71A8CA /* SparkleEdge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A595E3ABDA82A784967D1E7F /* SparkleEdge.swift */; };
 		F8F146944C7BCAD72CCD6D46 /* VideoChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34CF208F84D5FB318096324 /* VideoChip.swift */; };
 		F9BFFA33DC9D45F5079F5D23 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546E9F75E86C23A57490AF4E /* RootView.swift */; };
+		FC6A31CCB5F7E99F559C2839 /* VideoPlaybackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37AF4CF122A661D00503B634 /* VideoPlaybackTests.swift */; };
 		FE70965FAE9D255EAC735065 /* PhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD5CB41372FAC9EE3F0CBA71 /* PhotoLibrary.swift */; };
 /* End PBXBuildFile section */
 
@@ -81,6 +82,7 @@
 		248F0EF6254F25A97A9C9EA6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		26A3453BBE0FA1771FD7AD6B /* PhotoKitLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoKitLibrary.swift; sourceTree = "<group>"; };
 		2BD7C31EE7E1AEFDDDBCA0D2 /* DecisionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecisionStore.swift; sourceTree = "<group>"; };
+		37AF4CF122A661D00503B634 /* VideoPlaybackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlaybackTests.swift; sourceTree = "<group>"; };
 		37F1AE4C1CC02F43ABBD6FE6 /* DecisionStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecisionStoreTests.swift; sourceTree = "<group>"; };
 		39964D3CAF40E333CE9F38C2 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		3F7D283517554BB3A2827263 /* Decision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decision.swift; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 				8F530D0E120C59DE789626A5 /* LaunchArtTests.swift */,
 				F262B57EB936D37E5D6FC508 /* SwipeSessionTests.swift */,
 				0DF25DA03F55B8498FBFD915 /* TrashModelTests.swift */,
+				37AF4CF122A661D00503B634 /* VideoPlaybackTests.swift */,
 				154BAE9761BE3D8FA460D5B2 /* VideoTimeTests.swift */,
 			);
 			path = MediantTests;
@@ -389,6 +392,7 @@
 				179E9308DA080B68CE601AD0 /* LaunchArtTests.swift in Sources */,
 				90A74C7C422D8768658B0F92 /* SwipeSessionTests.swift in Sources */,
 				086B5CFA3DE3F8100E85CBC1 /* TrashModelTests.swift in Sources */,
+				FC6A31CCB5F7E99F559C2839 /* VideoPlaybackTests.swift in Sources */,
 				69CB4BC3F5B987A4F84FCB4D /* VideoTimeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

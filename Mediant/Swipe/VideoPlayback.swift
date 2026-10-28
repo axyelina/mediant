@@ -16,6 +16,8 @@ final class VideoPlayback {
     /// Remembered between launches; muted until the user turns the sound on.
     private(set) var isMuted = UserDefaults.standard.object(forKey: mutedKey) as? Bool ?? true
     private(set) var isScrubbing = false
+    /// Paused by the user; a new video always starts playing.
+    private(set) var isPaused = false
 
     @ObservationIgnored private var looper: AVPlayerLooper?
     @ObservationIgnored private var timeObserver: Any?
@@ -39,6 +41,7 @@ final class VideoPlayback {
         self.id = id
         self.duration = duration
         time = 0
+        isPaused = false
         player.play()
     }
 
@@ -51,6 +54,12 @@ final class VideoPlayback {
         isMuted.toggle()
         player?.isMuted = isMuted
         UserDefaults.standard.set(isMuted, forKey: Self.mutedKey)
+    }
+
+    func togglePaused() {
+        guard let player else { return }
+        isPaused.toggle()
+        if isPaused { player.pause() } else if !isScrubbing { player.play() }
     }
 
     func beginScrub() {
@@ -70,7 +79,7 @@ final class VideoPlayback {
     func endScrub() {
         guard isScrubbing else { return }
         isScrubbing = false
-        player?.play()
+        if !isPaused { player?.play() }
     }
 
     private func stop() {
@@ -81,6 +90,7 @@ final class VideoPlayback {
         player = nil
         id = nil
         isScrubbing = false
+        isPaused = false
         time = 0
     }
 }
