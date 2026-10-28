@@ -8,6 +8,7 @@ final class SwipeSession {
         let index: Int
         let id: String
         let previous: Decision?
+        let decision: Decision
     }
 
     let assetIDs: [String]
@@ -24,10 +25,12 @@ final class SwipeSession {
     var isFinished: Bool { index >= assetIDs.count }
     var currentID: String? { isFinished ? nil : assetIDs[index] }
     var canUndo: Bool { !history.isEmpty }
+    /// The decision that `undo()` would revert.
+    var lastCommitted: Decision? { history.last?.decision }
 
     func commit(_ decision: Decision) {
         guard let id = currentID else { return }
-        history.append(Step(index: index, id: id, previous: store.decision(for: id)))
+        history.append(Step(index: index, id: id, previous: store.decision(for: id), decision: decision))
         store.set(decision, for: id)
         index += 1
     }

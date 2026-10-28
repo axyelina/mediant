@@ -14,7 +14,10 @@ struct RootView: View {
                         NavigationStack(path: $model.albumsPath) {
                             AlbumsView()
                                 .navigationDestination(for: AlbumInfo.self) { album in
-                                    Text(album.title)
+                                    AlbumGridView(album: album)
+                                }
+                                .navigationDestination(for: SwipeRoute.self) { route in
+                                    SwipeView(route: route)
                                 }
                         }
                     case .trash:

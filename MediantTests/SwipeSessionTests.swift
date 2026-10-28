@@ -56,6 +56,17 @@ struct SwipeSessionTests {
         #expect(store.decision(for: "b") == nil)
     }
 
+    @Test func lastCommittedTellsUndoDirection() {
+        let session = SwipeSession(assetIDs: ["a", "b"], startIndex: 0, store: store)
+        #expect(session.lastCommitted == nil)
+        session.commit(.trashed)
+        #expect(session.lastCommitted == .trashed)
+        session.commit(.kept)
+        #expect(session.lastCommitted == .kept)
+        session.undo()
+        #expect(session.lastCommitted == .trashed)
+    }
+
     @Test func jumpClamps() {
         let session = SwipeSession(assetIDs: ["a", "b", "c"], startIndex: 0, store: store)
         session.jump(to: 2)

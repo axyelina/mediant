@@ -40,6 +40,7 @@ struct AlbumsView: View {
             .padding(.top, 8)
             .padding(.bottom, FloatingTabBar.height + 24)
         }
+        .navigationTitle("Albums")
         .toolbar(.hidden, for: .navigationBar)
         .refreshable { await model.reload() }
     }

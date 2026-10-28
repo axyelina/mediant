@@ -11,7 +11,8 @@ struct AssetImage: View {
     var body: some View {
         GeometryReader { proxy in
             ZStack {
-                Color(white: 0.12)
+                // A fitted image keeps whatever is behind it visible.
+                if contentMode == .fill { Color(white: 0.12) }
                 if let image {
                     Image(uiImage: image)
                         .resizable()
