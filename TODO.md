@@ -27,6 +27,8 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
         developers (guidelines 3.1.1 / 3.2.2); the alternative is an in-app "tip" purchase, which
         is in-app purchase. Check the current rules before choosing.
       - Maybe "About" fits better than "Settings" while there is nothing to set.
+- [ ] **Album order.** Always show Favorites, Recently Added, Videos, Screenshots and Selfies
+      first, in this order; the other albums follow.
 
 ## From Claude
 
