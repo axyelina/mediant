@@ -12,8 +12,9 @@ simulator, even if one is booted or the panel is attached elsewhere.
    `device: "Median't iPhone 16"`. If it errors because the sim isn't booted, do step 2 and retry.
 2. **Sample photos (first time on a sim):** `.claude/skills/run-sim/scripts/seed-photos.sh`
    draws 40 local images in mixed shapes (portrait, landscape, square, panorama, screenshot-tall)
-   and adds them with `simctl addmedia`. It runs once per simulator (marker file); `--force` adds
-   another batch. No downloads.
+   plus 4 short videos (`make-videos.swift`: a moving ball inside a white frame, so cropping is easy
+   to spot) and adds them with `simctl addmedia`. It runs once per simulator (marker file);
+   `--force` adds another batch, `--videos` adds only the videos. No downloads.
 3. **Build and launch:** `.claude/skills/run-sim/scripts/run.sh` from the repo root (long
    timeout; a clean build takes a minute or two). The script finds or creates the simulator,
    boots it, sets dark appearance, regenerates the Xcode project if `project.yml` changed, builds

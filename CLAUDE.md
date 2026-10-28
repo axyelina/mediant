@@ -58,7 +58,8 @@ It is kept in **dark appearance**. Use the `run-sim` skill (`.claude/skills/run-
 ```bash
 .claude/skills/run-sim/scripts/run.sh          # build, install, launch on the dedicated sim
 .claude/skills/run-sim/scripts/run.sh --test   # unit tests (replaces the running app!)
-.claude/skills/run-sim/scripts/seed-photos.sh  # add 40 generated sample photos (once per sim)
+.claude/skills/run-sim/scripts/seed-photos.sh  # add 40 generated sample photos + 4 videos (once per sim)
+.claude/skills/run-sim/scripts/seed-photos.sh --videos  # add only the 4 sample videos
 ```
 
 Real iPhone (the user's phone `LINK`): `.claude/skills/run-device/scripts/run-device.sh` — see the

@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
-# Adds generated sample photos (mixed shapes) to the dedicated "Median't iPhone 16" simulator.
-# Runs once per simulator; pass --force to add another batch. Usage: seed-photos.sh [--force] [count]
+# Adds generated sample photos and videos (mixed shapes) to the dedicated "Median't iPhone 16" simulator.
+# Runs once per simulator; pass --force to add another batch, --videos to add only the sample videos.
+# Usage: seed-photos.sh [--force | --videos] [count]
 set -euo pipefail
 
 SIM_NAME="Median't iPhone 16"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 FORCE=0
+VIDEOS_ONLY=0
 [[ "${1:-}" == "--force" ]] && { FORCE=1; shift; }
+[[ "${1:-}" == "--videos" ]] && { VIDEOS_ONLY=1; shift; }
 COUNT="${1:-40}"
 
 UDID=$(xcrun simctl list devices -j | python3 -c "
@@ -19,15 +22,24 @@ for devs in json.load(sys.stdin)['devices'].values():
 [[ -z "$UDID" ]] && { echo "Simulator $SIM_NAME not found; run run.sh first" >&2; exit 1; }
 
 MARKER="$HOME/Library/Developer/CoreSimulator/Devices/$UDID/data/.mediant-seeded"
+xcrun simctl boot "$UDID" 2>/dev/null || true
+OUT="$(mktemp -d)"
+trap 'rm -rf "$OUT"' EXIT
+
+if [[ $VIDEOS_ONLY == 1 ]]; then
+  swift "$HERE/make-videos.swift" "$OUT"
+  xcrun simctl addmedia "$UDID" "$OUT"/*.mp4
+  echo "Added sample videos to $SIM_NAME"
+  exit 0
+fi
+
 if [[ -f "$MARKER" && $FORCE == 0 ]]; then
   echo "Already seeded ($MARKER). Use --force to add more."
   exit 0
 fi
 
-xcrun simctl boot "$UDID" 2>/dev/null || true
-OUT="$(mktemp -d)"
 swift "$HERE/make-photos.swift" "$OUT" "$COUNT"
-xcrun simctl addmedia "$UDID" "$OUT"/*.jpg
-rm -rf "$OUT"
+swift "$HERE/make-videos.swift" "$OUT"
+xcrun simctl addmedia "$UDID" "$OUT"/*.jpg "$OUT"/*.mp4
 touch "$MARKER"
-echo "Added $COUNT photos to $SIM_NAME"
+echo "Added $COUNT photos and sample videos to $SIM_NAME"
