@@ -1,6 +1,7 @@
 import SwiftUI
 
 /// Small previews of the album at the bottom of the swipe screen; the current one is centered.
+/// Drag the strip to scroll it: on release, the tile nearest the middle becomes the current photo.
 ///
 /// No ScrollView: every tile's position is calculated from the current photo, so one animation
 /// moves all tiles and resizes the current one together. (A scroll view animating to a target
@@ -19,6 +20,9 @@ struct PreviewStrip: View {
     /// Tiles drawn on each side of the current one; more than enough to fill the screen.
     private static let reach = 30
 
+    /// How far the strip is dragged; 0 while not dragging.
+    @State private var scroll: CGFloat = 0
+
     var body: some View {
         GeometryReader { proxy in
             let centers = Self.centers(around: currentIndex, in: assets)
@@ -31,13 +35,35 @@ struct PreviewStrip: View {
                                 size: size,
                                 isCurrent: index == currentIndex,
                                 animateBadge: asset.id == justDecidedID)
-                        .position(x: proxy.size.width / 2 + centers[index]!, y: proxy.size.height / 2)
+                        .position(x: proxy.size.width / 2 + centers[index]! + scroll, y: proxy.size.height / 2)
                         .onTapGesture { onSelect(index) }
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .contentShape(Rectangle())
+            .gesture(scrollDrag)
             .animation(.spring(response: 0.35, dampingFraction: 0.85), value: currentIndex)
         }
         .frame(height: Self.currentHeight + 4)
+    }
+
+    private var scrollDrag: some Gesture {
+        DragGesture(minimumDistance: 6)
+            .onChanged { value in
+                let range = Self.scrollRange(around: currentIndex, in: assets)
+                let x = value.translation.width
+                // Past the first or last tile the strip moves less, like a scroll view's bounce.
+                scroll = x < range.lowerBound ? range.lowerBound + (x - range.lowerBound) / 3
+                    : x > range.upperBound ? range.upperBound + (x - range.upperBound) / 3 : x
+            }
+            .onEnded { value in
+                let target = Self.index(scrolledBy: value.predictedEndTranslation.width,
+                                        around: currentIndex, in: assets)
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                    scroll = 0
+                    if target != currentIndex { onSelect(target) }
+                }
+            }
     }
 
     static func size(of asset: AssetInfo, current: Bool) -> CGSize {
@@ -63,6 +89,19 @@ struct PreviewStrip: View {
             edge += gap + width
         }
         return result
+    }
+
+    /// Drag distances that keep a tile in the middle: from the last tile to the first one.
+    static func scrollRange(around current: Int, in assets: [AssetInfo]) -> ClosedRange<CGFloat> {
+        let centers = centers(around: current, in: assets).values
+        guard let first = centers.min(), let last = centers.max() else { return 0...0 }
+        return -last...(-first)
+    }
+
+    /// The tile that is nearest the middle after the strip is dragged by `offset`.
+    static func index(scrolledBy offset: CGFloat, around current: Int, in assets: [AssetInfo]) -> Int {
+        centers(around: current, in: assets).min { abs($0.value + offset) < abs($1.value + offset) }?.key
+            ?? current
     }
 }
 

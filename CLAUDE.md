@@ -19,7 +19,7 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
 | `Mediant/App/` | `AppModel` (owns everything, reloads on library changes), `RootView`, `FloatingTabBar`, `AccessView`, `LaunchScreen.storyboard` (the `LaunchArt` image, aspect-fill) |
 | `Mediant/Splash/` | `LaunchArt` (launch picture geometry in screen points, unit-tested), `SplashView` (launch ✨ flies into the title), `TitleSparkle` (the drawn ✨ cluster in the Albums / access titles, the landing spot) |
 | `Mediant/Albums/`, `Album/` | Albums list (main page) with the `ProgressCard` (space freed / items deleted), and the album grid |
-| `Mediant/Swipe/` | Swipe screen: `SwipeView` (card-stack drag: top card tilts, next waits behind), `PreviewStrip` (💖/👹 + ogre pop), `SparkleEdge`/`SparkleShape` (✨ edges), `PhotoPage` |
+| `Mediant/Swipe/` | Swipe screen: `SwipeView` (card-stack drag: top card tilts, next waits behind), `PreviewStrip` (💖/👹 + ogre pop, drag to scroll), `SparkleEdge`/`SparkleShape` (✨ edges), `PhotoPage` |
 | `Mediant/Trash/` | `TrashModel` (one-batch delete, restore) and `TrashView` |
 | `Mediant/Shared/` | `Chip` (the glass capsule button), `AssetImage`, `.shimmering(_:)` (a value that is not final yet) |
 | `MediantTests/` | Swift Testing; `FakePhotoLibrary` stands in for PhotoKit |

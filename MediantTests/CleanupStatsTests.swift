@@ -43,4 +43,25 @@ struct StripLayoutTests {
         #expect(centers[2] == 43)
         #expect(centers[0] == -43)
     }
+
+    @Test func dragPicksTheTileNearestTheCenter() {
+        let assets = [asset("a", 1), asset("b", 1), asset("c", 1)]
+        #expect(PreviewStrip.index(scrolledBy: 0, around: 1, in: assets) == 1)
+        #expect(PreviewStrip.index(scrolledBy: 15, around: 1, in: assets) == 1)
+        // Dragging left by 40 brings tile 2 (center 43) to 3 pt from the middle.
+        #expect(PreviewStrip.index(scrolledBy: -40, around: 1, in: assets) == 2)
+        #expect(PreviewStrip.index(scrolledBy: 50, around: 1, in: assets) == 0)
+    }
+
+    @Test func dragPastTheEndStopsAtTheLastTile() {
+        let assets = [asset("a", 1), asset("b", 1), asset("c", 1)]
+        #expect(PreviewStrip.index(scrolledBy: -1_000, around: 1, in: assets) == 2)
+        #expect(PreviewStrip.index(scrolledBy: 1_000, around: 1, in: assets) == 0)
+    }
+
+    @Test func dragIsLimitedBetweenTheFirstAndLastTile() {
+        let assets = [asset("a", 1), asset("b", 1), asset("c", 1)]
+        #expect(PreviewStrip.scrollRange(around: 1, in: assets) == -43...43)
+        #expect(PreviewStrip.scrollRange(around: 0, in: assets) == -(43 + 40)...0)
+    }
 }
