@@ -3,6 +3,10 @@ import Observation
 
 /// The video on the top card: one looping player that the card shows and the chips control
 /// (time, sound, scrub). Only one video plays at a time.
+///
+/// Sound: muted, the app follows the silent switch and leaves the user's music playing (ambient).
+/// With the sound turned on (the 🔊 chip, or a volume-up press on a muted video) it plays even
+/// when the phone is on silent (playback), like a video app.
 @MainActor
 @Observable
 final class VideoPlayback {
@@ -14,7 +18,7 @@ final class VideoPlayback {
     private(set) var time: TimeInterval = 0
     private(set) var duration: TimeInterval = 0
     /// Remembered between launches; muted until the user turns the sound on.
-    private(set) var isMuted = UserDefaults.standard.object(forKey: mutedKey) as? Bool ?? true
+    private(set) var isMuted: Bool
     private(set) var isScrubbing = false
     /// Paused by the user; a new video always starts playing.
     private(set) var isPaused = false
@@ -22,11 +26,25 @@ final class VideoPlayback {
     @ObservationIgnored private var looper: AVPlayerLooper?
     @ObservationIgnored private var timeObserver: Any?
     @ObservationIgnored private var scrubStart: TimeInterval = 0
+    @ObservationIgnored private var volumeObservation: NSKeyValueObservation?
+    private let defaults: UserDefaults
+
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+        isMuted = defaults.object(forKey: Self.mutedKey) as? Bool ?? true
+        // Volume buttons change the output volume; there is no other public signal for them.
+        volumeObservation = AVAudioSession.sharedInstance().observe(\.outputVolume, options: [.old, .new]) {
+            [weak self] _, change in
+            guard let old = change.oldValue, let new = change.newValue else { return }
+            Task { @MainActor in self?.volumeChanged(from: old, to: new) }
+        }
+    }
+
+    var audioCategory: AVAudioSession.Category { isMuted ? .ambient : .playback }
 
     func play(_ item: AVPlayerItem, id: String, duration: TimeInterval) {
         stop()
-        // Ambient: follows the silent switch and does not stop the user's music.
-        try? AVAudioSession.sharedInstance().setCategory(.ambient)
+        applyAudioSession()
         let player = AVQueuePlayer()
         player.isMuted = isMuted
         looper = AVPlayerLooper(player: player, templateItem: item)
@@ -45,15 +63,26 @@ final class VideoPlayback {
         player.play()
     }
 
-    /// Stops the player if it still plays `id` (a card that left may stop after the next one started).
+    /// Stops the player if it still plays `id` (a card that left may stop after the next one started),
+    /// and lets the user's music play again.
     func stop(_ id: String) {
-        if self.id == id { stop() }
+        guard self.id == id else { return }
+        stop()
+        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
     }
 
     func toggleMuted() {
         isMuted.toggle()
-        player?.isMuted = isMuted
-        UserDefaults.standard.set(isMuted, forKey: Self.mutedKey)
+        defaults.set(isMuted, forKey: Self.mutedKey)
+        guard let player else { return }
+        applyAudioSession()
+        player.isMuted = isMuted
+    }
+
+    /// A volume-up press while a video plays muted turns its sound on, the same as the 🔊 chip.
+    func volumeChanged(from old: Float, to new: Float) {
+        guard new > old, isMuted, player != nil else { return }
+        toggleMuted()
     }
 
     func togglePaused() {
@@ -80,6 +109,13 @@ final class VideoPlayback {
         guard isScrubbing else { return }
         isScrubbing = false
         if !isPaused { player?.play() }
+    }
+
+    /// Active, so the volume buttons report changes while a video is on screen.
+    private func applyAudioSession() {
+        let session = AVAudioSession.sharedInstance()
+        try? session.setCategory(audioCategory)
+        try? session.setActive(true)
     }
 
     private func stop() {
