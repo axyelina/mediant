@@ -1,0 +1,135 @@
+<h2>Tab bar + Trash — one-hand (v2)</h2>
+<p class="subtitle">Select and Empty sit at the bottom, on the same line as the tab bar, in thumb reach.</p>
+
+<style>
+  .flow { display:flex; gap:26px; flex-wrap:wrap; justify-content:center; align-items:flex-start; margin-top:14px; }
+  .step { display:flex; flex-direction:column; align-items:center; gap:10px; width:250px; }
+  .step .label { text-align:center; }
+  .ph { width:240px; height:500px; border-radius:38px; border:8px solid #2a2a2e; overflow:hidden; position:relative;
+        font-family:-apple-system,system-ui,sans-serif; color:#fff; background:#000; box-shadow:0 10px 34px rgba(0,0,0,.45); }
+  .isl { position:absolute; top:8px; left:50%; transform:translateX(-50%); width:76px; height:21px; background:#000; border-radius:12px; z-index:20; }
+  .glass { background:rgba(255,255,255,.12); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,.12); }
+  .title { font-size:24px; font-weight:800; padding:0 14px; }
+  .sub { font-size:11px; color:#8e8e93; padding:2px 14px 8px; }
+  .row { display:flex; align-items:center; gap:10px; padding:7px 14px; border-bottom:1px solid #1c1c1e; }
+  .thumb { width:40px; height:40px; border-radius:8px; flex:none; background-size:cover; background-position:center; }
+  .rname { font-size:12px; font-weight:600; } .rmeta { font-size:10px; color:#8e8e93; margin-top:2px; }
+  .chev { margin-left:auto; color:#48484a; }
+  .tabbar { position:absolute; left:50%; transform:translateX(-50%); width:86px; bottom:16px; height:38px; border-radius:19px; display:flex; padding:3px; gap:3px; z-index:10; }
+  .tab { flex:1; border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0; font-size:0; font-weight:600; color:#aeaeb2; position:relative; }
+  .tab.on { background:rgba(255,255,255,.14); color:#fff; }
+  .tab svg { width:17px; height:17px; }
+  .badge { position:absolute; top:-3px; left:calc(50% + 3px); min-width:14px; height:14px; border-radius:7px; background:#ff3b30; color:#fff;
+           font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center; padding:0 3px; }
+  .botbtn { position:absolute; bottom:16px; height:38px; display:flex; align-items:center; z-index:10; }
+  .botbtn.l { left:10px; } .botbtn.r { right:10px; }
+  .topbtn { font-size:11px; font-weight:600; padding:0 10px; height:32px; display:flex; align-items:center; border-radius:16px; }
+  .topbtn.red { background:rgba(255,69,58,.22); color:#ff6961; border-color:rgba(255,69,58,.35); }
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; padding:0 2px; }
+  .grid div { aspect-ratio:1; background-size:cover; background-position:center; position:relative; }
+  .grid div::after { content:"👹"; position:absolute; right:2px; bottom:1px; font-size:10px; filter:drop-shadow(0 0 2px rgba(0,0,0,.8)); }
+  .empty { position:absolute; left:16px; right:16px; bottom:82px; height:42px; border-radius:21px; display:flex; align-items:center; justify-content:center;
+           font-size:14px; font-weight:700; background:linear-gradient(90deg,#c62a2a,#e0783a); z-index:9; }
+  .dim { position:absolute; inset:0; background:rgba(0,0,0,.5); z-index:30; }
+  .alert { position:absolute; left:28px; right:28px; top:150px; border-radius:16px; background:rgba(44,44,46,.96); z-index:31; text-align:center; overflow:hidden; }
+  .alert b { display:block; font-size:12px; padding:14px 12px 4px; } .alert p { font-size:10px; color:#ccc; margin:0; padding:0 12px 12px; }
+  .alert .btn { border-top:1px solid #48484a; padding:10px; font-size:12px; color:#0a84ff; }
+  .alert .btn.red { color:#ff453a; font-weight:600; }
+  .swp { position:absolute; inset:0; background:url(https://picsum.photos/seed/med4/480/1000) center/cover; }
+  .chip { position:absolute; top:40px; font-size:10px; font-weight:600; padding:4px 8px; border-radius:20px; z-index:5; }
+  .tapring { position:absolute; top:33px; right:5px; width:56px; height:34px; border-radius:20px; border:2px solid #0a84ff; z-index:6;
+             box-shadow:0 0 0 4px rgba(10,132,255,.25); }
+  .arrow { font-size:26px; color:#888; align-self:center; margin-top:-30px; }
+  .note { font-size:12px; opacity:.8; text-align:center; }
+</style>
+
+<div class="flow">
+  <div class="step">
+    <div class="ph">
+      <div class="isl"></div>
+      <div style="height:44px"></div>
+      <div class="title">Albums</div>
+      <div class="sub">16 albums · 72.6 GB</div>
+      <div class="row"><div class="thumb" style="background-image:url(https://picsum.photos/seed/s1/80/80)"></div><div><div class="rname">Recents</div><div class="rmeta">12 480 items · 38.2 GB</div></div><div class="chev">›</div></div>
+      <div class="row"><div class="thumb" style="background-image:url(https://picsum.photos/seed/s2/80/80)"></div><div><div class="rname">Screenshots</div><div class="rmeta">2 113 items · 1.9 GB</div></div><div class="chev">›</div></div>
+      <div class="row"><div class="thumb" style="background-image:url(https://picsum.photos/seed/s3/80/80)"></div><div><div class="rname">Videos</div><div class="rmeta">341 items · 21.4 GB</div></div><div class="chev">›</div></div>
+      <div class="row"><div class="thumb" style="background-image:url(https://picsum.photos/seed/a1/80/80)"></div><div><div class="rname">Trip 2025</div><div class="rmeta">604 items · 4.1 GB</div></div><div class="chev">›</div></div>
+      <div class="row"><div class="thumb" style="background-image:url(https://picsum.photos/seed/a2/80/80)"></div><div><div class="rname">WhatsApp</div><div class="rmeta">1 870 items · 2.6 GB</div></div><div class="chev">›</div></div>
+      <div class="tabbar glass">
+        <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg>Albums</div>
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Trash<span class="badge">8</span></div>
+      </div>
+    </div>
+    <div class="label">1 · Main page, compact tab bar</div>
+  </div>
+
+  <div class="step">
+    <div class="ph">
+      <div class="isl"></div>
+      <div class="swp"></div>
+      <div class="chip glass" style="left:12px">‹ Back</div>
+      <div class="chip glass" style="right:12px">👹 8</div>
+      <div class="tapring"></div>
+    </div>
+    <div class="label">2 · Swipe screen: tap 👹 counter</div>
+    <div class="note">Opens the Trash.</div>
+  </div>
+
+  <div class="step">
+    <div class="ph">
+      <div class="isl"></div>
+      
+      <div style="height:44px"></div>
+      <div class="title">Trash</div>
+      <div class="sub">8 photos · 13.4 MB to free</div>
+      <div class="grid">
+        <div style="background-image:url(https://picsum.photos/seed/s5/120/120)"></div><div style="background-image:url(https://picsum.photos/seed/s6/120/120)"></div><div style="background-image:url(https://picsum.photos/seed/s7/120/120)"></div>
+        <div style="background-image:url(https://picsum.photos/seed/s8/120/120)"></div><div style="background-image:url(https://picsum.photos/seed/med2/120/120)"></div><div style="background-image:url(https://picsum.photos/seed/med3/120/120)"></div>
+        <div style="background-image:url(https://picsum.photos/seed/med5/120/120)"></div><div style="background-image:url(https://picsum.photos/seed/med6/120/120)"></div>
+      </div>
+      
+      <div class="tabbar glass">
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg>Albums</div>
+        <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Trash<span class="badge">8</span></div>
+      </div>
+      <div class="botbtn l"><div class="topbtn glass">Select</div></div><div class="botbtn r"><div class="topbtn glass red">Empty</div></div>
+    </div>
+    <div class="label">3 · Trash tab</div>
+  </div>
+
+  <div class="step">
+    <div class="ph">
+      <div class="isl"></div>
+      
+      <div style="height:44px"></div>
+      <div class="title">Trash</div>
+      <div class="sub">8 photos · 13.4 MB to free</div>
+      <div class="grid">
+        <div style="background-image:url(https://picsum.photos/seed/s5/120/120)"></div><div style="background-image:url(https://picsum.photos/seed/s6/120/120)"></div><div style="background-image:url(https://picsum.photos/seed/s7/120/120)"></div>
+        <div style="background-image:url(https://picsum.photos/seed/s8/120/120)"></div><div style="background-image:url(https://picsum.photos/seed/med2/120/120)"></div><div style="background-image:url(https://picsum.photos/seed/med3/120/120)"></div>
+        <div style="background-image:url(https://picsum.photos/seed/med5/120/120)"></div><div style="background-image:url(https://picsum.photos/seed/med6/120/120)"></div>
+      </div>
+      
+      <div class="botbtn l"><div class="topbtn glass">Select</div></div><div class="botbtn r"><div class="topbtn glass red">Empty</div></div>
+      <div class="dim"></div>
+      <div class="alert">
+        <b>Allow “Median't” to delete 8 photos?</b>
+        <p>These photos will be moved to Recently Deleted.</p>
+        <div class="btn">Don't Allow</div>
+        <div class="btn red">Delete</div>
+      </div>
+    </div>
+    <div class="label">4 · Tap "Empty" → iOS dialog</div>
+    <div class="note">The app shows no extra confirmation of its own.</div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:22px">
+  <h3>My guesses — correct me</h3>
+  <ul>
+    <li>Two tabs only: Albums and Trash. No Settings tab yet. Tabs show icons only, no text.</li>
+    <li>The red badge on the Trash tab shows the number of photos in the Trash.</li>
+    <li>"Select" lets you pick photos in the Trash and put them back (restore).</li>
+    <li>The Trash is saved: it stays after you close the app.</li>
+  </ul>
+</div>

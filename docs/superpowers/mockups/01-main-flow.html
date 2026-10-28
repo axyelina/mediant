@@ -1,0 +1,89 @@
+<h2>Median't — main flow (draft)</h2>
+<p class="subtitle">Albums → album photos (newest first) → tap a photo → swipe. Left = delete, right = keep.</p>
+
+<style>
+  .flow { display:flex; gap:28px; flex-wrap:wrap; align-items:flex-start; justify-content:center; margin-top:16px; }
+  .step { display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .step .label { text-align:center; }
+  .phone { width:240px; height:500px; border-radius:36px; background:#000; border:8px solid #2a2a2e; color:#fff;
+           font-family:-apple-system,system-ui,sans-serif; overflow:hidden; position:relative; box-shadow:0 8px 30px rgba(0,0,0,.35); }
+  .island { width:80px; height:22px; background:#111; border-radius:12px; margin:8px auto 0; }
+  .title { font-size:22px; font-weight:700; padding:10px 14px 6px; }
+  .navback { font-size:12px; color:#0a84ff; padding:8px 14px 0; }
+  .row { display:flex; align-items:center; gap:10px; padding:8px 14px; border-bottom:1px solid #1c1c1e; }
+  .thumb { width:44px; height:44px; border-radius:8px; flex:none; }
+  .rname { font-size:13px; font-weight:600; }
+  .rmeta { font-size:11px; color:#8e8e93; margin-top:2px; }
+  .chev { margin-left:auto; color:#48484a; font-size:14px; }
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; padding:0 2px; }
+  .grid div { aspect-ratio:1; }
+  .sec { font-size:11px; color:#8e8e93; padding:6px 14px 4px; }
+  .card { position:absolute; left:18px; right:18px; top:70px; height:300px; border-radius:18px;
+          background:linear-gradient(160deg,#6a8caf,#2d4f6b); transform:rotate(-7deg) translateX(-18px); box-shadow:0 6px 18px rgba(0,0,0,.5); }
+  .card.under { transform:none; background:linear-gradient(160deg,#a3765a,#5b3a2a); }
+  .stamp { position:absolute; top:18px; right:16px; border:3px solid #ff453a; color:#ff453a; font-weight:800;
+           padding:2px 8px; border-radius:6px; transform:rotate(12deg); font-size:16px; }
+  .btns { position:absolute; bottom:46px; left:0; right:0; display:flex; justify-content:center; gap:38px; }
+  .btn { width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; }
+  .del { border:2px solid #ff453a; color:#ff453a; } .keep { border:2px solid #30d158; color:#30d158; }
+  .counter { position:absolute; top:40px; left:0; right:0; text-align:center; font-size:12px; color:#8e8e93; }
+  .arrow { font-size:28px; color:var(--text-secondary, #888); align-self:center; margin-top:-40px; }
+</style>
+
+<div class="flow">
+  <div class="step">
+    <div class="phone">
+      <div class="island"></div>
+      <div class="title">Albums</div>
+      <div class="row"><div class="thumb" style="background:linear-gradient(135deg,#f6a,#a6f)"></div><div><div class="rname">Recents</div><div class="rmeta">12 480 items · 38.2 GB</div></div><div class="chev">›</div></div>
+      <div class="row"><div class="thumb" style="background:linear-gradient(135deg,#6cf,#36a)"></div><div><div class="rname">Screenshots</div><div class="rmeta">2 113 items · 1.9 GB</div></div><div class="chev">›</div></div>
+      <div class="row"><div class="thumb" style="background:linear-gradient(135deg,#fc6,#c63)"></div><div><div class="rname">Videos</div><div class="rmeta">341 items · 21.4 GB</div></div><div class="chev">›</div></div>
+      <div class="row"><div class="thumb" style="background:linear-gradient(135deg,#6f9,#296)"></div><div><div class="rname">Trip 2025</div><div class="rmeta">604 items · 4.1 GB</div></div><div class="chev">›</div></div>
+      <div class="row"><div class="thumb" style="background:linear-gradient(135deg,#ccc,#666)"></div><div><div class="rname">WhatsApp</div><div class="rmeta">1 870 items · 2.6 GB</div></div><div class="chev">›</div></div>
+    </div>
+    <div class="label">1 · Main page</div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <div class="step">
+    <div class="phone">
+      <div class="island"></div>
+      <div class="navback">‹ Albums</div>
+      <div class="title">Screenshots</div>
+      <div class="sec">Newest first</div>
+      <div class="grid">
+        <div style="background:#3a5f7d;outline:2px solid #0a84ff;outline-offset:-2px"></div><div style="background:#7d5a3a"></div><div style="background:#4d7d3a"></div>
+        <div style="background:#7d3a6a"></div><div style="background:#3a7d7a"></div><div style="background:#6a6a6a"></div>
+        <div style="background:#5a3a7d"></div><div style="background:#7d763a"></div><div style="background:#3a4d7d"></div>
+        <div style="background:#7d3a3a"></div><div style="background:#3a7d55"></div><div style="background:#55557d"></div>
+        <div style="background:#6a4a3a"></div><div style="background:#3a6a7d"></div><div style="background:#7d5a6a"></div>
+      </div>
+    </div>
+    <div class="label">2 · Album — tap a photo</div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <div class="step">
+    <div class="phone">
+      <div class="island"></div>
+      <div class="counter">1 of 2 113</div>
+      <div class="card under"></div>
+      <div class="card"><div class="stamp">DELETE</div></div>
+      <div class="btns"><div class="btn del">✕</div><div class="btn keep">✓</div></div>
+    </div>
+    <div class="label">3 · Swipe from that photo</div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:24px">
+  <h3>What I understand so far</h3>
+  <ul>
+    <li>Free: no subscription, no ads, no payment.</li>
+    <li>Main page: your albums, each with item count and storage size.</li>
+    <li>Album: photos in a grid, newest first.</li>
+    <li>Tap a photo: swipe mode starts at that photo and moves to older photos.</li>
+    <li><em>My guess:</em> the ✕ and ✓ buttons do the same as a swipe.</li>
+  </ul>
+</div>
