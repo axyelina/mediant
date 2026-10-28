@@ -93,4 +93,31 @@ struct VideoPlaybackTests {
         playback.volumeChanged(from: 0.4, to: 0.5)
         #expect(playback.isMuted)
     }
+
+    @Test func hiddenVideoStopsAndComesBackPlaying() {
+        let playback = makePlayback()
+        playback.play(item(), id: "a", duration: 10)
+        playback.setHidden(true)
+        #expect(playback.player?.rate == 0)
+        #expect(!playback.isPaused)
+        playback.setHidden(false)
+        #expect(playback.player?.rate != 0)
+    }
+
+    @Test func hiddenVideoPausedByTheUserStaysPaused() {
+        let playback = makePlayback()
+        playback.play(item(), id: "a", duration: 10)
+        playback.togglePaused()
+        playback.setHidden(true)
+        playback.setHidden(false)
+        #expect(playback.isPaused)
+        #expect(playback.player?.rate == 0)
+    }
+
+    @Test func nextVideoWhileHiddenWaits() {
+        let playback = makePlayback()
+        playback.setHidden(true)
+        playback.play(item(), id: "a", duration: 10)
+        #expect(playback.player?.rate == 0)
+    }
 }

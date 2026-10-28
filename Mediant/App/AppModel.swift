@@ -63,10 +63,17 @@ final class AppModel {
 
     var hasAccess: Bool { access == .full || access == .limited }
 
-    /// Shows the Trash tab, leaving the swipe screen.
+    /// Shows the Trash tab. The swipe screen stays behind it, so swiping back returns to the same photo.
     func openTrash() {
-        albumsPath = NavigationPath()
         tab = .trash
+    }
+
+    /// Empties the Trash (one iOS dialog, see `TrashModel.emptyTrash()`). After a real delete the
+    /// swipe screen closes: its photos may be gone, and its Undo would point at them.
+    func emptyTrash() async {
+        let before = trash.deleteCount
+        await trash.emptyTrash()
+        if trash.deleteCount != before { albumsPath = NavigationPath() }
     }
 
     func reload() async {

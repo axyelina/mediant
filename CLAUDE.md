@@ -16,7 +16,7 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
 |---|---|
 | `Mediant/Model/` | Pure logic, unit-tested: `visibleAssets` (album filter: no 👹, 💖 only with "Show 💖"), `orderedAlbums` (Recents, then Favorites, Recently Added, Videos, Screenshots, Selfies, then A–Z), `TabSwipe` (which tab a swipe leads to), `DecisionStore` (kept/trashed per photo id, JSON in Application Support), `CleanupStats` (all-time deleted count + freed bytes, `stats.json`), `SwipeSession` (current index + undo stack), `ByteFormat` / `counted()`, `VideoTime` (time text, scrub math) |
 | `Mediant/Library/` | `PhotoLibrary` protocol + `PhotoKitLibrary`; `AlbumSizes` (background size sums, cached in `album-sizes.json`; a cached size shimmers until it is measured again); `ThumbnailLoader` (PHCachingImageManager) |
-| `Mediant/App/` | `AppModel` (owns everything, reloads on library changes), `RootView` (tab slide + edge swipe), `FloatingTabBar` (tap or swipe), `AccessView`, `LaunchScreen.storyboard` (the `LaunchArt` image, aspect-fill) |
+| `Mediant/App/` | `AppModel` (owns everything, reloads on library changes), `RootView` (both tabs stay alive and slide; edge swipe), `FloatingTabBar` (tap or swipe), `AccessView`, `LaunchScreen.storyboard` (the `LaunchArt` image, aspect-fill) |
 | `Mediant/Splash/` | `LaunchArt` (launch picture geometry in screen points, unit-tested), `SplashView` (launch ✨ flies into the title), `TitleSparkle` (the drawn ✨ cluster in the Albums / access titles, the landing spot) |
 | `Mediant/Albums/`, `Album/` | Albums list (main page) with the `ProgressCard` (space freed / items deleted), and the album grid |
 | `Mediant/Swipe/` | Swipe screen: `SwipeView` (card-stack drag: top card tilts, next waits behind; tap = skip), `PreviewStrip` (💖/👹 + ogre pop, drag to scroll), `SparkleEdge`/`SparkleShape` (✨ edges), `PhotoPage` (photo or video card), `LoopingVideo` (shows the top card's video), `VideoPlayback` (the one looping player: time, pause, mute, scrub), `VideoChip` (time chip: tap = pause/play, drag = scrub) |
@@ -31,7 +31,8 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
   `FakePhotoLibrary`. Only `PhotoKitLibrary` and `ThumbnailLoader` import Photos
   (`ThumbnailLoader.playerItem(for:)` loads videos).
 - **Deleting is only `TrashModel.emptyTrash()`** → one iOS dialog for the whole Trash. Never add an
-  app-made confirmation on top, never delete per swipe.
+  app-made confirmation on top, never delete per swipe. The UI calls it through
+  `AppModel.emptyTrash()`, which also closes a swipe screen whose photos may be gone.
 - **Compact UI in thumb reach.** Controls are small glass `Chip`s, primary actions at the bottom.
 - An image that fills its frame overflows it, and `.clipped()` does not stop the overflow from
   taking taps. `AssetImage` already turns off hit testing on the image; keep a

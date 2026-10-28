@@ -85,7 +85,7 @@ struct TrashView: View {
                 Chip("Select") { trash.isSelecting = true }
                 Spacer()
                 Chip(trash.isDeleting ? "Deleting…" : "Empty", tint: .red) {
-                    Task { await trash.emptyTrash() }
+                    Task { await model.emptyTrash() }
                 }
                 .disabled(trash.isDeleting)
             }

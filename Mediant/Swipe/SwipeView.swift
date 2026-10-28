@@ -49,6 +49,7 @@ struct SwipeView: View {
             model.isSwiping = true
         }
         .onDisappear { model.isSwiping = false }
+        .onChange(of: model.tab, initial: true) { _, tab in playback.setHidden(tab != .albums) }
         .task(id: session?.currentID) {
             currentSize = nil
             guard let id = session?.currentID else { return }
@@ -219,6 +220,8 @@ struct SwipeView: View {
 
     /// 👹 with the Trash count; a tap opens the Trash tab.
     private var trashChip: some View {
-        Chip("👹 \(model.store.trashCount)") { model.openTrash() }
+        Chip("👹 \(model.store.trashCount)") {
+            withAnimation(FloatingTabBar.switchAnimation) { model.openTrash() }
+        }
     }
 }

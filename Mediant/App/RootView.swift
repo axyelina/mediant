@@ -11,27 +11,25 @@ struct RootView: View {
         Group {
             if model.hasAccess {
                 ZStack(alignment: .bottom) {
-                    // Tabs sit left to right as in the tab bar, so a switch slides that way.
-                    Group {
-                        switch model.tab {
-                        case .albums:
-                            NavigationStack(path: $model.albumsPath) {
-                                AlbumsView()
-                                    .navigationDestination(for: AlbumInfo.self) { album in
-                                        AlbumGridView(album: album)
-                                    }
-                                    .navigationDestination(for: SwipeRoute.self) { route in
-                                        SwipeView(route: route)
-                                    }
-                            }
-                            .transition(.move(edge: .leading))
-                        case .trash:
-                            TrashView()
-                                .transition(.move(edge: .trailing))
+                    // Both tabs stay alive, so the swipe screen keeps its photo and Undo while the
+                    // Trash is on top. Tabs sit left to right as in the tab bar and slide that way.
+                    ZStack {
+                        NavigationStack(path: $model.albumsPath) {
+                            AlbumsView()
+                                .navigationDestination(for: AlbumInfo.self) { album in
+                                    AlbumGridView(album: album)
+                                }
+                                .navigationDestination(for: SwipeRoute.self) { route in
+                                    SwipeView(route: route)
+                                }
                         }
+                        .tabPage(shown: model.tab == .albums, offset: -screenWidth)
+                        TrashView()
+                            .tabPage(shown: model.tab == .trash, offset: screenWidth)
                     }
                     .simultaneousGesture(edgeSwipe, including: edgeSwipeEnabled ? .all : .subviews)
-                    if !model.isSwiping {
+                    // The swipe screen hides the tab bar, but not while the Trash covers it.
+                    if !model.isSwiping || model.tab == .trash {
                         FloatingTabBar(selection: $model.tab, trashCount: model.store.trashCount)
                             .padding(.bottom, 8)
                     }
@@ -61,7 +59,7 @@ struct RootView: View {
     /// Only on the root pages: the swipe screen has its own drag, and the left edge of a pushed
     /// album page is the system's back swipe.
     private var edgeSwipeEnabled: Bool {
-        !model.isSwiping && (model.tab == .trash || model.albumsPath.isEmpty)
+        model.tab == .trash || (!model.isSwiping && model.albumsPath.isEmpty)
     }
 
     /// A swipe from the page edge on the side of the other tab switches to it.
@@ -75,5 +73,14 @@ struct RootView: View {
                 guard target != model.tab else { return }
                 withAnimation(FloatingTabBar.switchAnimation) { model.tab = target }
             }
+    }
+}
+
+private extension View {
+    /// A tab page that slides out by `offset` when it is not shown, and then takes no touches.
+    func tabPage(shown: Bool, offset: CGFloat) -> some View {
+        self.offset(x: shown ? 0 : offset)
+            .allowsHitTesting(shown)
+            .accessibilityHidden(!shown)
     }
 }

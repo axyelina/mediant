@@ -12,4 +12,39 @@ struct AppModelTests {
             .appendingPathComponent("model-\(UUID().uuidString)/decisions.json"))
         #expect(model.access == .limited)
     }
+
+    func makeModel() -> (AppModel, FakePhotoLibrary) {
+        let library = FakePhotoLibrary()
+        let model = AppModel(library: library, storeURL: FileManager.default.temporaryDirectory
+            .appendingPathComponent("model-\(UUID().uuidString)/decisions.json"))
+        return (model, library)
+    }
+
+    @Test func openTrashKeepsTheSwipeScreenToComeBackTo() {
+        let (model, _) = makeModel()
+        model.albumsPath.append("album")
+        model.albumsPath.append("swipe")
+        model.openTrash()
+        #expect(model.tab == .trash)
+        #expect(model.albumsPath.count == 2)
+    }
+
+    @Test func emptyingTheTrashClosesTheSwipeScreen() async {
+        // Its photos may be gone now, and its Undo would point at them.
+        let (model, _) = makeModel()
+        model.albumsPath.append("album")
+        model.albumsPath.append("swipe")
+        model.store.set(.trashed, for: "a")
+        await model.emptyTrash()
+        #expect(model.albumsPath.isEmpty)
+    }
+
+    @Test func declinedEmptyKeepsTheSwipeScreen() async {
+        let (model, library) = makeModel()
+        library.deleteError = DeleteError.declined
+        model.albumsPath.append("swipe")
+        model.store.set(.trashed, for: "a")
+        await model.emptyTrash()
+        #expect(model.albumsPath.count == 1)
+    }
 }

@@ -22,6 +22,8 @@ final class VideoPlayback {
     private(set) var isScrubbing = false
     /// Paused by the user; a new video always starts playing.
     private(set) var isPaused = false
+    /// The Trash tab covers the swipe screen: the video waits, and plays again when it comes back.
+    private(set) var isHidden = false
 
     @ObservationIgnored private var looper: AVPlayerLooper?
     @ObservationIgnored private var timeObserver: Any?
@@ -60,7 +62,7 @@ final class VideoPlayback {
         self.duration = duration
         time = 0
         isPaused = false
-        player.play()
+        if !isHidden { player.play() }
     }
 
     /// Stops the player if it still plays `id` (a card that left may stop after the next one started),
@@ -91,6 +93,12 @@ final class VideoPlayback {
         if isPaused { player.pause() } else if !isScrubbing { player.play() }
     }
 
+    func setHidden(_ hidden: Bool) {
+        isHidden = hidden
+        guard let player else { return }
+        if hidden { player.pause() } else if !isPaused && !isScrubbing { player.play() }
+    }
+
     func beginScrub() {
         guard player != nil, !isScrubbing else { return }
         isScrubbing = true
@@ -108,7 +116,7 @@ final class VideoPlayback {
     func endScrub() {
         guard isScrubbing else { return }
         isScrubbing = false
-        if !isPaused { player?.play() }
+        if !isPaused && !isHidden { player?.play() }
     }
 
     /// Active, so the volume buttons report changes while a video is on screen.
