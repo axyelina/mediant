@@ -6,9 +6,10 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 
 ## From the user
 
-- [ ] **Working with video.** Today the swipe screen shows only the poster frame and a "▶ 0:32"
-      chip. Ideas: play the video in place (muted, tap for sound), scrub with a drag on the chip,
-      show the video size more prominently (videos are where the space is).
+- [ ] **Working with video.** The top card plays its video in a loop (sound follows the silent
+      switch). Still open: scrub with a drag on the "▶ 0:32" chip, a sound on/off chip (a tap on
+      the card is skip), show the video size more prominently (videos are where the space is), a
+      ▶ badge on video tiles in the album grid.
 - [ ] **Swipe between tabs.** Horizontal swipe on the tab bar (or the page edge) switches
       Trash ↔ Albums. Must not fight the swipe screen's own drag.
 - [ ] **Russian localization.** All strings are inline English today. Move them to a String
