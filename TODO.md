@@ -9,8 +9,6 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [ ] **Working with video.** Shipped: looping playback on the top card, scrub on the ▶ chip,
       🔊/🔇 chip, ▶ badge in the album grid. Still open: show the video size more prominently
       (videos are where the space is).
-- [ ] **Swipe between tabs.** Horizontal swipe on the tab bar (or the page edge) switches
-      Trash ↔ Albums. Must not fight the swipe screen's own drag.
 - [ ] **Russian localization.** All strings are inline English today. Move them to a String
       Catalog (`Localizable.xcstrings`) and add Russian, including plurals ("1 фото", "5 фото",
       "items deleted") and byte formats.
