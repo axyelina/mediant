@@ -11,6 +11,11 @@ final class PhotoKitLibrary: PhotoLibrary {
         PHAssetCollectionSubtype.albumSyncedEvent.rawValue,
     ]
 
+    private static let pinnedSubtypes: [PHAssetCollectionSubtype: PinnedAlbum] = [
+        .smartAlbumFavorites: .favorites, .smartAlbumRecentlyAdded: .recentlyAdded,
+        .smartAlbumVideos: .videos, .smartAlbumScreenshots: .screenshots, .smartAlbumSelfPortraits: .selfies,
+    ]
+
     func accessLevel() -> AccessLevel {
         Self.level(PHPhotoLibrary.authorizationStatus(for: .readWrite))
     }
@@ -32,13 +37,12 @@ final class PhotoKitLibrary: PhotoLibrary {
                         title: collection.localizedTitle ?? "",
                         count: assets.count,
                         coverAssetID: assets.firstObject?.localIdentifier,
-                        isAllPhotos: collection.assetCollectionSubtype == .smartAlbumUserLibrary))
+                        isAllPhotos: collection.assetCollectionSubtype == .smartAlbumUserLibrary,
+                        // Only smart albums: a user's own album has subtype .albumRegular.
+                        pinned: type == .smartAlbum ? Self.pinnedSubtypes[collection.assetCollectionSubtype] : nil))
                 }
         }
-        return result.sorted { lhs, rhs in
-            if lhs.isAllPhotos != rhs.isAllPhotos { return lhs.isAllPhotos }
-            return lhs.title.localizedStandardCompare(rhs.title) == .orderedAscending
-        }
+        return orderedAlbums(result)
     }
 
     func assets(inAlbum id: String) -> [AssetInfo] {

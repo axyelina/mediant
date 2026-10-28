@@ -11,6 +11,8 @@ struct AlbumInfo: Identifiable, Hashable {
     let coverAssetID: String?
     /// The "Recents" / all-photos album; its size is the library total.
     var isAllPhotos = false
+    /// Set for the smart albums that lead the list (see `orderedAlbums`).
+    var pinned: PinnedAlbum?
 }
 
 struct AssetInfo: Identifiable, Hashable {
