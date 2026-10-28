@@ -2,6 +2,10 @@ import SwiftUI
 
 struct TrashView: View {
     @Environment(AppModel.self) private var model
+    @Environment(\.openURL) private var openURL
+
+    /// Opens the Photos app. iOS has no public link to the Recently Deleted album itself.
+    private static let photosURL = URL(string: "photos-redirect://")!
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 3)
 
@@ -99,9 +103,20 @@ struct TrashView: View {
         VStack(spacing: 8) {
             Text("👹").font(.system(size: 44))
             Text("Trash is empty").font(.headline)
-            Text("Swipe left on photos you don't want.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+            if model.stats.deletedCount > 0 {
+                // iOS keeps deleted photos in Recently Deleted; the space comes back only from there.
+                Text("Don't forget to delete them from Recently Deleted in Photos too. iOS keeps them there for 30 days, and they still take up space.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+                Chip("Open Photos", systemImage: "arrow.up.forward.app") { openURL(Self.photosURL) }
+                    .padding(.top, 6)
+            } else {
+                Text("Swipe left on photos you don't want.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 120)
