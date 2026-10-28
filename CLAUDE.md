@@ -7,6 +7,8 @@ Display name is **Median't**; everything code-facing (folders, targets, module, 
 
 Design (the "project map"): `docs/superpowers/specs/2026-10-28-mediant-photo-cleaner-design.md`.
 Mockups from the brainstorm: `docs/superpowers/mockups/` (open in a browser).
+Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they ship. Commit
+`TODO.md` right after each edit (its own `docs:` commit, not mixed into code changes).
 
 ## Code map
 
