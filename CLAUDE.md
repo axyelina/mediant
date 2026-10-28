@@ -1,32 +1,56 @@
 # Median't
 
-iOS app (SwiftUI, iOS 17+, iPhone only, portrait). Display name is **Median't**; everything
-code-facing (folders, targets, module, scheme) is `Mediant` because the apostrophe breaks paths.
+Free, Tinder-style photo cleaner for iOS: swipe **left to delete**, **right to keep**. No ads,
+no subscription, no payments — ever. SwiftUI, iOS 17+, iPhone only, portrait, dark-first.
+Display name is **Median't**; everything code-facing (folders, targets, module, scheme) is
+`Mediant` because the apostrophe breaks paths.
 
-## Project layout
+Design (the "project map"): `docs/superpowers/specs/2026-10-28-mediant-photo-cleaner-design.md`.
+Mockups from the brainstorm: `docs/superpowers/mockups/` (open in a browser).
 
-- `project.yml` — XcodeGen spec, the source of truth. `Mediant.xcodeproj` is generated from it:
-  after adding/removing files or changing settings, run `xcodegen generate`. Never hand-edit the
-  `.xcodeproj`.
-- `Mediant/` — app sources and assets (`MediantApp.swift` entry point, `ContentView.swift`).
-- `MediantTests/` — unit tests, Swift Testing (`import Testing`, `@Test`, `#expect`).
-- Bundle ID `com.pisarenko.mediant`; no development team set (Simulator only for now).
+## Code map
+
+| Folder | What lives there |
+|---|---|
+| `Mediant/Model/` | Pure logic, unit-tested: `DecisionStore` (kept/trashed per photo id, JSON in Application Support), `SwipeSession` (current index + undo stack), `ByteFormat` / `counted()` |
+| `Mediant/Library/` | `PhotoLibrary` protocol + `PhotoKitLibrary`; `AlbumSizes` (background size sums); `ThumbnailLoader` (PHCachingImageManager) |
+| `Mediant/App/` | `AppModel` (owns everything, reloads on library changes), `RootView`, `FloatingTabBar`, `AccessView` |
+| `Mediant/Albums/`, `Album/` | Albums list (main page) and the album grid |
+| `Mediant/Swipe/` | Swipe screen: `SwipeView` (page-slide drag), `PreviewStrip` (💖/👹 + ogre pop), `SparkleEdge`/`SparkleShape` (✨ edges), `PhotoPage` |
+| `Mediant/Trash/` | `TrashModel` (one-batch delete, restore) and `TrashView` |
+| `Mediant/Shared/` | `Chip` (the glass capsule button), `AssetImage` |
+| `MediantTests/` | Swift Testing; `FakePhotoLibrary` stands in for PhotoKit |
+
+## Rules
+
+- **PhotoKit stays behind `PhotoLibrary`.** Logic takes the protocol, so it is tested with
+  `FakePhotoLibrary`. Only `PhotoKitLibrary` and `ThumbnailLoader` import Photos.
+- **Deleting is only `TrashModel.emptyTrash()`** → one iOS dialog for the whole Trash. Never add an
+  app-made confirmation on top, never delete per swipe.
+- **Compact UI in thumb reach.** Controls are small glass `Chip`s, primary actions at the bottom.
+- An image that fills its frame overflows it, and `.clipped()` does not stop the overflow from
+  taking taps. `AssetImage` already turns off hit testing on the image; keep a
+  `.contentShape(Rectangle())` on tappable cells.
+- `project.yml` is the source of truth (XcodeGen). After adding/removing files run
+  `xcodegen generate`. Never hand-edit the `.xcodeproj`.
+- TDD for anything in `Model/`, `Library/` logic and view models.
 
 ## Simulator — HARD RULE
 
 Use only the dedicated simulator **`Median't iPhone 16`** (iPhone 16, iOS 18.4) for building,
 running and testing. Never target another simulator, even if one is already booted or attached.
-It is kept in **dark appearance**. Run the app with the `run-sim` skill
-(`.claude/skills/run-sim/`), which finds/creates this simulator by name.
+It is kept in **dark appearance**. Use the `run-sim` skill (`.claude/skills/run-sim/`).
 
-## Build & test
+## Build, test, sample photos
 
 ```bash
 .claude/skills/run-sim/scripts/run.sh          # build, install, launch on the dedicated sim
-.claude/skills/run-sim/scripts/run.sh --test   # run unit tests on the dedicated sim
+.claude/skills/run-sim/scripts/run.sh --test   # unit tests (replaces the running app!)
+.claude/skills/run-sim/scripts/seed-photos.sh  # add 40 generated sample photos (once per sim)
 ```
 
-DerivedData goes to `./build/` (gitignored).
+DerivedData goes to `./build/` (gitignored). `simctl privacy grant photos` does not work on
+iOS 18.4 here: accept the app's permission dialog in the simulator instead.
 
 ## Git
 
