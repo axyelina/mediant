@@ -12,7 +12,9 @@
 		2EEEDB297492229750F13372 /* ByteFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E012775299F2BC4CEA5BD46E /* ByteFormat.swift */; };
 		302EC4E6A26768B7E96AB824 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF451C67CB5B0A148C010CFB /* ContentView.swift */; };
 		3A73B3FB9F8BED499C173AF3 /* ByteFormatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63478135307D4B7799434EA /* ByteFormatTests.swift */; };
+		3F7048E555A5600F9CCD3EEB /* SwipeSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193059841FE73FA07627E93F /* SwipeSession.swift */; };
 		7E66BE37DFF1CDE3952D2681 /* MediantApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1EE5C1F4779576F5FD9615 /* MediantApp.swift */; };
+		90A74C7C422D8768658B0F92 /* SwipeSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F262B57EB936D37E5D6FC508 /* SwipeSessionTests.swift */; };
 		950B241B3434D4C8577609D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 248F0EF6254F25A97A9C9EA6 /* Assets.xcassets */; };
 		A9DA57F0DB185727E3408A44 /* DecisionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD7C31EE7E1AEFDDDBCA0D2 /* DecisionStore.swift */; };
 		B35F72DD2D2FCB4456722D7B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BC11CE03F1961FC5745CDA5 /* Preview Assets.xcassets */; };
@@ -29,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		193059841FE73FA07627E93F /* SwipeSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeSession.swift; sourceTree = "<group>"; };
 		248F0EF6254F25A97A9C9EA6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2BD7C31EE7E1AEFDDDBCA0D2 /* DecisionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecisionStore.swift; sourceTree = "<group>"; };
 		37F1AE4C1CC02F43ABBD6FE6 /* DecisionStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecisionStoreTests.swift; sourceTree = "<group>"; };
@@ -40,6 +43,7 @@
 		E012775299F2BC4CEA5BD46E /* ByteFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ByteFormat.swift; sourceTree = "<group>"; };
 		EF451C67CB5B0A148C010CFB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		EFED1E38CDCFAD3BC3EEDE10 /* Mediant.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Mediant.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F262B57EB936D37E5D6FC508 /* SwipeSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeSessionTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -70,6 +74,7 @@
 				E012775299F2BC4CEA5BD46E /* ByteFormat.swift */,
 				3F7D283517554BB3A2827263 /* Decision.swift */,
 				2BD7C31EE7E1AEFDDDBCA0D2 /* DecisionStore.swift */,
+				193059841FE73FA07627E93F /* SwipeSession.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -79,6 +84,7 @@
 			children = (
 				A63478135307D4B7799434EA /* ByteFormatTests.swift */,
 				37F1AE4C1CC02F43ABBD6FE6 /* DecisionStoreTests.swift */,
+				F262B57EB936D37E5D6FC508 /* SwipeSessionTests.swift */,
 			);
 			path = MediantTests;
 			sourceTree = "<group>";
@@ -192,6 +198,7 @@
 			files = (
 				3A73B3FB9F8BED499C173AF3 /* ByteFormatTests.swift in Sources */,
 				2666D1F79E0E002296926EAE /* DecisionStoreTests.swift in Sources */,
+				90A74C7C422D8768658B0F92 /* SwipeSessionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,6 +211,7 @@
 				18D362878A17A0C83B786253 /* Decision.swift in Sources */,
 				A9DA57F0DB185727E3408A44 /* DecisionStore.swift in Sources */,
 				7E66BE37DFF1CDE3952D2681 /* MediantApp.swift in Sources */,
+				3F7048E555A5600F9CCD3EEB /* SwipeSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
