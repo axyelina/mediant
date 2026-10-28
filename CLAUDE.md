@@ -52,6 +52,9 @@ It is kept in **dark appearance**. Use the `run-sim` skill (`.claude/skills/run-
 .claude/skills/run-sim/scripts/seed-photos.sh  # add 40 generated sample photos (once per sim)
 ```
 
+Real iPhone (the user's phone `LINK`): `.claude/skills/run-device/scripts/run-device.sh` — see the
+`run-device` skill. Signing uses the free personal team `WZHN8Q7J25`; the app expires after 7 days.
+
 DerivedData goes to `./build/` (gitignored). `simctl privacy grant photos` does not work on
 iOS 18.4 here: accept the app's permission dialog in the simulator instead.
 

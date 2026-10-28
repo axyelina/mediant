@@ -8,6 +8,8 @@ settings:
   base:
     SWIFT_VERSION: "5.0"
     MARKETING_VERSION: "1.0"
+    # Free personal team (Alexandr Katsz). Apps signed with it expire after 7 days on a device.
+    DEVELOPMENT_TEAM: WZHN8Q7J25
     CURRENT_PROJECT_VERSION: "1"
 targets:
   Mediant:
