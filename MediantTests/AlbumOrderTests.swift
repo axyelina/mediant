@@ -16,9 +16,10 @@ struct AlbumOrderTests {
                 == ["Favorites", "Recently Added", "Videos", "Screenshots", "Selfies", "Beach"])
     }
 
-    @Test func recentsLeadsTheOtherAlbums() {
-        let albums = [album("Zoo"), album("Recents", allPhotos: true), album("Videos", .videos), album("Art")]
-        #expect(orderedAlbums(albums).map(\.title) == ["Videos", "Recents", "Art", "Zoo"])
+    @Test func recentsComesFirstRightBeforeFavorites() {
+        let albums = [album("Zoo"), album("Favorites", .favorites), album("Recents", allPhotos: true),
+                      album("Videos", .videos), album("Art")]
+        #expect(orderedAlbums(albums).map(\.title) == ["Recents", "Favorites", "Videos", "Art", "Zoo"])
     }
 
     @Test func otherAlbumsAreByTitle() {
