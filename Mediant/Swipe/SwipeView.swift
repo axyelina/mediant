@@ -8,7 +8,7 @@ struct SwipeView: View {
     @State private var session: SwipeSession?
     @State private var dragX: CGFloat = 0
     @State private var isAnimating = false
-    @State private var justTrashedID: String?
+    @State private var justDecidedID: String?
     @State private var currentSize: Int64?
 
     private let commitDistance: CGFloat = 90
@@ -97,7 +97,7 @@ struct SwipeView: View {
             withTransaction(Transaction(animation: nil)) {
                 session.commit(decision)
                 dragX = 0
-                justTrashedID = decision == .trashed ? id : nil
+                justDecidedID = id
             }
             isAnimating = false
         }
@@ -108,7 +108,7 @@ struct SwipeView: View {
         isAnimating = true
         withTransaction(Transaction(animation: nil)) {
             session.undo()
-            justTrashedID = nil
+            justDecidedID = nil
             // Start where the photo left the screen, then slide it back.
             dragX = last == .trashed ? -width : width
         }
@@ -152,7 +152,7 @@ struct SwipeView: View {
                     .padding(.bottom, 10)
 
                     PreviewStrip(assets: route.assets, currentIndex: session.index,
-                                 justTrashedID: justTrashedID) { index in
+                                 justDecidedID: justDecidedID) { index in
                         guard !isAnimating else { return }
                         session.jump(to: index)
                     }

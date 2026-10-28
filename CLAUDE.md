@@ -12,10 +12,10 @@ Mockups from the brainstorm: `docs/superpowers/mockups/` (open in a browser).
 
 | Folder | What lives there |
 |---|---|
-| `Mediant/Model/` | Pure logic, unit-tested: `DecisionStore` (kept/trashed per photo id, JSON in Application Support), `SwipeSession` (current index + undo stack), `ByteFormat` / `counted()` |
+| `Mediant/Model/` | Pure logic, unit-tested: `DecisionStore` (kept/trashed per photo id, JSON in Application Support), `CleanupStats` (all-time deleted count + freed bytes, `stats.json`), `SwipeSession` (current index + undo stack), `ByteFormat` / `counted()` |
 | `Mediant/Library/` | `PhotoLibrary` protocol + `PhotoKitLibrary`; `AlbumSizes` (background size sums); `ThumbnailLoader` (PHCachingImageManager) |
 | `Mediant/App/` | `AppModel` (owns everything, reloads on library changes), `RootView`, `FloatingTabBar`, `AccessView` |
-| `Mediant/Albums/`, `Album/` | Albums list (main page) and the album grid |
+| `Mediant/Albums/`, `Album/` | Albums list (main page) with the `ProgressCard` (space freed / items deleted), and the album grid |
 | `Mediant/Swipe/` | Swipe screen: `SwipeView` (page-slide drag), `PreviewStrip` (💖/👹 + ogre pop), `SparkleEdge`/`SparkleShape` (✨ edges), `PhotoPage` |
 | `Mediant/Trash/` | `TrashModel` (one-batch delete, restore) and `TrashView` |
 | `Mediant/Shared/` | `Chip` (the glass capsule button), `AssetImage` |
@@ -31,6 +31,9 @@ Mockups from the brainstorm: `docs/superpowers/mockups/` (open in a browser).
 - An image that fills its frame overflows it, and `.clipped()` does not stop the overflow from
   taking taps. `AssetImage` already turns off hit testing on the image; keep a
   `.contentShape(Rectangle())` on tappable cells.
+- The preview strip has **no ScrollView**: `PreviewStrip.centers(around:in:)` calculates every tile
+  position from the current photo and one animation moves them. A scroll view animating to a
+  target while tiles resize made the strip jump — do not go back to `scrollPosition`.
 - `project.yml` is the source of truth (XcodeGen). After adding/removing files run
   `xcodegen generate`. Never hand-edit the `.xcodeproj`.
 - TDD for anything in `Model/`, `Library/` logic and view models.

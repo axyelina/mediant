@@ -9,11 +9,13 @@ struct TrashModelTests {
     let library = FakePhotoLibrary()
     let store = DecisionStore(fileURL: FileManager.default.temporaryDirectory
         .appendingPathComponent("trash-\(UUID().uuidString).json"))
+    let stats = CleanupStats(fileURL: FileManager.default.temporaryDirectory
+        .appendingPathComponent("stats-\(UUID().uuidString).json"))
 
     @Test func emptyTrashClearsOnSuccess() async {
         store.set(.trashed, for: "a")
         store.set(.trashed, for: "b")
-        let trash = TrashModel(store: store, library: library)
+        let trash = TrashModel(store: store, library: library, stats: stats)
         await trash.emptyTrash()
         #expect(library.deleted == ["a", "b"])
         #expect(store.trashedIDs.isEmpty)
@@ -23,7 +25,7 @@ struct TrashModelTests {
     @Test func declinedDeleteKeepsIDsSilently() async {
         store.set(.trashed, for: "a")
         library.deleteError = DeleteError.declined
-        let trash = TrashModel(store: store, library: library)
+        let trash = TrashModel(store: store, library: library, stats: stats)
         await trash.emptyTrash()
         #expect(store.trashedIDs == ["a"])
         #expect(trash.errorMessage == nil)
@@ -32,16 +34,45 @@ struct TrashModelTests {
     @Test func failedDeleteKeepsIDsAndShowsError() async {
         store.set(.trashed, for: "a")
         library.deleteError = Broken()
-        let trash = TrashModel(store: store, library: library)
+        let trash = TrashModel(store: store, library: library, stats: stats)
         await trash.emptyTrash()
         #expect(store.trashedIDs == ["a"])
         #expect(trash.errorMessage != nil)
     }
 
+    @Test func emptyTrashRecordsProgress() async {
+        library.sizes = ["a": 100, "b": 250]
+        store.set(.trashed, for: "a")
+        store.set(.trashed, for: "b")
+        let trash = TrashModel(store: store, library: library, stats: stats)
+        await trash.emptyTrash()
+        #expect(stats.deletedCount == 2)
+        #expect(stats.freedBytes == 350)
+    }
+
+    @Test func progressCountsOnlyPhotosReallyDeleted() async {
+        library.sizes = ["a": 100, "b": 250]
+        library.undeletable = ["b"]
+        store.set(.trashed, for: "a")
+        store.set(.trashed, for: "b")
+        let trash = TrashModel(store: store, library: library, stats: stats)
+        await trash.emptyTrash()
+        #expect(stats.deletedCount == 1)
+        #expect(stats.freedBytes == 100)
+    }
+
+    @Test func declinedDeleteRecordsNothing() async {
+        store.set(.trashed, for: "a")
+        library.deleteError = DeleteError.declined
+        let trash = TrashModel(store: store, library: library, stats: stats)
+        await trash.emptyTrash()
+        #expect(stats.deletedCount == 0)
+    }
+
     @Test func restoreSelectedUntrashesAndExitsSelect() {
         store.set(.trashed, for: "a")
         store.set(.trashed, for: "b")
-        let trash = TrashModel(store: store, library: library)
+        let trash = TrashModel(store: store, library: library, stats: stats)
         trash.isSelecting = true
         trash.selection = ["a"]
         trash.restoreSelected()
@@ -55,7 +86,7 @@ struct TrashModelTests {
         library.sizes = ["a": 100, "b": 250]
         store.set(.trashed, for: "a")
         store.set(.trashed, for: "b")
-        let trash = TrashModel(store: store, library: library)
+        let trash = TrashModel(store: store, library: library, stats: stats)
         await trash.refreshSize()
         #expect(trash.totalBytes == 350)
     }

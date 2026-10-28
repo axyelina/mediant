@@ -8,6 +8,8 @@ final class FakePhotoLibrary: PhotoLibrary, @unchecked Sendable {
     var assetsByAlbum: [String: [AssetInfo]] = [:]
     var sizes: [String: Int64] = [:]
     var deleteError: Error?
+    /// Ids that `delete` skips, like shared photos.
+    var undeletable: Set<String> = []
     private(set) var deleted: [String] = []
     private(set) var singleSizeCalls = 0
     private(set) var batchSizeCalls = 0
@@ -33,9 +35,11 @@ final class FakePhotoLibrary: PhotoLibrary, @unchecked Sendable {
         return Set(ids).intersection(all)
     }
 
-    func delete(_ ids: [String]) async throws {
+    func delete(_ ids: [String]) async throws -> [String] {
         if let deleteError { throw deleteError }
-        deleted += ids
+        let done = ids.filter { !undeletable.contains($0) }
+        deleted += done
+        return done
     }
 
     /// Adds an album whose assets have the given sizes (nil = unknown size).

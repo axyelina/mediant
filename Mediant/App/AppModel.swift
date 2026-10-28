@@ -14,6 +14,7 @@ final class AppModel {
     let store: DecisionStore
     let sizes: AlbumSizes
     let trash: TrashModel
+    let stats: CleanupStats
     let thumbs = ThumbnailLoader()
 
     var access: AccessLevel = .notDetermined
@@ -31,7 +32,8 @@ final class AppModel {
         self.library = library
         store = DecisionStore(fileURL: storeURL)
         sizes = AlbumSizes(library: library)
-        trash = TrashModel(store: store, library: library)
+        stats = CleanupStats(fileURL: storeURL.deletingLastPathComponent().appending(path: "stats.json"))
+        trash = TrashModel(store: store, library: library, stats: stats)
     }
 
     /// Asks for access and loads the library. Calls while one is running wait for it.

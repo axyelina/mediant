@@ -89,12 +89,12 @@ final class PhotoKitLibrary: PhotoLibrary {
         return found
     }
 
-    func delete(_ ids: [String]) async throws {
+    func delete(_ ids: [String]) async throws -> [String] {
         var deletable: [PHAsset] = []
         PHAsset.fetchAssets(withLocalIdentifiers: ids, options: nil).enumerateObjects { asset, _, _ in
             if asset.canPerform(.delete) { deletable.append(asset) }
         }
-        guard !deletable.isEmpty else { return }
+        guard !deletable.isEmpty else { return [] }
         do {
             try await PHPhotoLibrary.shared().performChanges {
                 PHAssetChangeRequest.deleteAssets(deletable as NSArray)
@@ -102,6 +102,7 @@ final class PhotoKitLibrary: PhotoLibrary {
         } catch let error as PHPhotosError where error.code == .userCancelled {
             throw DeleteError.declined
         }
+        return deletable.map(\.localIdentifier)
     }
 
     private static var newestFirst: PHFetchOptions {

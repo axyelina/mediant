@@ -39,6 +39,6 @@ protocol PhotoLibrary: AnyObject, Sendable {
     func fileSizes(inAlbum id: String, cached: [String: Int64?]) -> [String: Int64?]
     func existingIDs(among ids: [String]) -> Set<String>
     /// Shows the iOS confirmation dialog. Throws `DeleteError.declined` when the user declines.
-    /// Photos that cannot be deleted (shared or synced) are skipped.
-    func delete(_ ids: [String]) async throws
+    /// Photos that cannot be deleted (shared or synced) are skipped. Returns the ids really deleted.
+    func delete(_ ids: [String]) async throws -> [String]
 }

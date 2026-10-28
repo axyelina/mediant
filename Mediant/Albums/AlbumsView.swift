@@ -38,7 +38,12 @@ struct AlbumsView: View {
                 }
             }
             .padding(.top, 8)
-            .padding(.bottom, FloatingTabBar.height + 24)
+            .padding(.bottom, FloatingTabBar.height + 100)
+        }
+        .overlay(alignment: .bottom) {
+            ProgressCard(freedBytes: model.stats.freedBytes, deletedCount: model.stats.deletedCount)
+                .padding(.horizontal, 16)
+                .padding(.bottom, FloatingTabBar.height + 18)
         }
         .navigationTitle("Albums")
         .toolbar(.hidden, for: .navigationBar)

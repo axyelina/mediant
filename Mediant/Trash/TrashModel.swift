@@ -7,6 +7,7 @@ import Observation
 final class TrashModel {
     private let store: DecisionStore
     private let library: PhotoLibrary
+    private let stats: CleanupStats
 
     var isSelecting = false
     var selection: Set<String> = []
@@ -17,9 +18,10 @@ final class TrashModel {
     /// Increments after each successful delete (drives the success haptic).
     private(set) var deleteCount = 0
 
-    init(store: DecisionStore, library: PhotoLibrary) {
+    init(store: DecisionStore, library: PhotoLibrary, stats: CleanupStats) {
         self.store = store
         self.library = library
+        self.stats = stats
     }
 
     func toggle(_ id: String) {
@@ -43,8 +45,11 @@ final class TrashModel {
         isDeleting = true
         errorMessage = nil
         defer { isDeleting = false }
+        // Measure before deleting: afterwards the photos are gone.
+        let sizes = await Self.sizes(of: ids, library: library)
         do {
-            try await library.delete(ids)
+            let deleted = try await library.delete(ids)
+            stats.record(deleted: deleted.count, bytes: deleted.compactMap { sizes[$0] }.reduce(Int64(0), +))
             store.clearTrash(ids)
             totalBytes = nil
             deleteCount += 1
@@ -53,6 +58,12 @@ final class TrashModel {
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+
+    private nonisolated static func sizes(of ids: [String], library: PhotoLibrary) async -> [String: Int64] {
+        var sizes: [String: Int64] = [:]
+        for id in ids { sizes[id] = library.fileSize(ofAsset: id) }
+        return sizes
     }
 
     func refreshSize() async {
