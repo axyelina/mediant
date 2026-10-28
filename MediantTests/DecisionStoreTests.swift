@@ -63,6 +63,13 @@ struct DecisionStoreTests {
         #expect(store.decision(for: "a") == nil)
     }
 
+    @Test func knownIDsListsEveryDecidedPhoto() {
+        let store = DecisionStore(fileURL: url)
+        store.set(.trashed, for: "a")
+        store.set(.kept, for: "b")
+        #expect(Set(store.knownIDs) == ["a", "b"])
+    }
+
     @Test func corruptFileStartsEmpty() throws {
         try Data("not json".utf8).write(to: url)
         let store = DecisionStore(fileURL: url)

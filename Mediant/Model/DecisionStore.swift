@@ -26,6 +26,8 @@ final class DecisionStore {
 
     var trashedIDs: [String] { state.trash }
     var trashCount: Int { state.trash.count }
+    /// Every photo with a decision (kept or trashed).
+    var knownIDs: [String] { Array(state.decisions.keys) }
 
     func decision(for id: String) -> Decision? {
         state.decisions[id]
