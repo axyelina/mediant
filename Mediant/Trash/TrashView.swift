@@ -37,6 +37,14 @@ struct TrashView: View {
             if !ids.isEmpty { bottomBar(trash) }
         }
         .task(id: ids) { await trash.refreshSize() }
+        .alert("Couldn't delete", isPresented: Binding(
+            get: { trash.errorMessage != nil },
+            set: { if !$0 { trash.errorMessage = nil } })
+        ) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(trash.errorMessage ?? "")
+        }
         .sensoryFeedback(.success, trigger: trash.deleteCount)
     }
 

@@ -1,9 +1,14 @@
 import Photos
 
 final class PhotoKitLibrary: PhotoLibrary {
-    /// Smart albums that are hidden from the list. Raw value 1000000201 is "Recently Deleted".
+    /// Albums hidden from the list: Hidden, "Recently Deleted" (raw value 1000000201), and albums
+    /// whose photos cannot be deleted (iCloud shared, synced from a computer).
     private static let excludedSubtypes: Set<Int> = [
         PHAssetCollectionSubtype.smartAlbumAllHidden.rawValue, 1_000_000_201,
+        PHAssetCollectionSubtype.albumCloudShared.rawValue,
+        PHAssetCollectionSubtype.albumSyncedAlbum.rawValue,
+        PHAssetCollectionSubtype.albumSyncedFaces.rawValue,
+        PHAssetCollectionSubtype.albumSyncedEvent.rawValue,
     ]
 
     func accessLevel() -> AccessLevel {
@@ -66,9 +71,17 @@ final class PhotoKitLibrary: PhotoLibrary {
     }
 
     func delete(_ ids: [String]) async throws {
-        let assets = PHAsset.fetchAssets(withLocalIdentifiers: ids, options: nil)
-        try await PHPhotoLibrary.shared().performChanges {
-            PHAssetChangeRequest.deleteAssets(assets)
+        var deletable: [PHAsset] = []
+        PHAsset.fetchAssets(withLocalIdentifiers: ids, options: nil).enumerateObjects { asset, _, _ in
+            if asset.canPerform(.delete) { deletable.append(asset) }
+        }
+        guard !deletable.isEmpty else { return }
+        do {
+            try await PHPhotoLibrary.shared().performChanges {
+                PHAssetChangeRequest.deleteAssets(deletable as NSArray)
+            }
+        } catch let error as PHPhotosError where error.code == .userCancelled {
+            throw DeleteError.declined
         }
     }
 

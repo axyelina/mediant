@@ -21,6 +21,11 @@ struct AssetInfo: Identifiable, Hashable {
     let duration: TimeInterval
 }
 
+enum DeleteError: Error {
+    /// The user tapped "Don't Allow" in the iOS dialog.
+    case declined
+}
+
 /// The app's view of the photo library. PhotoKit lives behind it so logic can be tested with a fake.
 protocol PhotoLibrary: AnyObject, Sendable {
     func accessLevel() -> AccessLevel
@@ -30,6 +35,7 @@ protocol PhotoLibrary: AnyObject, Sendable {
     func assets(inAlbum id: String) -> [AssetInfo]
     func fileSize(ofAsset id: String) -> Int64?
     func existingIDs(among ids: [String]) -> Set<String>
-    /// Shows the iOS confirmation dialog; throws when the user declines.
+    /// Shows the iOS confirmation dialog. Throws `DeleteError.declined` when the user declines.
+    /// Photos that cannot be deleted (shared or synced) are skipped.
     func delete(_ ids: [String]) async throws
 }

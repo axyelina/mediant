@@ -12,6 +12,8 @@ final class TrashModel {
     var selection: Set<String> = []
     private(set) var totalBytes: Int64?
     private(set) var isDeleting = false
+    /// Set when deleting failed for a reason other than the user declining.
+    var errorMessage: String?
     /// Increments after each successful delete (drives the success haptic).
     private(set) var deleteCount = 0
 
@@ -39,14 +41,17 @@ final class TrashModel {
         let ids = store.trashedIDs
         guard !ids.isEmpty, !isDeleting else { return }
         isDeleting = true
+        errorMessage = nil
         defer { isDeleting = false }
         do {
             try await library.delete(ids)
             store.clearTrash(ids)
             totalBytes = nil
             deleteCount += 1
+        } catch DeleteError.declined {
+            // "Don't Allow" in the iOS dialog: keep the Trash as it is.
         } catch {
-            // Declined in the iOS dialog: keep the Trash as it is.
+            errorMessage = error.localizedDescription
         }
     }
 
