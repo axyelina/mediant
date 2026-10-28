@@ -42,14 +42,14 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 
 ### Video
 - [ ] "Biggest first" order for an album, or a "Large videos" smart source — fastest way to free space.
-- [ ] Show the per-item size on the swipe screen for every photo, not only on the album row.
 
 ### Swiping
 - [ ] Swipe up = "decide later" / skip without marking (leaves the photo undecided).
 - [ ] Burst photos and Live Photos: show the count of frames / the "LIVE" badge so the user knows
       what they delete.
 - [ ] "On this day" / by-month source: swipe through one month at a time, a natural session size.
-- [ ] Undo after leaving and coming back (the undo stack lives only in the session now).
+- [ ] Undo after leaving and coming back. Going to the Trash and back keeps Undo now; Back to the
+      albums list and an app restart still lose it (the undo stack lives only in the session).
 
 ### Trash
 - [ ] Show the total size of the Trash on the "Empty" button (e.g. "Empty · 1.2 GB").
@@ -65,3 +65,21 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [ ] VoiceOver: actions for keep / delete / undo on the swipe screen, labels on emoji-only chips.
 - [ ] More languages after Russian (the String Catalog makes each one cheap).
 - [ ] Reduce Motion: tone down sparkles and the ogre pop.
+
+## Shipped
+
+### 2026-10-29
+- [x] App icon in light, dark and tinted variants.
+- [x] Splash: the launch ✨ flies from the icon art into the Albums title.
+- [x] Album sizes are cached and shimmer until they are measured again.
+- [x] Swipe screen: every photo shows whole; card-stack drag with a soft sparkle fade-out; drag
+      the preview strip to scroll it; tap the photo to skip it.
+- [x] Video (part of "Working with video"): looping playback on the top card, tap the time chip
+      to pause/play, drag it to scrub, 🔊/🔇 chip (sound plays on silent, volume up turns it on),
+      ▶ badge in the album grid.
+- [x] Album order: Recents, Favorites, Recently Added, Videos, Screenshots, Selfies first.
+- [x] Swipe between Albums and Trash.
+- [x] 👹 Trash counter next to Undo in the bottom row; Undo uses the `arrow.uturn.backward` symbol.
+- [x] The 👹 chip opens the Trash and coming back returns to the same photo with its Undo.
+- [x] Empty Trash reminds to clear Recently Deleted in Photos ("Open Photos" chip).
+- [x] Per-item size on the swipe screen for every photo (it was already there; idea removed).
