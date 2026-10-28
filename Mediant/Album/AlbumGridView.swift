@@ -40,6 +40,7 @@ struct AlbumGridView: View {
             let library = model.library
             let id = album.id
             assets = await Task.detached(priority: .userInitiated) { library.assets(inAlbum: id) }.value
+            await model.thumbs.prefetch(assets.map(\.id))
         }
     }
 }

@@ -29,12 +29,33 @@ final class ThumbnailLoader {
         }
     }
 
+    /// Fetches the PHAssets for many ids in one query off the main actor, so cells don't each query.
+    func prefetch(_ ids: [String]) async {
+        let missing = ids.filter { assets[$0] == nil }
+        guard !missing.isEmpty else { return }
+        let fetched = await Self.fetch(missing)
+        for asset in fetched.assets { assets[asset.localIdentifier] = asset }
+    }
+
+    private nonisolated static func fetch(_ ids: [String]) async -> AssetBox {
+        var found: [PHAsset] = []
+        PHAsset.fetchAssets(withLocalIdentifiers: ids, options: nil).enumerateObjects { asset, _, _ in
+            found.append(asset)
+        }
+        return AssetBox(assets: found)
+    }
+
     private func asset(for id: String) -> PHAsset? {
         if let cached = assets[id] { return cached }
         let asset = PHAsset.fetchAssets(withLocalIdentifiers: [id], options: nil).firstObject
         assets[id] = asset
         return asset
     }
+}
+
+/// PHAsset is immutable but not marked Sendable.
+private struct AssetBox: @unchecked Sendable {
+    let assets: [PHAsset]
 }
 
 /// Holds a request id that the cancel handler reads from another thread.

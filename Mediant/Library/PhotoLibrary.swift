@@ -34,6 +34,9 @@ protocol PhotoLibrary: AnyObject, Sendable {
     /// Newest first.
     func assets(inAlbum id: String) -> [AssetInfo]
     func fileSize(ofAsset id: String) -> Int64?
+    /// Size of every asset in the album in one pass; values in `cached` are reused, not measured again.
+    /// Stops early (partial result) when the current task is cancelled.
+    func fileSizes(inAlbum id: String, cached: [String: Int64?]) -> [String: Int64?]
     func existingIDs(among ids: [String]) -> Set<String>
     /// Shows the iOS confirmation dialog. Throws `DeleteError.declined` when the user declines.
     /// Photos that cannot be deleted (shared or synced) are skipped.

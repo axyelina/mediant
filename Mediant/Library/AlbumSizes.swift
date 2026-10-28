@@ -10,6 +10,7 @@ final class AlbumSizes {
     private var albumIDs: [String] = []
     private var allPhotosID: String?
     @ObservationIgnored private var assetSizes: [String: Int64?] = [:]
+    @ObservationIgnored private var running: Task<Void, Never>?
 
     init(library: PhotoLibrary) {
         self.library = library
@@ -26,25 +27,30 @@ final class AlbumSizes {
         return known.isEmpty ? nil : known.reduce(0, +)
     }
 
+    /// Recalculates all albums. A newer call cancels a running one.
     func refresh(_ albums: [AlbumInfo]) async {
+        running?.cancel()
+        let task = Task { await measure(albums) }
+        running = task
+        await task.value
+    }
+
+    private func measure(_ albums: [AlbumInfo]) async {
         albumIDs = albums.map(\.id)
         allPhotosID = albums.first(where: \.isAllPhotos)?.id
         // All-photos first: it fills the cache for every other album.
         for album in albums.sorted(by: { $0.isAllPhotos && !$1.isAllPhotos }) {
-            let library = library
-            let cache = assetSizes
-            let (sum, found) = await Task.detached(priority: .utility) {
-                var found: [String: Int64?] = [:]
-                var sum: Int64?
-                for asset in library.assets(inAlbum: album.id) {
-                    let size = cache[asset.id] ?? library.fileSize(ofAsset: asset.id)
-                    found[asset.id] = size
-                    if let size { sum = (sum ?? 0) + size }
-                }
-                return (sum, found)
-            }.value
+            let found = await Self.sizes(in: album.id, library: library, cached: assetSizes)
+            guard !Task.isCancelled else { return }
             assetSizes.merge(found) { _, new in new }
-            sizes[album.id] = sum
+            let known = found.values.compactMap { $0 }
+            sizes[album.id] = known.isEmpty ? nil : known.reduce(0, +)
         }
+    }
+
+    /// Runs off the main actor; cancellation of the calling task reaches PhotoKit enumeration.
+    private nonisolated static func sizes(in albumID: String, library: PhotoLibrary,
+                                          cached: [String: Int64?]) async -> [String: Int64?] {
+        library.fileSizes(inAlbum: albumID, cached: cached)
     }
 }

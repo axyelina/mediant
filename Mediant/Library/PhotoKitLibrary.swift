@@ -57,7 +57,26 @@ final class PhotoKitLibrary: PhotoLibrary {
 
     func fileSize(ofAsset id: String) -> Int64? {
         guard let asset = PHAsset.fetchAssets(withLocalIdentifiers: [id], options: nil).firstObject else { return nil }
-        // PhotoKit has no public size API; "fileSize" on PHAssetResource is the only source.
+        return Self.size(of: asset)
+    }
+
+    func fileSizes(inAlbum id: String, cached: [String: Int64?]) -> [String: Int64?] {
+        guard let collection = PHAssetCollection.fetchAssetCollections(
+            withLocalIdentifiers: [id], options: nil).firstObject else { return [:] }
+        var result: [String: Int64?] = [:]
+        PHAsset.fetchAssets(in: collection, options: nil).enumerateObjects { asset, _, stop in
+            if Task.isCancelled {
+                stop.pointee = true
+                return
+            }
+            let assetID = asset.localIdentifier
+            result[assetID] = cached[assetID] ?? Self.size(of: asset)
+        }
+        return result
+    }
+
+    /// PhotoKit has no public size API; "fileSize" on PHAssetResource is the only source.
+    private static func size(of asset: PHAsset) -> Int64? {
         let sizes = PHAssetResource.assetResources(for: asset)
             .compactMap { ($0.value(forKey: "fileSize") as? NSNumber)?.int64Value }
         return sizes.isEmpty ? nil : sizes.reduce(0, +)

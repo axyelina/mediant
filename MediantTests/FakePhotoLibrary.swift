@@ -9,12 +9,24 @@ final class FakePhotoLibrary: PhotoLibrary, @unchecked Sendable {
     var sizes: [String: Int64] = [:]
     var deleteError: Error?
     private(set) var deleted: [String] = []
+    private(set) var singleSizeCalls = 0
+    private(set) var batchSizeCalls = 0
 
     func accessLevel() -> AccessLevel { level }
     func requestAccess() async -> AccessLevel { level }
     func albums() -> [AlbumInfo] { albumList }
     func assets(inAlbum id: String) -> [AssetInfo] { assetsByAlbum[id] ?? [] }
-    func fileSize(ofAsset id: String) -> Int64? { sizes[id] }
+    func fileSize(ofAsset id: String) -> Int64? {
+        singleSizeCalls += 1
+        return sizes[id]
+    }
+
+    func fileSizes(inAlbum id: String, cached: [String: Int64?]) -> [String: Int64?] {
+        batchSizeCalls += 1
+        var result: [String: Int64?] = [:]
+        for asset in assets(inAlbum: id) { result[asset.id] = cached[asset.id] ?? sizes[asset.id] }
+        return result
+    }
 
     func existingIDs(among ids: [String]) -> Set<String> {
         let all = Set(assetsByAlbum.values.flatMap { $0.map(\.id) })

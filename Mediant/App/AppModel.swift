@@ -25,6 +25,7 @@ final class AppModel {
 
     @ObservationIgnored private var observer: LibraryObserver?
     @ObservationIgnored private var reloadTask: Task<Void, Never>?
+    @ObservationIgnored private var startTask: Task<Void, Never>?
 
     init(library: PhotoLibrary = PhotoKitLibrary(), storeURL: URL = AppModel.defaultStoreURL) {
         self.library = library
@@ -33,7 +34,16 @@ final class AppModel {
         trash = TrashModel(store: store, library: library)
     }
 
+    /// Asks for access and loads the library. Calls while one is running wait for it.
     func start() async {
+        if let startTask { return await startTask.value }
+        let task = Task { await runStart() }
+        startTask = task
+        await task.value
+        startTask = nil
+    }
+
+    private func runStart() async {
         access = library.accessLevel()
         if access == .notDetermined {
             access = await library.requestAccess()
@@ -54,9 +64,18 @@ final class AppModel {
     }
 
     func reload() async {
-        albums = library.albums()
-        store.removeMissing(keeping: library.existingIDs(among: store.knownIDs))
+        let library = library
+        albums = await Self.offMain { library.albums() }
+        let known = store.knownIDs
+        let existing = await Self.offMain { library.existingIDs(among: known) }
+        // Keep ids decided while the query ran.
+        store.removeMissing(keeping: existing.union(Set(store.knownIDs).subtracting(known)))
         await sizes.refresh(albums)
+    }
+
+    /// Runs synchronous PhotoKit work off the main actor.
+    private nonisolated static func offMain<T: Sendable>(_ work: @Sendable () -> T) async -> T {
+        work()
     }
 
     private func scheduleReload() {

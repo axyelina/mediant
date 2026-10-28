@@ -37,6 +37,15 @@ struct AlbumSizesTests {
         #expect(sizes.total == 150)
     }
 
+    @Test func usesOneBatchedQueryPerAlbum() async {
+        library.addAlbum("x", assets: [("a", 100), ("b", 200)])
+        library.addAlbum("y", assets: [("c", 50)])
+        let sizes = AlbumSizes(library: library)
+        await sizes.refresh(library.albums())
+        #expect(library.singleSizeCalls == 0)
+        #expect(library.batchSizeCalls == 2)
+    }
+
     @Test func unknownAlbumHasNoSize() {
         let sizes = AlbumSizes(library: library)
         #expect(sizes.size(of: "nope") == nil)
