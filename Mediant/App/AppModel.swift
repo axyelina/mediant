@@ -23,6 +23,8 @@ final class AppModel {
     var albumsPath = NavigationPath()
     /// True while the swipe screen is on screen; it hides the tab bar.
     var isSwiping = false
+    /// False until the launch ✨ lands in the title; the title ✨ stays hidden until then.
+    var splashFinished = false
 
     @ObservationIgnored private var observer: LibraryObserver?
     @ObservationIgnored private var reloadTask: Task<Void, Never>?
@@ -34,6 +36,7 @@ final class AppModel {
         sizes = AlbumSizes(library: library)
         stats = CleanupStats(fileURL: storeURL.deletingLastPathComponent().appending(path: "stats.json"))
         trash = TrashModel(store: store, library: library, stats: stats)
+        access = library.accessLevel()
     }
 
     /// Asks for access and loads the library. Calls while one is running wait for it.

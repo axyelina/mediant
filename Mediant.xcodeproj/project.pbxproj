@@ -8,10 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		086B5CFA3DE3F8100E85CBC1 /* TrashModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF25DA03F55B8498FBFD915 /* TrashModelTests.swift */; };
+		0AB281409FBD3AA66DBCC063 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39964D3CAF40E333CE9F38C2 /* SplashView.swift */; };
+		179E9308DA080B68CE601AD0 /* LaunchArtTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F530D0E120C59DE789626A5 /* LaunchArtTests.swift */; };
 		18D362878A17A0C83B786253 /* Decision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7D283517554BB3A2827263 /* Decision.swift */; };
 		1A0ABDCD0291ED994F160CB1 /* TrashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F18B1E441746022D8F7E16D /* TrashView.swift */; };
 		1DC2CB0A54371B74E2CD7B7A /* AlbumSizes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D45246AD07112AC23B807E /* AlbumSizes.swift */; };
 		2666D1F79E0E002296926EAE /* DecisionStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F1AE4C1CC02F43ABBD6FE6 /* DecisionStoreTests.swift */; };
+		2A93D821BB4BA9A5D3EE422A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1616EEB3522DCF5413F677E1 /* LaunchScreen.storyboard */; };
 		2DD21714D552B03D928BC342 /* ProgressCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2496E6193E4A28856625D00 /* ProgressCard.swift */; };
 		2EEEDB297492229750F13372 /* ByteFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E012775299F2BC4CEA5BD46E /* ByteFormat.swift */; };
 		2F6ACCF78BA09783E5BB3A82 /* AlbumFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7CC638F34E922CD77981F1 /* AlbumFilterTests.swift */; };
@@ -23,6 +26,8 @@
 		3F7048E555A5600F9CCD3EEB /* SwipeSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193059841FE73FA07627E93F /* SwipeSession.swift */; };
 		509ECBC26BFD44F9ACA522AB /* AlbumGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD68D951108120D8249810C /* AlbumGridView.swift */; };
 		562E28EE3938B1D362CD0B12 /* CleanupStatsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E11F6C32CA4087B5E474416 /* CleanupStatsTests.swift */; };
+		568365783573E3308853CDE4 /* AppModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A57719C73959F8333D509A /* AppModelTests.swift */; };
+		56F87360147A9269D144D9BC /* LaunchArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9A5730B48A83BAB327B858 /* LaunchArt.swift */; };
 		5B1CBE778224462E2E875E86 /* SwipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2EF1A587CF8B22CB68A5FD /* SwipeView.swift */; };
 		7341B169347B50505B50A75F /* Chip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA69708B6A86DDD429E1923 /* Chip.swift */; };
 		76263E2550D3EA78B34DEA1F /* AlbumRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C025BE9E75AF761F2CEF55 /* AlbumRow.swift */; };
@@ -61,6 +66,7 @@
 		04D45246AD07112AC23B807E /* AlbumSizes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumSizes.swift; sourceTree = "<group>"; };
 		0DF25DA03F55B8498FBFD915 /* TrashModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashModelTests.swift; sourceTree = "<group>"; };
 		149ABDC4B09270224B18AE31 /* PhotoPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPage.swift; sourceTree = "<group>"; };
+		1616EEB3522DCF5413F677E1 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		193059841FE73FA07627E93F /* SwipeSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeSession.swift; sourceTree = "<group>"; };
 		1C2EF1A587CF8B22CB68A5FD /* SwipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeView.swift; sourceTree = "<group>"; };
 		218B08A622E04843A06AC885 /* AlbumsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsView.swift; sourceTree = "<group>"; };
@@ -68,6 +74,7 @@
 		26A3453BBE0FA1771FD7AD6B /* PhotoKitLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoKitLibrary.swift; sourceTree = "<group>"; };
 		2BD7C31EE7E1AEFDDDBCA0D2 /* DecisionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecisionStore.swift; sourceTree = "<group>"; };
 		37F1AE4C1CC02F43ABBD6FE6 /* DecisionStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecisionStoreTests.swift; sourceTree = "<group>"; };
+		39964D3CAF40E333CE9F38C2 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		3F7D283517554BB3A2827263 /* Decision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decision.swift; sourceTree = "<group>"; };
 		3FD68D951108120D8249810C /* AlbumGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumGridView.swift; sourceTree = "<group>"; };
 		546E9F75E86C23A57490AF4E /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -77,6 +84,9 @@
 		6E11F6C32CA4087B5E474416 /* CleanupStatsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanupStatsTests.swift; sourceTree = "<group>"; };
 		70B78503B35A6592C2AC3574 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		854BA78EEDC49F4F1C6D64C3 /* FloatingTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingTabBar.swift; sourceTree = "<group>"; };
+		85A57719C73959F8333D509A /* AppModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModelTests.swift; sourceTree = "<group>"; };
+		8F530D0E120C59DE789626A5 /* LaunchArtTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchArtTests.swift; sourceTree = "<group>"; };
+		8F9A5730B48A83BAB327B858 /* LaunchArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchArt.swift; sourceTree = "<group>"; };
 		9F18B1E441746022D8F7E16D /* TrashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashView.swift; sourceTree = "<group>"; };
 		A595E3ABDA82A784967D1E7F /* SparkleEdge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleEdge.swift; sourceTree = "<group>"; };
 		A63478135307D4B7799434EA /* ByteFormatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ByteFormatTests.swift; sourceTree = "<group>"; };
@@ -130,6 +140,15 @@
 			path = Album;
 			sourceTree = "<group>";
 		};
+		573F9ED63BBD17BD046072B9 /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				8F9A5730B48A83BAB327B858 /* LaunchArt.swift */,
+				39964D3CAF40E333CE9F38C2 /* SplashView.swift */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
 		7364895C969A6FD84970EA5B /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -162,6 +181,7 @@
 				8C1C533EA7AE7D9F93AD76C6 /* Model */,
 				F7E152D7452354DB9D012D55 /* Preview Content */,
 				0E75EA1A6FB96061BAC7EB4B /* Shared */,
+				573F9ED63BBD17BD046072B9 /* Splash */,
 				26C46715409B31B448784E4D /* Swipe */,
 				E5AAAB07308B46B5C34A6D07 /* Trash */,
 			);
@@ -186,10 +206,12 @@
 			children = (
 				DA7CC638F34E922CD77981F1 /* AlbumFilterTests.swift */,
 				AFDB848C852B704127DB781A /* AlbumSizesTests.swift */,
+				85A57719C73959F8333D509A /* AppModelTests.swift */,
 				A63478135307D4B7799434EA /* ByteFormatTests.swift */,
 				6E11F6C32CA4087B5E474416 /* CleanupStatsTests.swift */,
 				37F1AE4C1CC02F43ABBD6FE6 /* DecisionStoreTests.swift */,
 				CDE0DC556CA80ACA0ED183FE /* FakePhotoLibrary.swift */,
+				8F530D0E120C59DE789626A5 /* LaunchArtTests.swift */,
 				F262B57EB936D37E5D6FC508 /* SwipeSessionTests.swift */,
 				0DF25DA03F55B8498FBFD915 /* TrashModelTests.swift */,
 			);
@@ -202,6 +224,7 @@
 				D39F2603D94E7984B6B706C7 /* AccessView.swift */,
 				70B78503B35A6592C2AC3574 /* AppModel.swift */,
 				854BA78EEDC49F4F1C6D64C3 /* FloatingTabBar.swift */,
+				1616EEB3522DCF5413F677E1 /* LaunchScreen.storyboard */,
 				546E9F75E86C23A57490AF4E /* RootView.swift */,
 			);
 			path = App;
@@ -326,6 +349,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				950B241B3434D4C8577609D0 /* Assets.xcassets in Resources */,
+				2A93D821BB4BA9A5D3EE422A /* LaunchScreen.storyboard in Resources */,
 				B35F72DD2D2FCB4456722D7B /* Preview Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -339,10 +363,12 @@
 			files = (
 				2F6ACCF78BA09783E5BB3A82 /* AlbumFilterTests.swift in Sources */,
 				3EABAA36A27145C83CA406A6 /* AlbumSizesTests.swift in Sources */,
+				568365783573E3308853CDE4 /* AppModelTests.swift in Sources */,
 				3A73B3FB9F8BED499C173AF3 /* ByteFormatTests.swift in Sources */,
 				562E28EE3938B1D362CD0B12 /* CleanupStatsTests.swift in Sources */,
 				2666D1F79E0E002296926EAE /* DecisionStoreTests.swift in Sources */,
 				DF5792A19BF48D7CC75945D7 /* FakePhotoLibrary.swift in Sources */,
+				179E9308DA080B68CE601AD0 /* LaunchArtTests.swift in Sources */,
 				90A74C7C422D8768658B0F92 /* SwipeSessionTests.swift in Sources */,
 				086B5CFA3DE3F8100E85CBC1 /* TrashModelTests.swift in Sources */,
 			);
@@ -366,6 +392,7 @@
 				18D362878A17A0C83B786253 /* Decision.swift in Sources */,
 				A9DA57F0DB185727E3408A44 /* DecisionStore.swift in Sources */,
 				8358BA470BBD99DEFE0E4F1F /* FloatingTabBar.swift in Sources */,
+				56F87360147A9269D144D9BC /* LaunchArt.swift in Sources */,
 				7E66BE37DFF1CDE3952D2681 /* MediantApp.swift in Sources */,
 				7DC5BB4C334CAC51771C6412 /* PhotoKitLibrary.swift in Sources */,
 				FE70965FAE9D255EAC735065 /* PhotoLibrary.swift in Sources */,
@@ -375,6 +402,7 @@
 				F9BFFA33DC9D45F5079F5D23 /* RootView.swift in Sources */,
 				EB27CD0DC0A0B7FE0F71A8CA /* SparkleEdge.swift in Sources */,
 				3D751FF18F4D7B8B570715D6 /* SparkleShape.swift in Sources */,
+				0AB281409FBD3AA66DBCC063 /* SplashView.swift in Sources */,
 				3F7048E555A5600F9CCD3EEB /* SwipeSession.swift in Sources */,
 				5B1CBE778224462E2E875E86 /* SwipeView.swift in Sources */,
 				BBCF62054C337247A1E3B952 /* ThumbnailLoader.swift in Sources */,
@@ -473,7 +501,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Median't";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Median't shows your photos so you can swipe to keep or delete them. Nothing leaves your phone.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -591,7 +619,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Median't";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Median't shows your photos so you can swipe to keep or delete them. Nothing leaves your phone.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

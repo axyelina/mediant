@@ -8,7 +8,10 @@ struct AlbumsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Albums ✨").font(.largeTitle.bold())
+                    HStack(spacing: 6) {
+                        Text("Albums").font(.largeTitle.bold())
+                        TitleSparkle(size: 30)
+                    }
                     Text("\(counted(model.albums.count, "album", "albums")) · \(ByteFormat.string(model.sizes.total))")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)

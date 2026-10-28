@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="2904" viewBox="0 -60 100 220">
+  <!-- dark.svg stretched to a tall screen: same art, the diagonal extended at the same angle -->
+  <defs>
+    <clipPath id="left"><path d="M0 -60H76.4L23.6 160H0Z"/></clipPath>
+    <clipPath id="right"><path d="M76.4 -60H100V160H23.6Z"/></clipPath>
+  </defs>
+  <rect y="-60" width="100" height="220" fill="#1c0812"/>
+  <path d="M0 -60H76.4L23.6 160H0Z" fill="#12050a"/>
+  <g clip-path="url(#left)"><path transform="translate(50 50) scale(0.62 0.8)" d="M0 -50 Q7 -7 50 0 Q7 7 0 50 Q-7 7 -50 0 Q-7 -7 0 -50Z" fill="#c2184e"/></g>
+  <g clip-path="url(#right)"><path transform="translate(50 50) scale(0.62 0.8)" d="M0 -50 Q7 -7 50 0 Q7 7 0 50 Q-7 7 -50 0 Q-7 -7 0 -50Z" fill="#ff5c93"/></g>
+  <path transform="translate(76 24) scale(0.16 0.22)" d="M0 -50 Q7 -7 50 0 Q7 7 0 50 Q-7 7 -50 0 Q-7 -7 0 -50Z" fill="#ff5c93"/>
+  <path transform="translate(24 78) scale(0.11 0.15)" d="M0 -50 Q7 -7 50 0 Q7 7 0 50 Q-7 7 -50 0 Q-7 -7 0 -50Z" fill="#c2184e"/>
+</svg>

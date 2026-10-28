@@ -3,6 +3,7 @@ import SwiftUI
 struct RootView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.scenePhase) private var scenePhase
+    @State private var splashGone = false
 
     var body: some View {
         @Bindable var model = model
@@ -30,6 +31,17 @@ struct RootView: View {
                 }
             } else {
                 AccessView()
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .overlayPreferenceValue(SplashTarget.self) { target in
+            if !splashGone {
+                GeometryReader { proxy in
+                    SplashView(target: target.map { proxy[$0] }, size: proxy.size,
+                               onLand: { model.splashFinished = true },
+                               onDone: { splashGone = true })
+                }
+                .ignoresSafeArea()
             }
         }
         .onChange(of: scenePhase) { _, phase in

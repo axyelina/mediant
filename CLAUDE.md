@@ -14,13 +14,14 @@ Mockups from the brainstorm: `docs/superpowers/mockups/` (open in a browser).
 |---|---|
 | `Mediant/Model/` | Pure logic, unit-tested: `visibleAssets` (album filter: no 👹, 💖 only with "Show 💖"), `DecisionStore` (kept/trashed per photo id, JSON in Application Support), `CleanupStats` (all-time deleted count + freed bytes, `stats.json`), `SwipeSession` (current index + undo stack), `ByteFormat` / `counted()` |
 | `Mediant/Library/` | `PhotoLibrary` protocol + `PhotoKitLibrary`; `AlbumSizes` (background size sums); `ThumbnailLoader` (PHCachingImageManager) |
-| `Mediant/App/` | `AppModel` (owns everything, reloads on library changes), `RootView`, `FloatingTabBar`, `AccessView` |
+| `Mediant/App/` | `AppModel` (owns everything, reloads on library changes), `RootView`, `FloatingTabBar`, `AccessView`, `LaunchScreen.storyboard` (the `LaunchArt` image, aspect-fill) |
+| `Mediant/Splash/` | `LaunchArt` (launch picture geometry in screen points, unit-tested), `SplashView` (launch ✨ flies into the title), `TitleSparkle` (the drawn ✨ cluster in the Albums / access titles, the landing spot) |
 | `Mediant/Albums/`, `Album/` | Albums list (main page) with the `ProgressCard` (space freed / items deleted), and the album grid |
 | `Mediant/Swipe/` | Swipe screen: `SwipeView` (page-slide drag), `PreviewStrip` (💖/👹 + ogre pop), `SparkleEdge`/`SparkleShape` (✨ edges), `PhotoPage` |
 | `Mediant/Trash/` | `TrashModel` (one-batch delete, restore) and `TrashView` |
 | `Mediant/Shared/` | `Chip` (the glass capsule button), `AssetImage` |
 | `MediantTests/` | Swift Testing; `FakePhotoLibrary` stands in for PhotoKit |
-| `Design/AppIcon/` | App icon sources: `light.svg` (✨ on the delete/keep diagonal split), `dark.svg`, `tinted.svg`. Edit the SVG, then `swift Design/AppIcon/render.swift` from the repo root writes the 1024 px PNGs into `AppIcon.appiconset` |
+| `Design/AppIcon/` | App icon sources: `light.svg` (✨ on the delete/keep diagonal split), `dark.svg`, `tinted.svg`; launch screen sources `launch-light.svg` / `launch-dark.svg` (the icon art in a 100×220 canvas). Edit the SVG, then `swift Design/AppIcon/render.swift` from the repo root writes the PNGs into `AppIcon.appiconset` and `LaunchArt.imageset` |
 
 ## Rules
 
@@ -35,6 +36,11 @@ Mockups from the brainstorm: `docs/superpowers/mockups/` (open in a browser).
 - The preview strip has **no ScrollView**: `PreviewStrip.centers(around:in:)` calculates every tile
   position from the current photo and one animation moves them. A scroll view animating to a
   target while tiles resize made the strip jump — do not go back to `scrollPosition`.
+- **Icon → launch screen → splash → title ✨ is one picture.** `SplashView` draws the launch art
+  in code and must match `launch-*.svg` exactly on its first frame (`LaunchArt` holds the shared
+  geometry, `SplashView.Palette` the colors). Change the icon art in all three places. The title ✨
+  is a drawn `SparkleShape(cluster: true)`, not the emoji. The splash waits 0.4 s before it moves:
+  iOS is still fading the static launch screen out, and moving earlier leaves a ghost ✨.
 - `project.yml` is the source of truth (XcodeGen). After adding/removing files run
   `xcodegen generate`. Never hand-edit the `.xcodeproj`.
 - TDD for anything in `Model/`, `Library/` logic and view models.

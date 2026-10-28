@@ -23,7 +23,8 @@ targets:
         INFOPLIST_KEY_CFBundleDisplayName: "Median't"
         INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "Median't shows your photos so you can swipe to keep or delete them. Nothing leaves your phone."
         GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        # The app icon stretched to the screen; the splash animation starts from the same frame.
+        INFOPLIST_KEY_UILaunchStoryboardName: LaunchScreen
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
         TARGETED_DEVICE_FAMILY: "1"

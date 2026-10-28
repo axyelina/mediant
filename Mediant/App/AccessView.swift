@@ -7,7 +7,7 @@ struct AccessView: View {
 
     var body: some View {
         VStack(spacing: 14) {
-            Text("✨").font(.system(size: 56))
+            TitleSparkle(size: 56)
             Text("Median't needs your photos")
                 .font(.title2.bold())
             Text("Swipe left to delete, right to keep. Your photos never leave your phone.")
