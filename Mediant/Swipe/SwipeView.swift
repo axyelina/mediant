@@ -25,9 +25,9 @@ struct SwipeView: View {
                     } else {
                         pages(session, width: width)
                             .gesture(drag(session, width: width))
-                        SparkleEdge(side: .leading, color: Color(red: 1, green: 0.27, blue: 0.23),
+                        SparkleEdge(side: .leading, color: Color(red: 0x47 / 255, green: 0x01 / 255, blue: 0x12 / 255), // #470112
                                     progress: dragX < 0 ? progress : 0)
-                        SparkleEdge(side: .trailing, color: Color(red: 0.19, green: 0.82, blue: 0.35),
+                        SparkleEdge(side: .trailing, color: Color(red: 0x75 / 255, green: 0x01 / 255, blue: 0x3D / 255), // #75013d
                                     progress: dragX > 0 ? progress : 0)
                     }
                     overlay(session)
