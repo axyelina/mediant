@@ -6,10 +6,9 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 
 ## From the user
 
-- [ ] **Working with video.** The top card plays its video in a loop (sound follows the silent
-      switch). Still open: scrub with a drag on the "▶ 0:32" chip, a sound on/off chip (a tap on
-      the card is skip), show the video size more prominently (videos are where the space is), a
-      ▶ badge on video tiles in the album grid.
+- [ ] **Working with video.** Shipped: looping playback on the top card, scrub on the ▶ chip,
+      🔊/🔇 chip, ▶ badge in the album grid. Still open: show the video size more prominently
+      (videos are where the space is).
 - [ ] **Swipe between tabs.** Horizontal swipe on the tab bar (or the page edge) switches
       Trash ↔ Albums. Must not fight the swipe screen's own drag.
 - [ ] **Russian localization.** All strings are inline English today. Move them to a String
