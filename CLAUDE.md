@@ -13,13 +13,13 @@ Mockups from the brainstorm: `docs/superpowers/mockups/` (open in a browser).
 | Folder | What lives there |
 |---|---|
 | `Mediant/Model/` | Pure logic, unit-tested: `visibleAssets` (album filter: no 👹, 💖 only with "Show 💖"), `DecisionStore` (kept/trashed per photo id, JSON in Application Support), `CleanupStats` (all-time deleted count + freed bytes, `stats.json`), `SwipeSession` (current index + undo stack), `ByteFormat` / `counted()` |
-| `Mediant/Library/` | `PhotoLibrary` protocol + `PhotoKitLibrary`; `AlbumSizes` (background size sums); `ThumbnailLoader` (PHCachingImageManager) |
+| `Mediant/Library/` | `PhotoLibrary` protocol + `PhotoKitLibrary`; `AlbumSizes` (background size sums, cached in `album-sizes.json`; a cached size shimmers until it is measured again); `ThumbnailLoader` (PHCachingImageManager) |
 | `Mediant/App/` | `AppModel` (owns everything, reloads on library changes), `RootView`, `FloatingTabBar`, `AccessView`, `LaunchScreen.storyboard` (the `LaunchArt` image, aspect-fill) |
 | `Mediant/Splash/` | `LaunchArt` (launch picture geometry in screen points, unit-tested), `SplashView` (launch ✨ flies into the title), `TitleSparkle` (the drawn ✨ cluster in the Albums / access titles, the landing spot) |
 | `Mediant/Albums/`, `Album/` | Albums list (main page) with the `ProgressCard` (space freed / items deleted), and the album grid |
 | `Mediant/Swipe/` | Swipe screen: `SwipeView` (page-slide drag), `PreviewStrip` (💖/👹 + ogre pop), `SparkleEdge`/`SparkleShape` (✨ edges), `PhotoPage` |
 | `Mediant/Trash/` | `TrashModel` (one-batch delete, restore) and `TrashView` |
-| `Mediant/Shared/` | `Chip` (the glass capsule button), `AssetImage` |
+| `Mediant/Shared/` | `Chip` (the glass capsule button), `AssetImage`, `.shimmering(_:)` (a value that is not final yet) |
 | `MediantTests/` | Swift Testing; `FakePhotoLibrary` stands in for PhotoKit |
 | `Design/AppIcon/` | App icon sources: `light.svg` (✨ on the delete/keep diagonal split), `dark.svg`, `tinted.svg`; launch screen sources `launch-light.svg` / `launch-dark.svg` (the icon art in a 100×220 canvas). Edit the SVG, then `swift Design/AppIcon/render.swift` from the repo root writes the PNGs into `AppIcon.appiconset` and `LaunchArt.imageset` |
 

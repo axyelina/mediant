@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06A1FC1E26DFABEED6B68FD1 /* Shimmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E638BCECB8FE5003CE49DEE7 /* Shimmer.swift */; };
 		086B5CFA3DE3F8100E85CBC1 /* TrashModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF25DA03F55B8498FBFD915 /* TrashModelTests.swift */; };
 		0AB281409FBD3AA66DBCC063 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39964D3CAF40E333CE9F38C2 /* SplashView.swift */; };
 		179E9308DA080B68CE601AD0 /* LaunchArtTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F530D0E120C59DE789626A5 /* LaunchArtTests.swift */; };
@@ -104,6 +105,7 @@
 		DCE08EC501AE1D107F730A48 /* CleanupStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanupStats.swift; sourceTree = "<group>"; };
 		E012775299F2BC4CEA5BD46E /* ByteFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ByteFormat.swift; sourceTree = "<group>"; };
 		E2496E6193E4A28856625D00 /* ProgressCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressCard.swift; sourceTree = "<group>"; };
+		E638BCECB8FE5003CE49DEE7 /* Shimmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shimmer.swift; sourceTree = "<group>"; };
 		EA3A6B1C15BC6F6230C56B67 /* AssetImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetImage.swift; sourceTree = "<group>"; };
 		EFED1E38CDCFAD3BC3EEDE10 /* Mediant.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Mediant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F262B57EB936D37E5D6FC508 /* SwipeSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeSessionTests.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 			children = (
 				EA3A6B1C15BC6F6230C56B67 /* AssetImage.swift */,
 				5AA69708B6A86DDD429E1923 /* Chip.swift */,
+				E638BCECB8FE5003CE49DEE7 /* Shimmer.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -400,6 +403,7 @@
 				E1282AB3AB0DD48F5A8DA8D1 /* PreviewStrip.swift in Sources */,
 				2DD21714D552B03D928BC342 /* ProgressCard.swift in Sources */,
 				F9BFFA33DC9D45F5079F5D23 /* RootView.swift in Sources */,
+				06A1FC1E26DFABEED6B68FD1 /* Shimmer.swift in Sources */,
 				EB27CD0DC0A0B7FE0F71A8CA /* SparkleEdge.swift in Sources */,
 				3D751FF18F4D7B8B570715D6 /* SparkleShape.swift in Sources */,
 				0AB281409FBD3AA66DBCC063 /* SplashView.swift in Sources */,

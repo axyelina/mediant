@@ -12,9 +12,13 @@ struct AlbumsView: View {
                         Text("Albums").font(.largeTitle.bold())
                         TitleSparkle(size: 30)
                     }
-                    Text("\(counted(model.albums.count, "album", "albums")) · \(ByteFormat.string(model.sizes.total))")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                    HStack(spacing: 0) {
+                        Text("\(counted(model.albums.count, "album", "albums")) · ")
+                        Text(ByteFormat.string(model.sizes.total))
+                            .shimmering(!model.sizes.isTotalMeasured)
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 10)
@@ -34,7 +38,8 @@ struct AlbumsView: View {
                 LazyVStack(spacing: 0) {
                     ForEach(model.albums) { album in
                         NavigationLink(value: album) {
-                            AlbumRow(album: album, size: model.sizes.size(of: album.id))
+                            AlbumRow(album: album, size: model.sizes.size(of: album.id),
+                                     sizeIsMeasured: model.sizes.isMeasured(album.id))
                         }
                         .buttonStyle(.plain)
                     }

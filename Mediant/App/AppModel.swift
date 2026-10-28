@@ -33,8 +33,9 @@ final class AppModel {
     init(library: PhotoLibrary = PhotoKitLibrary(), storeURL: URL = AppModel.defaultStoreURL) {
         self.library = library
         store = DecisionStore(fileURL: storeURL)
-        sizes = AlbumSizes(library: library)
-        stats = CleanupStats(fileURL: storeURL.deletingLastPathComponent().appending(path: "stats.json"))
+        let folder = storeURL.deletingLastPathComponent()
+        sizes = AlbumSizes(library: library, cacheURL: folder.appending(path: "album-sizes.json"))
+        stats = CleanupStats(fileURL: folder.appending(path: "stats.json"))
         trash = TrashModel(store: store, library: library, stats: stats)
         access = library.accessLevel()
     }

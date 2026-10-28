@@ -3,6 +3,8 @@ import SwiftUI
 struct AlbumRow: View {
     let album: AlbumInfo
     let size: Int64?
+    /// False while `size` is a cached value from an earlier launch.
+    let sizeIsMeasured: Bool
 
     var body: some View {
         HStack(spacing: 12) {
@@ -20,10 +22,14 @@ struct AlbumRow: View {
                 Text(album.title)
                     .font(.body.weight(.semibold))
                     .lineLimit(1)
-                Text("\(counted(album.count, "item", "items")) · \(size.map { ByteFormat.string($0) } ?? "…")")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .monospacedDigit()
+                HStack(spacing: 0) {
+                    Text("\(counted(album.count, "item", "items")) · ")
+                    Text(size.map { ByteFormat.string($0) } ?? "…")
+                        .shimmering(!sizeIsMeasured)
+                }
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .monospacedDigit()
             }
             Spacer(minLength: 8)
             Image(systemName: "chevron.right")
