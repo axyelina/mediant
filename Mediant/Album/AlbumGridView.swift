@@ -43,6 +43,16 @@ struct AlbumGridView: View {
                                 DecisionBadge(decision: model.store.decision(for: asset.id))
                                     .padding(3)
                             }
+                            .overlay(alignment: .bottomLeading) {
+                                if asset.isVideo {
+                                    Text("▶ \(VideoTime.string(asset.duration))")
+                                        .font(.system(size: 11, weight: .semibold))
+                                        .monospacedDigit()
+                                        .foregroundStyle(.white)
+                                        .shadow(color: .black.opacity(0.8), radius: 2)
+                                        .padding(4)
+                                }
+                            }
                     }
                     .buttonStyle(.plain)
                 }

@@ -1,7 +1,8 @@
+import AVFoundation
 import Photos
 import UIKit
 
-/// Loads photo images through a caching PhotoKit image manager.
+/// Loads photo images and video player items through a caching PhotoKit image manager.
 @MainActor
 final class ThumbnailLoader {
     private let manager = PHCachingImageManager()
@@ -28,6 +29,21 @@ final class ThumbnailLoader {
             }
             continuation.onTermination = { _ in manager.cancelImageRequest(requestID) }
         }
+    }
+
+    /// A player item for a video; downloads it from iCloud when needed. Nil for a photo or a failed load.
+    func playerItem(for id: String) async -> AVPlayerItem? {
+        guard let asset = asset(for: id), asset.mediaType == .video else { return nil }
+        let options = PHVideoRequestOptions()
+        options.deliveryMode = .automatic
+        options.isNetworkAccessAllowed = true
+        let manager = manager
+        let box = await withCheckedContinuation { (continuation: CheckedContinuation<ItemBox, Never>) in
+            manager.requestPlayerItem(forVideo: asset, options: options) { item, _ in
+                continuation.resume(returning: ItemBox(item: item))
+            }
+        }
+        return box.item
     }
 
     /// Fetches the PHAssets for many ids in one query off the main actor, so cells don't each query.
@@ -57,4 +73,9 @@ final class ThumbnailLoader {
 /// PHAsset is immutable but not marked Sendable.
 private struct AssetBox: @unchecked Sendable {
     let assets: [PHAsset]
+}
+
+/// PhotoKit hands the player item over from its own queue; nothing touches it until it arrives.
+private struct ItemBox: @unchecked Sendable {
+    let item: AVPlayerItem?
 }

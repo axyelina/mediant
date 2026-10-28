@@ -12,6 +12,7 @@ struct SwipeView: View {
     @State private var isAnimating = false
     @State private var justDecidedID: String?
     @State private var currentSize: Int64?
+    @State private var playback = VideoPlayback()
 
     private let commitDistance: CGFloat = 90
     private let flingDistance: CGFloat = 160
@@ -39,6 +40,7 @@ struct SwipeView: View {
         }
         .ignoresSafeArea(edges: .vertical)
         .toolbar(.hidden, for: .navigationBar)
+        .environment(playback)
         .sensoryFeedback(.impact(weight: .light), trigger: session?.index)
         .onAppear {
             if session == nil {
@@ -69,7 +71,7 @@ struct SwipeView: View {
         return ZStack {
             ForEach(next + [current]) { asset in
                 let isCurrent = asset.id == current.id
-                PhotoPage(asset: asset)
+                PhotoPage(asset: asset, plays: isCurrent)
                     .overlay(Color.black.opacity(isCurrent ? 0 : 0.55 * (1 - lift)))
                     .clipShape(RoundedRectangle(cornerRadius: 44, style: .continuous))
                     .scaleEffect(isCurrent ? 1 : 0.9 + 0.1 * lift)
@@ -165,8 +167,13 @@ struct SwipeView: View {
                 Spacer()
 
                 if !session.isFinished {
-                    HStack(alignment: .center) {
-                        Text(sizeText(session))
+                    HStack(alignment: .center, spacing: 8) {
+                        let asset = route.assets[session.index]
+                        if asset.isVideo {
+                            VideoChip(asset: asset)
+                            Chip(playback.isMuted ? "🔇" : "🔊") { playback.toggleMuted() }
+                        }
+                        Text(currentSize.map { ByteFormat.string($0) } ?? "")
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundStyle(.white.opacity(0.75))
                             .monospacedDigit()
@@ -192,14 +199,6 @@ struct SwipeView: View {
                     .allowsHitTesting(false)
             }
         }
-    }
-
-    private func sizeText(_ session: SwipeSession) -> String {
-        let asset = route.assets[session.index]
-        let size = currentSize.map { ByteFormat.string($0) } ?? ""
-        guard asset.isVideo else { return size }
-        let seconds = Int(asset.duration.rounded())
-        return "▶ \(seconds / 60):\(String(format: "%02d", seconds % 60))  \(size)"
     }
 
     private func finished(_ session: SwipeSession, width: CGFloat) -> some View {
