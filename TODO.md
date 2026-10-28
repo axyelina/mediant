@@ -16,7 +16,9 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
       - app version and build number;
       - about the creator (name, short text, link);
       - an optional donation link ("Buy me a coffee" style): one quiet row, never a popup,
-        badge, reminder or nag, and nothing in the app is locked behind it.
+        badge, reminder or nag, and nothing in the app is locked behind it;
+      - reset the little dashboard on the Albums page (the `ProgressCard`: space freed / items
+        deleted from `CleanupStats`, `stats.json`) back to zero.
 
       Open questions before building:
       - The design lists "A Settings tab" as a v1 non-goal and "no payments — ever" — update the
