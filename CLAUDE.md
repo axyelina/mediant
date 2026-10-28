@@ -20,6 +20,7 @@ Mockups from the brainstorm: `docs/superpowers/mockups/` (open in a browser).
 | `Mediant/Trash/` | `TrashModel` (one-batch delete, restore) and `TrashView` |
 | `Mediant/Shared/` | `Chip` (the glass capsule button), `AssetImage` |
 | `MediantTests/` | Swift Testing; `FakePhotoLibrary` stands in for PhotoKit |
+| `Design/AppIcon/` | App icon sources: `light.svg` (✨ on the delete/keep diagonal split), `dark.svg`, `tinted.svg`. Edit the SVG, then `swift Design/AppIcon/render.swift` from the repo root writes the 1024 px PNGs into `AppIcon.appiconset` |
 
 ## Rules
 
