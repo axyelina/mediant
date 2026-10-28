@@ -13,6 +13,7 @@ final class AppModel {
     let library: PhotoLibrary
     let store: DecisionStore
     let sizes: AlbumSizes
+    let trash: TrashModel
     let thumbs = ThumbnailLoader()
 
     var access: AccessLevel = .notDetermined
@@ -29,6 +30,7 @@ final class AppModel {
         self.library = library
         store = DecisionStore(fileURL: storeURL)
         sizes = AlbumSizes(library: library)
+        trash = TrashModel(store: store, library: library)
     }
 
     func start() async {

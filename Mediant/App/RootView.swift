@@ -21,7 +21,7 @@ struct RootView: View {
                                 }
                         }
                     case .trash:
-                        Text("Trash")
+                        TrashView()
                     }
                     if !model.isSwiping {
                         FloatingTabBar(selection: $model.tab, trashCount: model.store.trashCount)
