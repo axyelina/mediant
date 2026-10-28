@@ -56,19 +56,28 @@ struct SwipeView: View {
 
     // MARK: Pages
 
-    /// The current photo follows the finger; the next one slides in from the other side.
+    /// The current photo is a card on top: it follows the finger and tilts. The next one waits
+    /// behind it, smaller and darker, and comes forward as the top card leaves.
     /// Pages are keyed by photo id, so the next page keeps its loaded image when it becomes current.
     private func pages(_ session: SwipeSession, width: CGFloat) -> some View {
         let current = route.assets[session.index]
         let next = route.assets.indices.contains(session.index + 1) ? [route.assets[session.index + 1]] : []
+        let lift = min(abs(dragX) / width, 1)
         return ZStack {
             ForEach(next + [current]) { asset in
+                let isCurrent = asset.id == current.id
                 PhotoPage(asset: asset)
-                    .offset(x: asset.id == current.id ? dragX
-                            : (dragX <= 0 ? width + dragX : -width + dragX))
+                    .overlay(Color.black.opacity(isCurrent ? 0 : 0.55 * (1 - lift)))
+                    .clipShape(RoundedRectangle(cornerRadius: 44, style: .continuous))
+                    .scaleEffect(isCurrent ? 1 : 0.9 + 0.1 * lift)
+                    .rotationEffect(.degrees(isCurrent ? Double(dragX / width) * 12 : 0), anchor: .bottom)
+                    .offset(x: isCurrent ? dragX : 0)
             }
         }
     }
+
+    /// How far the top card travels to leave the screen; it is tilted, so a width is not enough.
+    private func offscreen(_ width: CGFloat) -> CGFloat { width * 1.5 }
 
     private func drag(_ session: SwipeSession, width: CGFloat) -> some Gesture {
         DragGesture(minimumDistance: 8)
@@ -91,8 +100,8 @@ struct SwipeView: View {
     private func commit(_ decision: Decision, session: SwipeSession, width: CGFloat) {
         isAnimating = true
         let id = session.currentID
-        withAnimation(.easeOut(duration: 0.22)) {
-            dragX = decision == .trashed ? -width : width
+        withAnimation(.easeOut(duration: 0.26)) {
+            dragX = decision == .trashed ? -offscreen(width) : offscreen(width)
         } completion: {
             withTransaction(Transaction(animation: nil)) {
                 session.commit(decision)
@@ -110,7 +119,7 @@ struct SwipeView: View {
             session.undo()
             justDecidedID = nil
             // Start where the photo left the screen, then slide it back.
-            dragX = last == .trashed ? -width : width
+            dragX = last == .trashed ? -offscreen(width) : offscreen(width)
         }
         // Next run loop, so the start position is rendered before the slide.
         DispatchQueue.main.async {
