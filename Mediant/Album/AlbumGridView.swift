@@ -11,14 +11,29 @@ struct AlbumGridView: View {
     @Environment(AppModel.self) private var model
     let album: AlbumInfo
     @State private var assets: [AssetInfo] = []
+    /// Kept (💖) photos are hidden unless this is on; it stays on until tapped again.
+    @AppStorage("showKept") private var showKept = false
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 3)
 
     var body: some View {
+        // Trashed photos never show; the swipe screen gets the same list the grid shows.
+        let shown = visibleAssets(assets, store: model.store, showKept: showKept)
         ScrollView {
+            if shown.isEmpty && !assets.isEmpty {
+                VStack(spacing: 8) {
+                    Text("✨").font(.system(size: 44))
+                    Text("All sorted").font(.headline)
+                    Text(showKept ? "Every photo here is in the Trash." : "Tap Show 💖 to see the photos you kept.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.top, 120)
+            }
             LazyVGrid(columns: columns, spacing: 2) {
-                ForEach(Array(assets.enumerated()), id: \.element.id) { index, asset in
-                    NavigationLink(value: SwipeRoute(album: album, assets: assets, startIndex: index)) {
+                ForEach(Array(shown.enumerated()), id: \.element.id) { index, asset in
+                    NavigationLink(value: SwipeRoute(album: album, assets: shown, startIndex: index)) {
                         Color.clear
                             .aspectRatio(1, contentMode: .fit)
                             .overlay { AssetImage(id: asset.id) }
@@ -36,6 +51,12 @@ struct AlbumGridView: View {
         }
         .navigationTitle(album.title)
         .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Chip("Show 💖", tint: showKept ? .pink : nil) { showKept.toggle() }
+                    .accessibilityAddTraits(showKept ? .isSelected : [])
+            }
+        }
         .task(id: album.id) {
             let library = model.library
             let id = album.id
