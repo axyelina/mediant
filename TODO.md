@@ -4,16 +4,6 @@ Loose backlog, not a plan. Before building an item, check it against the design'
 anti-goals (`docs/superpowers/specs/2026-10-28-mediant-photo-cleaner-design.md`): no ads, no
 subscription, no tracking, no per-swipe delete dialog, compact controls in thumb reach.
 
-## ⚠️ Before the first release
-
-- [ ] **Change the bundle ID.** Today it is `com.pisarenko.mediant` (tests:
-      `com.pisarenko.mediant.tests`, `bundleIdPrefix: com.pisarenko`) under the free personal team
-      `WZHN8Q7J25`. After the first App Store upload the ID can never change, so pick the final one
-      first. Change it in `project.yml`, run `xcodegen generate`, and update the scripts that use it
-      (`.claude/skills/run-sim/scripts/run.sh`, `.claude/skills/run-device/scripts/run-device.sh`).
-      A new ID is a new app on the simulator and the phone: decisions, stats and the Photos
-      permission start again.
-
 ## From the user
 
 - [ ] **Working with video.** Shipped: looping playback on the top card, scrub on the ▶ chip,
@@ -61,6 +51,8 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 ## Shipped
 
 ### 2026-10-30
+- [x] Final bundle ID `app.mediant` (tests `app.mediant.tests`), signed with the free personal team
+      `NDCC8HH7D8` (Lina Barkhatova).
 - [x] Settings tab: English / Русский switch, progress reset, version; all texts in Russian.
 - [x] Trash reminder: one local notification 2 h after leaving a full Trash (30 s in Debug), tap
       opens the Trash, never twice for the same Trash; On / Off in Settings.
