@@ -31,14 +31,19 @@ the App Store Connect API directly and only borrows Spaceship's JWT.
 2. `bundle exec fastlane tips dry_run:true` — shows what would change, writes nothing.
 3. `bundle exec fastlane tips` — creates missing tips, fixes names, descriptions, review note and
    price. Run it again: a second run must report no changes.
-4. Commit `tips.json`. The app's StoreKit code and `.storekit` test file use the same product IDs.
+4. A new tip also needs an image: copy a `Design/Tips/tip-*.svg`, add it to the jobs in
+   `Design/AppIcon/render.swift`, run `swift Design/AppIcon/render.swift`.
+5. Commit `tips.json`. The app's StoreKit code and `.storekit` test file use the same product IDs.
 
 ## Rules
 
 - Never delete a tip in App Store Connect: a deleted product ID can never be used again. To stop
   selling one, remove it from the app and mark it "Removed from Sale" by hand.
 - Availability is set once (all territories, new territories on) and then left alone.
-- Not automated: the App Review screenshot of the tip screen (needed before the first submission)
-  and submitting the tips together with an app version. Do both by hand in App Store Connect.
+- Not automated — do these by hand in App Store Connect:
+  - the 1024×1024 tip images in `fastlane/tips/`, as each purchase's promotional image (optional,
+    only if you promote the tips on the App Store);
+  - the App Review screenshot of the tip screen (needed before the first submission);
+  - submitting the tips together with an app version.
 - An API error is printed with Apple's own text (`POST /v2/inAppPurchases → 403 …`). A 403 on
   create usually means the Paid Apps Agreement is not active or the key's role is too low.
