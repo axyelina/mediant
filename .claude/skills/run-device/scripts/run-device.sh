@@ -4,7 +4,7 @@
 set -euo pipefail
 
 NAME="${1:-LINK}"
-BUNDLE_ID="com.pisarenko.mediant"
+BUNDLE_ID="app.mediant"
 ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
 cd "$ROOT"
 

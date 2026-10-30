@@ -7,7 +7,7 @@ set -euo pipefail
 SIM_NAME="Median't iPhone 16"
 DEVICE_TYPE="com.apple.CoreSimulator.SimDeviceType.iPhone-16"
 RUNTIME="com.apple.CoreSimulator.SimRuntime.iOS-18-4"
-BUNDLE_ID="com.pisarenko.mediant"
+BUNDLE_ID="app.mediant"
 
 ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
 cd "$ROOT"

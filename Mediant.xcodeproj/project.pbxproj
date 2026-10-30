@@ -386,11 +386,11 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					E0782427E8D0290BCA33A0EE = {
-						DevelopmentTeam = WZHN8Q7J25;
+						DevelopmentTeam = NDCC8HH7D8;
 						ProvisioningStyle = Automatic;
 					};
 					E612C563F098C85DBF39888D = {
-						DevelopmentTeam = WZHN8Q7J25;
+						DevelopmentTeam = NDCC8HH7D8;
 					};
 				};
 			};
@@ -551,7 +551,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = WZHN8Q7J25;
+				DEVELOPMENT_TEAM = NDCC8HH7D8;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -600,7 +600,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pisarenko.mediant;
+				PRODUCT_BUNDLE_IDENTIFIER = app.mediant;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -642,7 +642,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = WZHN8Q7J25;
+				DEVELOPMENT_TEAM = NDCC8HH7D8;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -675,7 +675,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pisarenko.mediant.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = app.mediant.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mediant.app/Mediant";
@@ -692,7 +692,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pisarenko.mediant.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = app.mediant.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mediant.app/Mediant";
@@ -718,7 +718,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pisarenko.mediant;
+				PRODUCT_BUNDLE_IDENTIFIER = app.mediant;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

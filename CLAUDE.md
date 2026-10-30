@@ -74,7 +74,8 @@ It is kept in **dark appearance**. Use the `run-sim` skill (`.claude/skills/run-
 ```
 
 Real iPhone (the user's phone `LINK`): `.claude/skills/run-device/scripts/run-device.sh` — see the
-`run-device` skill. Signing uses the free personal team `WZHN8Q7J25`; the app expires after 7 days.
+`run-device` skill. Signing uses the free personal team `NDCC8HH7D8`
+(Lina Barkhatova); the app expires after 7 days. Bundle ID: `app.mediant` (tests `app.mediant.tests`).
 
 DerivedData goes to `./build/` (gitignored). `simctl privacy grant photos` does not work on
 iOS 18.4 here: accept the app's permission dialog in the simulator instead. The Trash reminder
