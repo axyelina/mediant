@@ -30,19 +30,6 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
       - App Store review: a link to an outside donation page is often rejected for individual
         developers (guidelines 3.1.1 / 3.2.2); the alternative is an in-app "tip" purchase, which
         is in-app purchase. Check the current rules before choosing.
-- [ ] **Research: local push for a forgotten Trash.** Example: the user marked photos to delete,
-      did not empty the Trash and left the app for hours → one local notification ("12 photos ·
-      340 MB wait in the Trash"); tapping it opens the Trash.
-
-      To find out before building:
-      - Local only (`UNUserNotificationCenter` + `UNTimeIntervalNotificationTrigger`), no server,
-        no tracking. Schedule on going to background with a non-empty Trash; cancel on return,
-        on empty and on restore of everything.
-      - The app does not run when it fires: the text is fixed at scheduling time.
-      - When to ask for permission: not at launch; maybe the first time the Trash gets items.
-      - Delay (2 h? next evening?) and how often: one per batch, never repeat → no nag.
-      - Opt-out: iOS Settings is enough, or does it need a switch in the app?
-
 ## From Claude
 
 ### Video
@@ -72,6 +59,11 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [ ] Reduce Motion: tone down sparkles and the ogre pop.
 
 ## Shipped
+
+### 2026-10-30
+- [x] Settings tab: English / Русский switch, progress reset, version; all texts in Russian.
+- [x] Trash reminder: one local notification 2 h after leaving a full Trash (30 s in Debug), tap
+      opens the Trash, never twice for the same Trash; On / Off in Settings.
 
 ### 2026-10-29
 - [x] App icon in light, dark and tinted variants.
