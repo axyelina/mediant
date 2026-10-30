@@ -79,6 +79,7 @@
 		CC36355B35FEE3849369862D /* TrashReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6FC22BBF9415E3FFC2C995 /* TrashReminder.swift */; };
 		DCE06FBED79E8570E565FF36 /* FireworksPlanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36267727288734F43433C77A /* FireworksPlanTests.swift */; };
 		DD0CBDE9A85226CDE0CC294D /* TabSwipeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14497B9FE25D48B2AC8BBB9D /* TabSwipeTests.swift */; };
+		DD456B1625AD07892C287860 /* FireworksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93AF54B0689B1B1334E4901D /* FireworksView.swift */; };
 		DD891070C888ECAEEEEBC1F0 /* Tips.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 575250369C17CAC417ACEE68 /* Tips.storekit */; };
 		DF10D90E7A9E907D7A669052 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0DECFBFB4F7877183073163E /* GoogleService-Info.plist */; };
 		DF5792A19BF48D7CC75945D7 /* FakePhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE0DC556CA80ACA0ED183FE /* FakePhotoLibrary.swift */; };
@@ -149,6 +150,7 @@
 		85A57719C73959F8333D509A /* AppModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModelTests.swift; sourceTree = "<group>"; };
 		8F530D0E120C59DE789626A5 /* LaunchArtTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchArtTests.swift; sourceTree = "<group>"; };
 		8F9A5730B48A83BAB327B858 /* LaunchArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchArt.swift; sourceTree = "<group>"; };
+		93AF54B0689B1B1334E4901D /* FireworksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireworksView.swift; sourceTree = "<group>"; };
 		982DDCD09206D58B6CFFAAA1 /* StoreKitTipStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitTipStore.swift; sourceTree = "<group>"; };
 		9EA126C4C6976E8E36BF9B09 /* AppLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguage.swift; sourceTree = "<group>"; };
 		9F18B1E441746022D8F7E16D /* TrashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashView.swift; sourceTree = "<group>"; };
@@ -386,6 +388,7 @@
 		D72E0D7AFA7D922BFBBCBCA8 /* Tips */ = {
 			isa = PBXGroup;
 			children = (
+				93AF54B0689B1B1334E4901D /* FireworksView.swift */,
 				4FD8F6980D1BB6E25523A813 /* TipButtons.swift */,
 			);
 			path = Tips;
@@ -596,6 +599,7 @@
 				A9DA57F0DB185727E3408A44 /* DecisionStore.swift in Sources */,
 				07FDD280F4CAE2A02233D9FA /* DemoTipStore.swift in Sources */,
 				C6514F56C5D836AE6D08BE79 /* FireworksPlan.swift in Sources */,
+				DD456B1625AD07892C287860 /* FireworksView.swift in Sources */,
 				8358BA470BBD99DEFE0E4F1F /* FloatingTabBar.swift in Sources */,
 				56F87360147A9269D144D9BC /* LaunchArt.swift in Sources */,
 				56A5DAC30E111CAC27502AED /* LoopingVideo.swift in Sources */,

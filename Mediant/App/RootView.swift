@@ -35,6 +35,8 @@ struct RootView: View {
                         FloatingTabBar(selection: $model.tab, trashCount: model.store.trashCount)
                             .padding(.bottom, 8)
                     }
+                    // Over everything, edge to edge; it takes no taps, so the app stays usable.
+                    FireworksView()
                 }
             } else {
                 AccessView()
