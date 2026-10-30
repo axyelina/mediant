@@ -1,6 +1,13 @@
 import Foundation
 import Observation
 
+/// What the last real delete removed, for the "just emptied" Trash.
+struct EmptiedTrash: Equatable {
+    let count: Int
+    /// Nil when no size of the deleted photos was known.
+    let bytes: Int64?
+}
+
 /// Trash tab state: selection for restoring, and the one-batch delete.
 @MainActor
 @Observable
@@ -17,6 +24,9 @@ final class TrashModel {
     var errorMessage: String?
     /// Increments after each successful delete (drives the success haptic).
     private(set) var deleteCount = 0
+    /// Set after a delete that went through; the Trash tab then shows what was freed and the tips.
+    /// `AppModel` ends it when the user leaves the tab or the app goes to the background.
+    private(set) var justEmptied: EmptiedTrash?
 
     init(store: DecisionStore, library: PhotoLibrary, stats: CleanupStats) {
         self.store = store
@@ -49,7 +59,9 @@ final class TrashModel {
         let sizes = await Self.sizes(of: ids, library: library)
         do {
             let deleted = try await library.delete(ids)
-            stats.record(deleted: deleted.count, bytes: deleted.compactMap { sizes[$0] }.reduce(Int64(0), +))
+            let known = deleted.compactMap { sizes[$0] }
+            stats.record(deleted: deleted.count, bytes: known.reduce(Int64(0), +))
+            justEmptied = EmptiedTrash(count: deleted.count, bytes: known.isEmpty ? nil : known.reduce(0, +))
             store.clearTrash(ids)
             totalBytes = nil
             deleteCount += 1
@@ -58,6 +70,10 @@ final class TrashModel {
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+
+    func endJustEmptied() {
+        justEmptied = nil
     }
 
     private nonisolated static func sizes(of ids: [String], library: PhotoLibrary) async -> [String: Int64] {

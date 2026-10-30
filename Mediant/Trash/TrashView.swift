@@ -106,9 +106,27 @@ struct TrashView: View {
     }
 
     private var empty: some View {
-        VStack(spacing: 8) {
-            Text("👹").font(.system(size: 44))
-            Text("Trash is empty").font(.headline)
+        let emptied = model.trash.justEmptied
+        return VStack(spacing: 8) {
+            if let emptied {
+                // Just emptied: what this delete freed, then the tips.
+                SparkleShape(cluster: true)
+                    .fill(Self.pink)
+                    .frame(width: 44, height: 44)
+                Text("Done!").font(.headline)
+                if let bytes = emptied.bytes {
+                    Text("\(ByteFormat.string(bytes, locale: locale)) freed")
+                        .font(.title.weight(.heavy))
+                        .foregroundStyle(LinearGradient(colors: [Self.lightPink, Self.pink],
+                                                        startPoint: .leading, endPoint: .trailing))
+                }
+                Text("\(emptied.count) photos deleted")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            } else {
+                Text("👹").font(.system(size: 44))
+                Text("Trash is empty").font(.headline)
+            }
             if model.stats.deletedCount > 0 {
                 // iOS keeps deleted photos in Recently Deleted; the space comes back only from there.
                 Text("Don't forget to delete them from Recently Deleted in Photos too. iOS keeps them there for 30 days, and they still take up space.")
@@ -123,8 +141,41 @@ struct TrashView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
+            if emptied != nil, model.tips.load != .unavailable {
+                tipSection
+            }
         }
         .frame(maxWidth: .infinity)
-        .padding(.top, 120)
+        .padding(.top, emptied == nil ? 120 : 48)
+        .padding(.bottom, FloatingTabBar.height + 24)
     }
+
+    /// A thin divider, one quiet line and the pink tip buttons. After a tip from here the line
+    /// says thanks (or that it failed) for a moment.
+    private var tipSection: some View {
+        let tips = model.tips
+        let thanks = tips.message == .init(kind: .thanks, place: .trash)
+        let failed = tips.message == .init(kind: .failed, place: .trash)
+        return VStack(spacing: 10) {
+            Rectangle().fill(.white.opacity(0.12)).frame(height: 1).padding(.horizontal, 24)
+            Group {
+                if thanks {
+                    Text("Thank you! ✨")
+                } else if failed {
+                    Text("The tip did not go through.")
+                } else {
+                    Text("Liked it? Treat the developer ✨")
+                }
+            }
+            .font(.subheadline)
+            .foregroundStyle(Self.lightPink)
+            TipButtons(place: .trash, style: .pink)
+                .padding(.horizontal, 16)
+        }
+        .padding(.top, 12)
+        .animation(.easeInOut(duration: 0.2), value: tips.message)
+    }
+
+    private static let lightPink = Color(red: 1, green: 0.820, blue: 0.890)  // #ffd1e3
+    private static let pink = Color(red: 1, green: 0.361, blue: 0.576)  // #ff5c93
 }

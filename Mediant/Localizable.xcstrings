@@ -1,6 +1,16 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "%@ freed": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Освобождено %@"
+          }
+        }
+      }
+    },
     "%lld albums · ": {
       "localizations": {
         "en": {
@@ -150,6 +160,58 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "В Корзине ждут %lld фото (%@). Очистите её, чтобы освободить место."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld photos deleted": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld photo deleted"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld photos deleted"
+                }
+              }
+            }
+          }
+        },
+        "ru": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Удалено %lld фото"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Удалено %lld фото"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Удалено %lld фото"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Удалено %lld фото"
                 }
               }
             }
@@ -371,6 +433,16 @@
         }
       }
     },
+    "Done!": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Готово!"
+          }
+        }
+      }
+    },
     "Empty": {
       "localizations": {
         "ru": {
@@ -397,6 +469,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Язык"
+          }
+        }
+      }
+    },
+    "Liked it? Treat the developer ✨": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Понравилось? Угостите разработчика ✨"
           }
         }
       }

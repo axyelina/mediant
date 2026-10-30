@@ -90,4 +90,41 @@ struct TrashModelTests {
         await trash.refreshSize()
         #expect(trash.totalBytes == 350)
     }
+
+    @Test func successfulDeleteRemembersWhatWasFreed() async {
+        library.sizes = ["a": 100, "b": 50]
+        store.set(.trashed, for: "a")
+        store.set(.trashed, for: "b")
+        let trash = TrashModel(store: store, library: library, stats: stats)
+        await trash.emptyTrash()
+        #expect(trash.justEmptied == EmptiedTrash(count: 2, bytes: 150))
+    }
+
+    @Test func deleteWithoutSizesHasNoBytes() async {
+        store.set(.trashed, for: "a")
+        store.set(.trashed, for: "b")
+        let trash = TrashModel(store: store, library: library, stats: stats)
+        await trash.emptyTrash()
+        #expect(trash.justEmptied == EmptiedTrash(count: 2, bytes: nil))
+    }
+
+    @Test func declinedOrFailedDeleteIsNotJustEmptied() async {
+        store.set(.trashed, for: "a")
+        let trash = TrashModel(store: store, library: library, stats: stats)
+        library.deleteError = DeleteError.declined
+        await trash.emptyTrash()
+        #expect(trash.justEmptied == nil)
+        library.deleteError = Broken()
+        await trash.emptyTrash()
+        #expect(trash.justEmptied == nil)
+    }
+
+    @Test func endJustEmptiedClears() async {
+        store.set(.trashed, for: "a")
+        let trash = TrashModel(store: store, library: library, stats: stats)
+        await trash.emptyTrash()
+        #expect(trash.justEmptied != nil)
+        trash.endJustEmptied()
+        #expect(trash.justEmptied == nil)
+    }
 }

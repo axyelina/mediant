@@ -22,7 +22,11 @@ final class AppModel {
 
     var access: AccessLevel = .notDetermined
     var albums: [AlbumInfo] = []
-    var tab: Tab = .albums
+    var tab: Tab = .albums {
+        // New photos can only be trashed from the Albums tab, so this also ends the "just emptied"
+        // state when new photos land in the Trash.
+        didSet { if oldValue == .trash && tab != .trash { trash.endJustEmptied() } }
+    }
     var albumsPath = NavigationPath()
     /// True while the swipe screen is on screen; it hides the tab bar.
     var isSwiping = false
@@ -99,6 +103,7 @@ final class AppModel {
     func sceneChanged(to phase: ScenePhase) {
         switch phase {
         case .background:
+            trash.endJustEmptied()
             let ids = store.trashedIDs
             let title = "Median't"
             let body = reminderText(count: ids.count, bytes: trash.totalBytes)

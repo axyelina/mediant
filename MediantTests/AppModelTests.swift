@@ -47,4 +47,24 @@ struct AppModelTests {
         await model.emptyTrash()
         #expect(model.albumsPath.count == 1)
     }
+
+    @Test func leavingTrashEndsJustEmptied() async {
+        let (model, _) = makeModel()
+        model.tab = .trash
+        model.store.set(.trashed, for: "a")
+        await model.emptyTrash()
+        #expect(model.trash.justEmptied != nil)
+        model.tab = .albums
+        #expect(model.trash.justEmptied == nil)
+    }
+
+    @Test func backgroundEndsJustEmptied() async {
+        let (model, _) = makeModel()
+        model.tab = .trash
+        model.store.set(.trashed, for: "a")
+        await model.emptyTrash()
+        #expect(model.trash.justEmptied != nil)
+        model.sceneChanged(to: .background)
+        #expect(model.trash.justEmptied == nil)
+    }
 }
