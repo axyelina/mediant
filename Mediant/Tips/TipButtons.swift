@@ -79,7 +79,10 @@ struct TipButtons: View {
                 .contentShape(Capsule())
         }
         .buttonStyle(.plain)
-        .disabled(tips.purchasing != nil)
+        // Not `.disabled`: that would dim the tapped button and its spinner too. `TipJar.buy` also
+        // ignores a tap while a purchase runs.
+        .allowsHitTesting(tips.purchasing == nil)
+        .opacity(tips.purchasing != nil && !isBuying ? 0.4 : 1)
         .accessibilityLabel("Tip, \(product.displayPrice)")
     }
 

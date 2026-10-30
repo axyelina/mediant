@@ -34,7 +34,7 @@ argument the app uses StoreKit.
 |---|---|---|
 | `usd` | $0.99 / $2.99 / $4.99 / $9.99 | one row of four buttons, the normal case |
 | `kzt` | 499,00 ₸ … 5 990,00 ₸ | long prices: the 2 × 2 grid |
-| `idr` | Rp 19.000,00 … Rp 199.000,00 | the longest prices: 2 × 2 (or one column with large text) |
+| `idr` | Rp 19.000,00 … Rp 199.000,00 | the longest prices: 2 × 2 (one column only if the prices are too long even for 2 × 2) |
 | `fail` | as `usd` | every purchase fails: the failed line, no fireworks |
 | `none` | none | the products never load: the "not available" states |
 
