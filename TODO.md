@@ -32,7 +32,11 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [ ] **Settings tab — what is left.** Shipped: language switch, progress reset, version. Still to add:
       - about the creator (name, short text, link) — waits for the text;
       - an optional tip jar: one quiet row, never a popup, badge, reminder or nag, and nothing in
-        the app is locked behind it.
+        the app is locked behind it;
+      - the same tips in the just-emptied Trash: right after "Empty" really deletes photos, the
+        empty Trash shows what was freed and the tip chips inline, under the Recently Deleted
+        hint. Not a sheet or popup; gone on the next visit; nothing when the purchase sheet is
+        cancelled. This is the second place for tips, so update the "one quiet row" wording.
 
       Decided (App Review Guidelines, checked 2026-10-30, page updated 2026-10-16): **tips are
       consumable in-app purchases (StoreKit), not an outside "Buy me a coffee" link.**
