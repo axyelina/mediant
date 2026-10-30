@@ -1,6 +1,6 @@
 # Tips in Settings and in the just-emptied Trash: design
 
-Date: 2026-10-31. Status: draft from the brainstorm, waiting for the user's approval.
+Date: 2026-10-31. Status: approved by the user on 2026-10-31. Plan: `docs/superpowers/plans/2026-10-31-settings-tips.md`.
 Mockups (HTML, open in a browser):
 
 - `docs/superpowers/mockups/04-settings-tips.html` — layout B was chosen (the order changed
