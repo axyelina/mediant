@@ -17,7 +17,7 @@ struct StoreKitTipStore: TipStore {
                 await transaction.finish()
                 return .success
             case .success(.unverified):
-                // Not finished: StoreKit offers it again, and `finishUpdates()` may still sort it out.
+                // Never finished: not here, and not in `finishUpdates()`, which finishes only verified ones.
                 return .failed
             case .userCancelled:
                 return .cancelled
