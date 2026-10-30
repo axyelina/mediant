@@ -24,7 +24,8 @@ struct AlbumGridView: View {
                 VStack(spacing: 8) {
                     Text("✨").font(.system(size: 44))
                     Text("All sorted").font(.headline)
-                    Text(showKept ? "Every photo here is in the Trash." : "Tap Show 💖 to see the photos you kept.")
+                    Text(showKept ? LocalizedStringKey("Every photo here is in the Trash.")
+                                  : "Tap Show 💖 to see the photos you kept.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }

@@ -3,6 +3,7 @@ import SwiftUI
 struct SwipeView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.locale) private var locale
     let route: SwipeRoute
 
     @State private var session: SwipeSession?
@@ -173,7 +174,7 @@ struct SwipeView: View {
                             VideoChip(asset: asset)
                             Chip(playback.isMuted ? "🔇" : "🔊") { playback.toggleMuted() }
                         }
-                        Text(currentSize.map { ByteFormat.string($0) } ?? "")
+                        Text(currentSize.map { ByteFormat.string($0, locale: locale) } ?? "")
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundStyle(.white.opacity(0.75))
                             .monospacedDigit()

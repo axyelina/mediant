@@ -23,13 +23,15 @@ struct RootView: View {
                                     SwipeView(route: route)
                                 }
                         }
-                        .tabPage(shown: model.tab == .albums, offset: -screenWidth)
+                        .tabPage(.albums, current: model.tab, width: screenWidth)
                         TrashView()
-                            .tabPage(shown: model.tab == .trash, offset: screenWidth)
+                            .tabPage(.trash, current: model.tab, width: screenWidth)
+                        SettingsView()
+                            .tabPage(.settings, current: model.tab, width: screenWidth)
                     }
                     .simultaneousGesture(edgeSwipe, including: edgeSwipeEnabled ? .all : .subviews)
-                    // The swipe screen hides the tab bar, but not while the Trash covers it.
-                    if !model.isSwiping || model.tab == .trash {
+                    // The swipe screen hides the tab bar, but not while another tab covers it.
+                    if !model.isSwiping || model.tab != .albums {
                         FloatingTabBar(selection: $model.tab, trashCount: model.store.trashCount)
                             .padding(.bottom, 8)
                     }
@@ -39,6 +41,8 @@ struct RootView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        // The app's own texts follow the language chosen in Settings.
+        .environment(\.locale, model.language.locale(region: Locale.current.region))
         .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { screenWidth = $0 }
         .overlayPreferenceValue(SplashTarget.self) { target in
             if !splashGone {
@@ -59,10 +63,10 @@ struct RootView: View {
     /// Only on the root pages: the swipe screen has its own drag, and the left edge of a pushed
     /// album page is the system's back swipe.
     private var edgeSwipeEnabled: Bool {
-        model.tab == .trash || (!model.isSwiping && model.albumsPath.isEmpty)
+        model.tab != .albums || (!model.isSwiping && model.albumsPath.isEmpty)
     }
 
-    /// A swipe from the page edge on the side of the other tab switches to it.
+    /// A swipe from a page edge with a tab behind it switches to that tab.
     private var edgeSwipe: some Gesture {
         DragGesture(minimumDistance: 15, coordinateSpace: .global)
             .onEnded { value in
@@ -77,9 +81,11 @@ struct RootView: View {
 }
 
 private extension View {
-    /// A tab page that slides out by `offset` when it is not shown, and then takes no touches.
-    func tabPage(shown: Bool, offset: CGFloat) -> some View {
-        self.offset(x: shown ? 0 : offset)
+    /// A tab page: in place when it is the current tab, otherwise slid out to its side of the bar
+    /// (one screen width per tab between them), and then it takes no touches.
+    func tabPage(_ page: AppModel.Tab, current: AppModel.Tab, width: CGFloat) -> some View {
+        let shown = page == current
+        return offset(x: CGFloat(page.rawValue - current.rawValue) * width)
             .allowsHitTesting(shown)
             .accessibilityHidden(!shown)
     }

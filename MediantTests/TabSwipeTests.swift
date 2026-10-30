@@ -16,9 +16,17 @@ struct TabSwipeTests {
         #expect(swipe(80, from: .trash) == .albums)
     }
 
+    @Test func swipeLeftGoesFromTrashToSettings() {
+        #expect(swipe(-80, from: .trash) == .settings)
+    }
+
+    @Test func swipeRightGoesFromSettingsToTrash() {
+        #expect(swipe(80, from: .settings) == .trash)
+    }
+
     @Test func swipePastTheEndStays() {
         #expect(swipe(80, from: .albums) == .albums)
-        #expect(swipe(-80, from: .trash) == .trash)
+        #expect(swipe(-80, from: .settings) == .settings)
     }
 
     @Test func shortSlowSwipeStays() {
@@ -33,12 +41,15 @@ struct TabSwipeTests {
         #expect(swipe(-80, 120, from: .albums) == .albums)
     }
 
-    @Test func edgeSwipeStartsAtTheEdgeTowardTheOtherTab() {
-        // Albums: from the right edge (Trash is on the right). Trash: from the left edge.
+    @Test func edgeSwipeStartsAtAnEdgeThatHasATabBehindIt() {
+        // Tabs left to right: Albums, Trash, Settings. An edge with no tab behind it does nothing.
         #expect(TabSwipe.startsAtEdge(x: 380, width: 393, on: .albums))
         #expect(!TabSwipe.startsAtEdge(x: 10, width: 393, on: .albums))
         #expect(!TabSwipe.startsAtEdge(x: 200, width: 393, on: .albums))
         #expect(TabSwipe.startsAtEdge(x: 10, width: 393, on: .trash))
-        #expect(!TabSwipe.startsAtEdge(x: 380, width: 393, on: .trash))
+        #expect(TabSwipe.startsAtEdge(x: 380, width: 393, on: .trash))
+        #expect(!TabSwipe.startsAtEdge(x: 200, width: 393, on: .trash))
+        #expect(TabSwipe.startsAtEdge(x: 10, width: 393, on: .settings))
+        #expect(!TabSwipe.startsAtEdge(x: 380, width: 393, on: .settings))
     }
 }

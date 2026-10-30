@@ -14,13 +14,15 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
 
 | Folder | What lives there |
 |---|---|
-| `Mediant/Model/` | Pure logic, unit-tested: `visibleAssets` (album filter: no 👹, 💖 only with "Show 💖"), `orderedAlbums` (Recents, then Favorites, Recently Added, Videos, Screenshots, Selfies, then A–Z), `TabSwipe` (which tab a swipe leads to), `DecisionStore` (kept/trashed per photo id, JSON in Application Support), `CleanupStats` (all-time deleted count + freed bytes, `stats.json`), `SwipeSession` (current index + undo stack), `ByteFormat` / `counted()`, `VideoTime` (time text, scrub math) |
+| `Mediant/Model/` | Pure logic, unit-tested: `visibleAssets` (album filter: no 👹, 💖 only with "Show 💖"), `orderedAlbums` (Recents, then Favorites, Recently Added, Videos, Screenshots, Selfies, then A–Z), `TabSwipe` (which tab a swipe leads to), `AppLanguage` (English / Russian, saved or from the phone), `DecisionStore` (kept/trashed per photo id, JSON in Application Support), `CleanupStats` (all-time deleted count + freed bytes, `stats.json`; reset from Settings), `SwipeSession` (current index + undo stack), `ByteFormat` / `counted()`, `VideoTime` (time text, scrub math) |
 | `Mediant/Library/` | `PhotoLibrary` protocol + `PhotoKitLibrary`; `AlbumSizes` (background size sums, cached in `album-sizes.json`; a cached size shimmers until it is measured again); `ThumbnailLoader` (PHCachingImageManager) |
 | `Mediant/App/` | `AppModel` (owns everything, reloads on library changes), `RootView` (both tabs stay alive and slide; edge swipe), `FloatingTabBar` (tap or swipe), `AccessView`, `LaunchScreen.storyboard` (the `LaunchArt` image, aspect-fill) |
 | `Mediant/Splash/` | `LaunchArt` (launch picture geometry in screen points, unit-tested), `SplashView` (launch ✨ flies into the title), `TitleSparkle` (the drawn ✨ cluster in the Albums / access titles, the landing spot) |
 | `Mediant/Albums/`, `Album/` | Albums list (main page) with the `ProgressCard` (space freed / items deleted), and the album grid |
 | `Mediant/Swipe/` | Swipe screen: `SwipeView` (card-stack drag: top card tilts, next waits behind; tap = skip), `PreviewStrip` (💖/👹 + ogre pop, drag to scroll), `SparkleEdge`/`SparkleShape` (✨ edges), `PhotoPage` (photo or video card), `LoopingVideo` (shows the top card's video), `VideoPlayback` (the one looping player: time, pause, mute, scrub), `VideoChip` (time chip: tap = pause/play, drag = scrub) |
 | `Mediant/Trash/` | `TrashModel` (one-batch delete, restore) and `TrashView` |
+| `Mediant/Settings/` | `SettingsView` (third tab: language chips, progress reset, version) |
+| `Mediant/Localizable.xcstrings`, `InfoPlist.xcstrings` | All UI texts, English + Russian (plural forms) |
 | `Mediant/Shared/` | `Chip` (the glass capsule button), `AssetImage`, `.shimmering(_:)` (a value that is not final yet) |
 | `MediantTests/` | Swift Testing; `FakePhotoLibrary` stands in for PhotoKit |
 | `Design/AppIcon/` | App icon sources: `light.svg` (✨ on the delete/keep diagonal split), `dark.svg`, `tinted.svg`; launch screen sources `launch-light.svg` / `launch-dark.svg` (the icon art in a 100×220 canvas). Edit the SVG, then `swift Design/AppIcon/render.swift` from the repo root writes the PNGs into `AppIcon.appiconset` and `LaunchArt.imageset` |
@@ -45,6 +47,12 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
   geometry, `SplashView.Palette` the colors). Change the icon art in all three places. The title ✨
   is a drawn `SparkleShape(cluster: true)`, not the emoji. The splash waits 0.4 s before it moves:
   iOS is still fading the static launch screen out, and moving earlier leaves a ghost ✨.
+- **Every UI text goes into `Localizable.xcstrings` with a Russian translation.** Pass texts as
+  literals or `LocalizedStringKey` (a `String` variable or a ternary of strings is not translated);
+  counts go in as `"\(count) items"` with plural forms in the catalog, sizes through
+  `ByteFormat.string(_, locale:)` with the environment `locale`. `RootView` sets that locale from
+  `AppModel.language`. System-supplied buttons (e.g. a dialog's Cancel) follow the phone, so add
+  your own. Plural forms without the number need a substitution (`%#@name@`) in the catalog.
 - `project.yml` is the source of truth (XcodeGen). After adding/removing files run
   `xcodegen generate`. Never hand-edit the `.xcodeproj`.
 - TDD for anything in `Model/`, `Library/` logic and view models.

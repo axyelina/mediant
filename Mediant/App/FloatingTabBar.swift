@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Icon-only tab bar in a small glass capsule at the bottom center. Tap an icon, or swipe the
-/// capsule sideways: left to Trash, right to Albums.
+/// capsule sideways to the next or previous tab (Albums, Trash, Settings).
 struct FloatingTabBar: View {
     @Binding var selection: AppModel.Tab
     let trashCount: Int
@@ -23,9 +23,10 @@ struct FloatingTabBar: View {
                             .offset(x: 10, y: -5)
                     }
                 }
+            item(.settings, symbol: "gearshape", label: "Settings")
         }
         .padding(3)
-        .frame(width: 92, height: Self.height)
+        .frame(width: 134, height: Self.height)
         .background(Capsule().fill(.ultraThinMaterial))
         .overlay(Capsule().strokeBorder(.white.opacity(0.12), lineWidth: 1))
         .contentShape(Capsule())
@@ -43,7 +44,7 @@ struct FloatingTabBar: View {
 
     static let switchAnimation = Animation.easeInOut(duration: 0.3)
 
-    private func item(_ tab: AppModel.Tab, symbol: String, label: String) -> some View {
+    private func item(_ tab: AppModel.Tab, symbol: String, label: LocalizedStringKey) -> some View {
         Button {
             withAnimation(Self.switchAnimation) { selection = tab }
         } label: {

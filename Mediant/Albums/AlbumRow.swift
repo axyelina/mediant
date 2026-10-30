@@ -5,6 +5,7 @@ struct AlbumRow: View {
     let size: Int64?
     /// False while `size` is a cached value from an earlier launch.
     let sizeIsMeasured: Bool
+    @Environment(\.locale) private var locale
 
     var body: some View {
         HStack(spacing: 12) {
@@ -23,8 +24,8 @@ struct AlbumRow: View {
                     .font(.body.weight(.semibold))
                     .lineLimit(1)
                 HStack(spacing: 0) {
-                    Text("\(counted(album.count, "item", "items")) · ")
-                    Text(size.map { ByteFormat.string($0) } ?? "…")
+                    Text("\(album.count) items · ")
+                    Text(size.map { ByteFormat.string($0, locale: locale) } ?? "…")
                         .shimmering(!sizeIsMeasured)
                 }
                 .font(.footnote)

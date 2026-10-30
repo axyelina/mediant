@@ -1,0 +1,24 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "NSPhotoLibraryUsageDescription": {
+      "comment": "Privacy - Photo Library Usage Description",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Median't shows your photos so you can swipe to keep or delete them. Nothing leaves your phone."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Median't показывает ваши фото, чтобы вы смахивали их и оставляли или удаляли. Ничего не покидает ваш телефон."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

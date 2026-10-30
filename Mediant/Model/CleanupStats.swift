@@ -29,6 +29,16 @@ final class CleanupStats {
     func record(deleted: Int, bytes: Int64) {
         state.deletedCount += deleted
         state.freedBytes += bytes
+        save()
+    }
+
+    /// Back to zero, from Settings.
+    func reset() {
+        state = State()
+        save()
+    }
+
+    private func save() {
         do {
             try FileManager.default.createDirectory(
                 at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)

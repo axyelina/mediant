@@ -6,8 +6,9 @@ import SwiftUI
 @MainActor
 @Observable
 final class AppModel {
-    enum Tab {
-        case albums, trash
+    /// Left to right, as in the tab bar.
+    enum Tab: Int, CaseIterable {
+        case albums, trash, settings
     }
 
     let library: PhotoLibrary
@@ -25,13 +26,24 @@ final class AppModel {
     var isSwiping = false
     /// False until the launch ✨ lands in the title; the title ✨ stays hidden until then.
     var splashFinished = false
+    /// The app's own texts; remembered. Without a choice it follows the phone's language.
+    var language: AppLanguage {
+        didSet { defaults.set(language.rawValue, forKey: Self.languageKey) }
+    }
+
+    private static let languageKey = "appLanguage"
+    private let defaults: UserDefaults
 
     @ObservationIgnored private var observer: LibraryObserver?
     @ObservationIgnored private var reloadTask: Task<Void, Never>?
     @ObservationIgnored private var startTask: Task<Void, Never>?
 
-    init(library: PhotoLibrary = PhotoKitLibrary(), storeURL: URL = AppModel.defaultStoreURL) {
+    init(library: PhotoLibrary = PhotoKitLibrary(), storeURL: URL = AppModel.defaultStoreURL,
+         defaults: UserDefaults = .standard) {
         self.library = library
+        self.defaults = defaults
+        language = AppLanguage.resolve(saved: defaults.string(forKey: Self.languageKey),
+                                       preferred: Locale.preferredLanguages)
         store = DecisionStore(fileURL: storeURL)
         let folder = storeURL.deletingLastPathComponent()
         sizes = AlbumSizes(library: library, cacheURL: folder.appending(path: "album-sizes.json"))

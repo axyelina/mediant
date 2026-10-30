@@ -3,6 +3,7 @@ import SwiftUI
 struct AlbumsView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.openURL) private var openURL
+    @Environment(\.locale) private var locale
 
     var body: some View {
         ScrollView {
@@ -13,8 +14,8 @@ struct AlbumsView: View {
                         TitleSparkle(size: 30)
                     }
                     HStack(spacing: 0) {
-                        Text("\(counted(model.albums.count, "album", "albums")) · ")
-                        Text(ByteFormat.string(model.sizes.total))
+                        Text("\(model.albums.count) albums · ")
+                        Text(ByteFormat.string(model.sizes.total, locale: locale))
                             .shimmering(!model.sizes.isTotalMeasured)
                     }
                     .font(.subheadline)

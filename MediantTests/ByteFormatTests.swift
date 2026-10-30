@@ -18,7 +18,13 @@ struct ByteFormatTests {
     }
 
     @Test func usesLocaleDecimalSeparator() {
-        #expect(ByteFormat.string(4_200_000, locale: Locale(identifier: "ru_RU")) == "4,2 MB")
+        #expect(ByteFormat.string(4_200_000, locale: Locale(identifier: "de_DE")) == "4,2 MB")
+    }
+
+    @Test func russianUnits() {
+        #expect(ByteFormat.string(4_200_000, locale: Locale(identifier: "ru_RU")) == "4,2 МБ")
+        #expect(ByteFormat.string(512_300, locale: Locale(identifier: "ru")) == "512 КБ")
+        #expect(ByteFormat.string(38_200_000_000, locale: Locale(identifier: "ru_RU")) == "38,2 ГБ")
     }
 
     @Test func zeroIsZeroKilobytes() {
@@ -28,9 +34,4 @@ struct ByteFormatTests {
     @Test func missingSizeShowsDash() {
         #expect(ByteFormat.string(nil) == "—")
     }
-}
-
-struct CountedTests {
-    @Test func singular() { #expect(counted(1, "photo", "photos") == "1 photo") }
-    @Test func plural() { #expect(counted(3, "photo", "photos") == "3 photos") }
 }

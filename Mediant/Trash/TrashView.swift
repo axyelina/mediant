@@ -3,6 +3,7 @@ import SwiftUI
 struct TrashView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.openURL) private var openURL
+    @Environment(\.locale) private var locale
 
     /// Opens the Photos app. iOS has no public link to the Recently Deleted album itself.
     private static let photosURL = URL(string: "photos-redirect://")!
@@ -16,8 +17,13 @@ struct TrashView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Trash").font(.largeTitle.bold())
-                    Text(ids.isEmpty ? "Nothing to delete"
-                         : "\(counted(ids.count, "photo", "photos")) · \(ByteFormat.string(trash.totalBytes)) to free")
+                    Group {
+                        if ids.isEmpty {
+                            Text("Nothing to delete")
+                        } else {
+                            Text("\(ids.count) photos · \(ByteFormat.string(trash.totalBytes, locale: locale)) to free")
+                        }
+                    }
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }

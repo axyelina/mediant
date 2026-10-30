@@ -21,6 +21,17 @@ struct CleanupStatsTests {
         #expect(stats.freedBytes == 350)
     }
 
+    @Test func resetGoesBackToZeroAndStays() {
+        let stats = CleanupStats(fileURL: url)
+        stats.record(deleted: 4, bytes: 1_000)
+        stats.reset()
+        #expect(stats.deletedCount == 0)
+        #expect(stats.freedBytes == 0)
+        let again = CleanupStats(fileURL: url)
+        #expect(again.deletedCount == 0)
+        #expect(again.freedBytes == 0)
+    }
+
     @Test func persistsAcrossInstances() {
         CleanupStats(fileURL: url).record(deleted: 4, bytes: 1_000)
         let again = CleanupStats(fileURL: url)

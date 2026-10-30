@@ -3,12 +3,12 @@ import SwiftUI
 /// The small glass capsule button used for Back, 👹, Undo, Select and Empty.
 /// `systemImage` puts an SF Symbol before the text.
 struct Chip: View {
-    let text: String
+    let text: LocalizedStringKey
     var systemImage: String?
     var tint: Color?
     let action: () -> Void
 
-    init(_ text: String, systemImage: String? = nil, tint: Color? = nil, action: @escaping () -> Void) {
+    init(_ text: LocalizedStringKey, systemImage: String? = nil, tint: Color? = nil, action: @escaping () -> Void) {
         self.text = text
         self.systemImage = systemImage
         self.tint = tint
