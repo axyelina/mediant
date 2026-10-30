@@ -9,9 +9,11 @@ final class FakeTipStore: TipStore, @unchecked Sendable {
         var loadError: Error?
         var result: TipPurchaseResult = .success
         var hold = false
+        var holdLoads = false
         var purchases: [String] = []
         var loadCalls = 0
         var waiting: [CheckedContinuation<Void, Never>] = []
+        var waitingLoads: [CheckedContinuation<Void, Never>] = []
     }
 
     private let lock = NSLock()
@@ -42,16 +44,32 @@ final class FakeTipStore: TipStore, @unchecked Sendable {
         set { locked { $0.hold = newValue } }
     }
 
+    /// While true, `products(for:)` waits for `releaseLoads()`: a load that is "in progress".
+    var holdLoads: Bool {
+        get { locked { $0.holdLoads } }
+        set { locked { $0.holdLoads = newValue } }
+    }
+
     var purchases: [String] { locked { $0.purchases } }
     var loadCalls: Int { locked { $0.loadCalls } }
     /// How many purchases are parked, waiting for `release()`.
     var heldCount: Int { locked { $0.waiting.count } }
+    /// How many loads are parked, waiting for `releaseLoads()`.
+    var heldLoadCount: Int { locked { $0.waitingLoads.count } }
 
     func products(for ids: [String]) async throws -> [TipProduct] {
-        let (products, error) = locked { state -> ([TipProduct], Error?) in
-            state.loadCalls += 1
-            return (state.products, state.loadError)
+        locked { $0.loadCalls += 1 }
+        await withCheckedContinuation { continuation in
+            let parked = locked { state -> Bool in
+                guard state.holdLoads else { return false }
+                state.waitingLoads.append(continuation)
+                return true
+            }
+            if !parked { continuation.resume() }
         }
+        // Like StoreKit: a request whose task was cancelled fails.
+        if Task.isCancelled { throw CancellationError() }
+        let (products, error) = locked { ($0.products, $0.loadError) }
         if let error { throw error }
         return products
     }
@@ -82,10 +100,29 @@ final class FakeTipStore: TipStore, @unchecked Sendable {
         for continuation in continuations { continuation.resume() }
     }
 
+    /// Lets every held `products(for:)` return.
+    func releaseLoads() {
+        let continuations = locked { state -> [CheckedContinuation<Void, Never>] in
+            state.holdLoads = false
+            defer { state.waitingLoads = [] }
+            return state.waitingLoads
+        }
+        for continuation in continuations { continuation.resume() }
+    }
+
     /// Waits until a purchase is parked. Returns false after `timeout` instead of hanging.
     func waitUntilHeld(timeout: Duration = .seconds(2)) async -> Bool {
+        await wait(timeout: timeout) { $0.heldCount > 0 }
+    }
+
+    /// Waits until a load is parked. Returns false after `timeout` instead of hanging.
+    func waitUntilLoadHeld(timeout: Duration = .seconds(2)) async -> Bool {
+        await wait(timeout: timeout) { $0.heldLoadCount > 0 }
+    }
+
+    private func wait(timeout: Duration, until done: (FakeTipStore) -> Bool) async -> Bool {
         let deadline = ContinuousClock.now + timeout
-        while heldCount == 0 {
+        while !done(self) {
             if ContinuousClock.now >= deadline { return false }
             try? await Task.sleep(for: .milliseconds(5))
         }

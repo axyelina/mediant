@@ -67,4 +67,53 @@ struct AppModelTests {
         model.sceneChanged(to: .background)
         #expect(model.trash.justEmptied == nil)
     }
+
+    // MARK: Tips
+
+    struct Broken: Error {}
+
+    func makeTipModel() -> (AppModel, FakeTipStore) {
+        let tipStore = FakeTipStore()
+        tipStore.products = [TipProduct(id: TipSize.small.productID, displayPrice: "$0.99", price: 0.99)]
+        tipStore.loadError = Broken()
+        let model = AppModel(library: FakePhotoLibrary(), storeURL: FileManager.default.temporaryDirectory
+            .appendingPathComponent("model-\(UUID().uuidString)/decisions.json"),
+                             defaults: UserDefaults(suiteName: "model-\(UUID().uuidString)")!,
+                             notifications: FakeNotificationCenter(), tipStore: tipStore)
+        return (model, tipStore)
+    }
+
+    @Test(arguments: [AppModel.Tab.settings, .trash])
+    func openingATipTabRetriesAFailedLoad(tab: AppModel.Tab) async {
+        let (model, tipStore) = makeTipModel()
+        await model.tips.loadIfNeeded()
+        #expect(model.tips.load == .unavailable)
+        tipStore.loadError = nil
+        model.tab = tab
+        // The tab change started the new attempt; this call waits for it.
+        #expect(model.tips.load == .loading)
+        await model.tips.loadIfNeeded()
+        #expect(tipStore.loadCalls == 2)
+        #expect(model.tips.load != .unavailable)
+    }
+
+    @Test func comingBackToTheAppRetriesAFailedLoad() async {
+        let (model, tipStore) = makeTipModel()
+        await model.tips.loadIfNeeded()
+        tipStore.loadError = nil
+        model.sceneChanged(to: .active)
+        #expect(model.tips.load == .loading)
+        await model.tips.loadIfNeeded()
+        #expect(tipStore.loadCalls == 2)
+    }
+
+    @Test func albumsTabDoesNotLoadTips() async {
+        let (model, tipStore) = makeTipModel()
+        await model.tips.loadIfNeeded()
+        model.tab = .trash
+        await model.tips.loadIfNeeded()
+        model.tab = .albums
+        #expect(model.tips.load == .unavailable)
+        #expect(tipStore.loadCalls == 2)
+    }
 }

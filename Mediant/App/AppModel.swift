@@ -23,9 +23,14 @@ final class AppModel {
     var access: AccessLevel = .notDetermined
     var albums: [AlbumInfo] = []
     var tab: Tab = .albums {
-        // New photos can only be trashed from the Albums tab, so this also ends the "just emptied"
-        // state when new photos land in the Trash.
-        didSet { if oldValue == .trash && tab != .trash { trash.endJustEmptied() } }
+        didSet {
+            // New photos can only be trashed from the Albums tab, so this also ends the "just
+            // emptied" state when new photos land in the Trash.
+            if oldValue == .trash && tab != .trash { trash.endJustEmptied() }
+            // Both tabs stay alive, so their views cannot ask again: a tip place that appears
+            // tries a failed load again here.
+            if tab != oldValue && (tab == .settings || tab == .trash) { tips.startLoadIfNeeded() }
+        }
     }
     var albumsPath = NavigationPath()
     /// True while the swipe screen is on screen; it hides the tab bar.
@@ -99,7 +104,7 @@ final class AppModel {
     }
 
     /// Leaving with photos in the Trash schedules the reminder; coming back cancels it. A tap on the
-    /// reminder opens the Trash.
+    /// reminder opens the Trash. Coming back also tries the tips again if they did not load.
     func sceneChanged(to phase: ScenePhase) {
         switch phase {
         case .background:
@@ -116,6 +121,7 @@ final class AppModel {
         case .active:
             reminder.appCameBack()
             Task { await reminder.refreshPermission() }
+            tips.startLoadIfNeeded()
         default:
             break
         }

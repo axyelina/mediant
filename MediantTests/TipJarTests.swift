@@ -52,6 +52,64 @@ struct TipJarTests {
         #expect(store.loadCalls == 1)
     }
 
+    @Test func concurrentLoadsFetchOnce() async {
+        store.products = [Self.small]
+        store.holdLoads = true
+        let jar = TipJar(store: store)
+        let first = Task { await jar.loadIfNeeded() }
+        guard await store.waitUntilLoadHeld() else {
+            Issue.record("The first load never reached the store")
+            store.releaseLoads()
+            await first.value
+            return
+        }
+        let second = Task { await jar.loadIfNeeded() }
+        // Time for the second call to reach the store, if it would.
+        try? await Task.sleep(for: .milliseconds(50))
+        #expect(store.loadCalls == 1)
+        store.releaseLoads()
+        await first.value
+        await second.value
+        #expect(store.loadCalls == 1)
+        #expect(jar.load == .loaded([Self.small]))
+    }
+
+    @Test func cancelledCallerDoesNotMarkUnavailable() async {
+        // A tip place that goes away cancels its task; the load must still finish.
+        store.products = [Self.small]
+        store.holdLoads = true
+        let jar = TipJar(store: store)
+        let caller = Task { await jar.loadIfNeeded() }
+        guard await store.waitUntilLoadHeld() else {
+            Issue.record("The load never reached the store")
+            store.releaseLoads()
+            await caller.value
+            return
+        }
+        caller.cancel()
+        store.releaseLoads()
+        await caller.value
+        #expect(jar.load == .loaded([Self.small]))
+        #expect(store.loadCalls == 1)
+    }
+
+    @Test func startLoadIfNeededStartsAtOnce() async {
+        store.loadError = Broken()
+        let jar = TipJar(store: store)
+        await jar.loadIfNeeded()
+        #expect(jar.load == .unavailable)
+        store.loadError = nil
+        store.products = [Self.small]
+        jar.startLoadIfNeeded()
+        #expect(jar.load == .loading)
+        await jar.loadIfNeeded()
+        #expect(jar.load == .loaded([Self.small]))
+        #expect(store.loadCalls == 2)
+        jar.startLoadIfNeeded()
+        #expect(jar.load == .loaded([Self.small]))
+        #expect(store.loadCalls == 2)
+    }
+
     @Test func sizeFromProductID() {
         #expect(TipSize(productID: "app.mediant.tip.huge") == .huge)
         #expect(TipSize(productID: "x") == nil)

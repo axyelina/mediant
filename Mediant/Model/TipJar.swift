@@ -42,6 +42,8 @@ final class TipJar {
     private let store: TipStore
     private let messageDuration: Duration
     private var messageTimer: Task<Void, Never>?
+    /// The one load that runs. Only it changes `load`, so a caller that goes away changes nothing.
+    private var loadTask: Task<Void, Never>?
     private var celebrationCount = 0
 
     init(store: TipStore, messageDuration: Duration = .seconds(3)) {
@@ -49,10 +51,25 @@ final class TipJar {
         self.messageDuration = messageDuration
     }
 
-    /// Loads once. After a failure a new call tries again.
+    /// Loads once and waits for it. A call while a load runs waits for that load; after a failure a
+    /// new call tries again.
     func loadIfNeeded() async {
-        if case .loaded = load { return }
+        await startLoadIfNeeded()?.value
+    }
+
+    /// Starts a load without waiting, unless the tips are loaded. Returns the load that runs.
+    @discardableResult
+    func startLoadIfNeeded() -> Task<Void, Never>? {
+        if case .loaded = load { return nil }
+        if let loadTask { return loadTask }
         load = .loading
+        let task = Task { await runLoad() }
+        loadTask = task
+        return task
+    }
+
+    private func runLoad() async {
+        defer { loadTask = nil }
         do {
             let products = try await store.products(for: TipSize.allCases.map(\.productID))
             let tips = products.filter { $0.size != nil }.sorted { $0.price < $1.price }
