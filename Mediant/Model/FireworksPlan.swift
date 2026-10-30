@@ -30,7 +30,7 @@ struct FireworksPlan: Equatable {
         let flight: TimeInterval
         let start: CGPoint
         let burst: CGPoint
-        /// Sideways pull of the flight path, in points.
+        /// Sideways pull of the flight path, in points (up to 0.17 of the canvas width).
         let bend: CGFloat
         let radius: CGFloat
         /// Palette pair: the rocket index. The view takes it modulo its palette count.
@@ -45,7 +45,8 @@ struct FireworksPlan: Equatable {
 
     private static let launchGap: TimeInterval = 0.38
     private static let finaleDelay: TimeInterval = 0.35
-    private static let finaleRadius: CGFloat = 250
+    /// Share of the canvas width (the sizes were drawn on a 540 px canvas for a 393 pt phone).
+    private static let finaleRadius: CGFloat = 0.46
     /// Gap kept between a burst and the screen edge.
     private static let edgeMargin: CGFloat = 10
     private static let topMargin: CGFloat = 8
@@ -66,15 +67,12 @@ struct FireworksPlan: Equatable {
         case .large: count = 3
         case .huge: count = 5
         }
-        // A burst wider than the screen could not stay on it.
-        let widest = canvas.width / 2 - Self.edgeMargin
         let lowest = 0.45 * canvas.height
 
         var rockets: [Rocket] = []
         for index in 0..<count {
-            let wanted = count == 1 ? CGFloat.random(in: 190...220, using: &random)
-                                    : CGFloat.random(in: 130...175, using: &random)
-            let radius = min(wanted, widest)
+            let radius = (count == 1 ? CGFloat.random(in: 0.35...0.41, using: &random)
+                                     : CGFloat.random(in: 0.24...0.32, using: &random)) * canvas.width
             let startX = CGFloat.random(in: 0.3...0.7, using: &random) * canvas.width
             let burstX = CGFloat.random(in: (radius + Self.edgeMargin)...(canvas.width - radius - Self.edgeMargin),
                                         using: &random)
@@ -85,11 +83,11 @@ struct FireworksPlan: Equatable {
                 flight: Double.random(in: 0.75...0.95, using: &random),
                 start: CGPoint(x: startX, y: canvas.height + 10),
                 burst: CGPoint(x: burstX, y: burstY),
-                bend: CGFloat.random(in: -90...90, using: &random),
+                bend: CGFloat.random(in: -0.17...0.17, using: &random) * canvas.width,
                 radius: radius, pair: index, isFinale: false))
         }
         if size == .huge {
-            let radius = min(Self.finaleRadius, widest)
+            let radius = Self.finaleRadius * canvas.width
             let burstY = max(0.36 * canvas.height, min(radius + Self.topMargin, lowest))
             rockets.append(Rocket(
                 launch: Double(count - 1) * Self.launchGap + Self.finaleDelay,

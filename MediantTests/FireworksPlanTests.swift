@@ -53,7 +53,17 @@ struct FireworksPlanTests {
         for rocket in FireworksPlan(size: .huge, canvas: phone, seed: 9).rockets {
             #expect(rocket.start.y == phone.height + 10)
             #expect(rocket.flight >= 0.75 && rocket.flight <= 0.95)
-            #expect(abs(rocket.bend) <= 90)
+            #expect(abs(rocket.bend) <= 0.17 * phone.width + 0.001)
+        }
+    }
+
+    @Test func radiiScaleWithWidth() {
+        for rocket in FireworksPlan(size: .large, canvas: phone, seed: 1).rockets {
+            #expect(rocket.radius >= 0.24 * 393 - 0.001 && rocket.radius <= 0.32 * 393 + 0.001)
+        }
+        for width: CGFloat in [393, 375] {
+            let plan = FireworksPlan(size: .huge, canvas: CGSize(width: width, height: 852), seed: 1)
+            #expect(abs(plan.rockets[5].radius - 0.46 * width) < 0.001)
         }
     }
 
