@@ -5,3 +5,7 @@ CLAUDE.local.md
 DerivedData/
 xcuserdata/
 .superpowers/
+fastlane/.env
+fastlane/report.xml
+fastlane/README.md
+*.p8

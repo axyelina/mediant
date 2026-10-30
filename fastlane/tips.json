@@ -1,0 +1,43 @@
+{
+  "bundle_id": "app.mediant",
+  "base_territory": "USA",
+  "review_note": "Optional tip for the developer. It unlocks nothing: no features, content or badges. The app is fully free.",
+  "tips": [
+    {
+      "product_id": "app.mediant.tip.small",
+      "reference_name": "Tip - Small",
+      "price": "0.99",
+      "localizations": {
+        "en-US": { "name": "Small Tip", "description": "A small thank-you for Median't" },
+        "ru": { "name": "Маленькие чаевые", "description": "Небольшое спасибо за Median't" }
+      }
+    },
+    {
+      "product_id": "app.mediant.tip.medium",
+      "reference_name": "Tip - Medium",
+      "price": "2.99",
+      "localizations": {
+        "en-US": { "name": "Medium Tip", "description": "A coffee-sized thank-you" },
+        "ru": { "name": "Средние чаевые", "description": "Спасибо размером с чашку кофе" }
+      }
+    },
+    {
+      "product_id": "app.mediant.tip.large",
+      "reference_name": "Tip - Large",
+      "price": "4.99",
+      "localizations": {
+        "en-US": { "name": "Large Tip", "description": "A generous thank-you" },
+        "ru": { "name": "Большие чаевые", "description": "Щедрое спасибо" }
+      }
+    },
+    {
+      "product_id": "app.mediant.tip.huge",
+      "reference_name": "Tip - Huge",
+      "price": "9.99",
+      "localizations": {
+        "en-US": { "name": "Huge Tip", "description": "A huge thank-you. You are amazing!" },
+        "ru": { "name": "Огромные чаевые", "description": "Огромное спасибо. Вы супер!" }
+      }
+    }
+  ]
+}

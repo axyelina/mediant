@@ -26,6 +26,7 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
 | `Mediant/Shared/` | `Chip` (the glass capsule button), `AssetImage`, `.shimmering(_:)` (a value that is not final yet) |
 | `MediantTests/` | Swift Testing; `FakePhotoLibrary` stands in for PhotoKit |
 | `Design/AppIcon/` | App icon sources: `light.svg` (✨ on the delete/keep diagonal split), `dark.svg`, `tinted.svg`; launch screen sources `launch-light.svg` / `launch-dark.svg` (the icon art in a 100×220 canvas). Edit the SVG, then `swift Design/AppIcon/render.swift` from the repo root writes the PNGs into `AppIcon.appiconset` and `LaunchArt.imageset` |
+| `fastlane/` | App Store Connect automation: `tips.json` (the tip in-app purchases), `asc.rb` (direct App Store Connect API calls — Spaceship has no in-app purchase models), `Fastfile` (`tips` lane). `Gemfile` pins fastlane |
 
 ## Rules
 
@@ -80,6 +81,10 @@ It is kept in **dark appearance**. Use the `run-sim` skill (`.claude/skills/run-
 Real iPhone (the user's phone `LINK`): `.claude/skills/run-device/scripts/run-device.sh` — see the
 `run-device` skill. Signing uses the paid individual team `NDCC8HH7D8`
 (Angelina Odegova); development profiles last a year. Bundle ID: `app.mediant` (tests `app.mediant.tests`).
+
+Tip in-app purchases in App Store Connect: `fastlane/tips.json` is the source of truth,
+`bundle exec fastlane tips [dry_run:true]` applies it — see the `asc-tips` skill. The API key lives
+in `~/.appstoreconnect/private_keys/` and `fastlane/.env` (gitignored); never read or commit it.
 
 DerivedData and Swift packages go to `./build/` (gitignored); the scripts pass
 `-clonedSourcePackagesDirPath build/SourcePackages` because Xcode on this Mac shares one package

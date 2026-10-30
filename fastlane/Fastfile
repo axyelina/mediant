@@ -1,0 +1,19 @@
+# Median't — App Store Connect automation. How to use it: .claude/skills/asc-tips/SKILL.md.
+# The API key comes from fastlane/.env (gitignored, see .env.example); the .p8 stays outside the repo.
+require_relative "asc"
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Create or update the tip in-app purchases from fastlane/tips.json (dry_run:true only shows the changes)"
+  lane :tips do |options|
+    %w[ASC_KEY_ID ASC_ISSUER_ID ASC_KEY_PATH].each do |name|
+      UI.user_error!("#{name} is not set — copy fastlane/.env.example to fastlane/.env") if ENV[name].to_s.empty?
+    end
+    client = MediantASC::Client.new(
+      key_id: ENV["ASC_KEY_ID"], issuer_id: ENV["ASC_ISSUER_ID"], key_path: ENV["ASC_KEY_PATH"]
+    )
+    config = JSON.parse(File.read(File.join(__dir__, "tips.json")))
+    MediantASC::Tips.new(client: client, config: config, ui: UI).sync(dry_run: options[:dry_run] == true)
+  end
+end
