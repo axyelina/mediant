@@ -46,10 +46,11 @@ struct FireworksPlan: Equatable {
     private static let launchGap: TimeInterval = 0.38
     private static let finaleDelay: TimeInterval = 0.35
     /// Share of the canvas width (the sizes were drawn on a 540 px canvas for a 393 pt phone).
+    /// Its rim (1.25 × 0.46 W) is wider than the screen, so the finale's outer dots leave the sides.
     private static let finaleRadius: CGFloat = 0.46
-    /// Gap kept between a burst and the screen edge.
-    private static let edgeMargin: CGFloat = 10
-    private static let topMargin: CGFloat = 8
+    /// The rim dots fly out to this times the radius (`FireworksView`): the gap a burst center
+    /// keeps from the side and top edges.
+    static let rimReach: CGFloat = 1.25
 
     let rockets: [Rocket]
 
@@ -74,9 +75,10 @@ struct FireworksPlan: Equatable {
             let radius = (count == 1 ? CGFloat.random(in: 0.35...0.41, using: &random)
                                      : CGFloat.random(in: 0.24...0.32, using: &random)) * canvas.width
             let startX = CGFloat.random(in: 0.3...0.7, using: &random) * canvas.width
-            let burstX = CGFloat.random(in: (radius + Self.edgeMargin)...(canvas.width - radius - Self.edgeMargin),
-                                        using: &random)
-            let highest = max(0.2 * canvas.height, min(radius + Self.topMargin, lowest))
+            // A burst wider than the screen (a single rocket above 0.4 W) goes to the middle.
+            let side = min(Self.rimReach * radius, canvas.width / 2)
+            let burstX = CGFloat.random(in: side...(canvas.width - side), using: &random)
+            let highest = max(0.2 * canvas.height, min(Self.rimReach * radius, lowest))
             let burstY = CGFloat.random(in: highest...lowest, using: &random)
             rockets.append(Rocket(
                 launch: Double(index) * Self.launchGap,
@@ -88,7 +90,7 @@ struct FireworksPlan: Equatable {
         }
         if size == .huge {
             let radius = Self.finaleRadius * canvas.width
-            let burstY = max(0.36 * canvas.height, min(radius + Self.topMargin, lowest))
+            let burstY = max(0.36 * canvas.height, min(Self.rimReach * radius, lowest))
             rockets.append(Rocket(
                 launch: Double(count - 1) * Self.launchGap + Self.finaleDelay,
                 flight: Double.random(in: 0.75...0.95, using: &random),

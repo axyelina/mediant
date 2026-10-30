@@ -39,9 +39,19 @@ struct FireworksPlanTests {
             for canvas in [CGSize(width: 393, height: 852), CGSize(width: 375, height: 667)] {
                 for seed in UInt64(1)...50 {
                     for rocket in FireworksPlan(size: size, canvas: canvas, seed: seed).rockets {
+                        // The rim dots fly out to 1.25 × the radius.
+                        let reach = 1.25 * rocket.radius
+                        if 2 * reach <= canvas.width {
+                            #expect(rocket.burst.x - reach >= -0.001)
+                            #expect(rocket.burst.x + reach <= canvas.width + 0.001)
+                        } else {
+                            // Wider than the screen (the finale, a single rocket above 0.4 W).
+                            #expect(abs(rocket.burst.x - canvas.width / 2) < 0.001)
+                        }
+                        // The streaks always fit.
                         #expect(rocket.burst.x - rocket.radius >= 0)
                         #expect(rocket.burst.x + rocket.radius <= canvas.width)
-                        #expect(rocket.burst.y - rocket.radius >= 0)
+                        #expect(rocket.burst.y - reach >= 0)
                         #expect(rocket.burst.y <= 0.45 * canvas.height + 0.001)
                     }
                 }

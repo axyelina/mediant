@@ -160,7 +160,7 @@ private struct Show {
                        second: i % 2 == 1)
             }
             let dots = (0..<(big ? 60 : 36)).map { i in
-                Dot(angle: rnd(0...(2 * .pi)), distance: rnd(1.02...1.25) * radius,
+                Dot(angle: rnd(0...(2 * .pi)), distance: rnd(1.02...FireworksPlan.rimReach) * radius,
                     radius: rnd(2...4.5) * scale, phase: rnd(0...6), second: i % 2 == 1)
             }
             let twinkles = (0..<(big ? 12 : 7)).map { _ in
