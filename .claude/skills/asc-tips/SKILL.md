@@ -5,7 +5,7 @@ description: Create or change Median't's tip in-app purchases (product IDs, name
 
 # Tip in-app purchases in App Store Connect
 
-The tips are consumable in-app purchases that unlock nothing (see `TODO.md`, tip jar).
+The tips are consumable in-app purchases that unlock nothing (design: `docs/superpowers/specs/2026-10-31-settings-tips-design.md`).
 `fastlane/tips.json` is the source of truth; `bundle exec fastlane tips` makes App Store Connect
 match it. fastlane's Spaceship has no in-app purchase (v2 API) models, so `fastlane/asc.rb` calls
 the App Store Connect API directly and only borrows Spaceship's JWT.
@@ -35,8 +35,10 @@ the App Store Connect API directly and only borrows Spaceship's JWT.
    it again: a second run must report no changes. A tip goes from `MISSING_METADATA` to
    `READY_TO_SUBMIT` once it has the screenshot. An upload that Apple still processes (no
    checksum yet, not `FAILED`) is reported as "still processing" and left alone; only a
-   different checksum or a `FAILED` upload is replaced. The state line at the end of each tip is
-   read after the changes.
+   different checksum or a `FAILED` upload is replaced. An upload that was reserved but never
+   committed (no checksum, state `AWAITING_UPLOAD`, for example after a crash) looks the same: the
+   lane reports "still processing" forever. Delete that screenshot by hand in App Store Connect,
+   then run the lane again. The state line at the end of each tip is read after the changes.
 4. A new tip also needs an image: copy a `Design/Tips/tip-*.svg`, add it to the jobs in
    `Design/AppIcon/render.swift`, run `swift Design/AppIcon/render.swift`, and set the tip's
    `image` in `tips.json` (path relative to `fastlane/`). Re-render and re-run the lane after an

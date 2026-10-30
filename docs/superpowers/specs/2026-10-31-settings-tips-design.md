@@ -80,6 +80,9 @@ Used in both places; only the colors differ.
   the normal font size; otherwise a 2 × 2 grid of equal buttons. `ViewThatFits` (row first, grid
   second) is the expected tool. Prices never shrink, wrap or get cut. With today's prices, USD,
   EUR, RUB, INR, JPY get one row; KZT, IDR, VND, KRW get the grid.
+- The price text is a fixed 15 pt bold font, like `Chip` (it does not grow with Dynamic Type), so
+  the one-column fallback (the last choice of `ViewThatFits`) appears only when the prices are too
+  long even for 2 × 2.
 - Accessibility: each button reads as "Tip, $2.99" ("Чаевые, 2,99 $").
 
 States:
@@ -176,6 +179,11 @@ events.)*
 
 The existing `.success` haptic on a delete stays.
 
+**Light mode (as shipped):** the line "Liked it? Treat the developer ✨" and the `.pink` chip text
+are wine `#c2184e` (light pink vanishes on a white page); the chip fill is `#ff375f` at about
+12 % and its border `#ff5c93` at about 50 %. Dark mode is unchanged (text `#ffb3c4`, fill about
+18 %, border about 40 %).
+
 ## Fireworks (look A, "app colors"; live prototype `07-fireworks.html`)
 
 - Trigger: only a verified, successful tip from a button the user tapped, in either place.
@@ -193,9 +201,11 @@ The existing `.success` haptic on a delete stays.
   - a bright many-pointed star flash in the center that fades in about 0.6 s;
   - 7 small ✨ (`SparkleShape`) twinkling around the burst (12 for the finale);
   - everything slows down, droops a little (gravity) and fades out over about 1.5 s.
-- **Burst size:** about 190–220 pt radius for a single rocket, 130–175 pt when there are several,
-  250 pt for the finale; each burst center stays far enough from the side edges that the whole
-  burst is on screen.
+- **Burst size** (as shipped; fractions of the screen width W, so every iPhone gets the same
+  look): radius 0.35–0.41 W for a single rocket, 0.24–0.32 W when there are several, 0.46 W for
+  the finale; the sideways bend of a flight path is up to ±0.17 W. Each burst center stays far
+  enough from the side edges that the whole burst is on screen. (The prototype's 190–220, 130–175,
+  250 and ±90 were its canvas pixels, not points.)
 - **Colors, dark mode (look A):** color pairs from the app palette — pink `#ff5c93` + light pink
   `#ffd1e3`, wine `#c2184e` + white, light pink + pink, white + wine. Trail light pink, star flash
   and ✨ white. Glow (additive blending and a soft blur), as in the prototype.

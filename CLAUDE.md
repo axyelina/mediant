@@ -1,7 +1,8 @@
 # Median't
 
 Free, Tinder-style photo cleaner for iOS: swipe **left to delete**, **right to keep**. No ads,
-no subscription, no payments — ever. SwiftUI, iOS 17+, iPhone only, portrait, dark-first.
+no subscription, no paywall, nothing locked behind a payment — ever. Optional tips that unlock
+nothing are allowed. SwiftUI, iOS 17+, iPhone only, portrait, dark-first.
 Display name is **Median't**; everything code-facing (folders, targets, module, scheme) is
 `Mediant` because the apostrophe breaks paths.
 
@@ -14,8 +15,8 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
 
 | Folder | What lives there |
 |---|---|
-| `Mediant/Model/` | Pure logic, unit-tested: `visibleAssets` (album filter: no 👹, 💖 only with "Show 💖"), `orderedAlbums` (Recents, then Favorites, Recently Added, Videos, Screenshots, Selfies, then A–Z), `TabSwipe` (which tab a swipe leads to), `AppLanguage` (English / Russian, saved or from the phone), `TrashReminder` (one local reminder for a forgotten Trash: schedule on leaving, cancel on return, never twice for the same Trash), `DecisionStore` (kept/trashed per photo id, JSON in Application Support), `CleanupStats` (all-time deleted count + freed bytes, `stats.json`; reset from Settings), `SwipeSession` (current index + undo stack), `ByteFormat` / `counted()`, `VideoTime` (time text, scrub math) |
-| `Mediant/Library/` | `PhotoLibrary` protocol + `PhotoKitLibrary`; `NotificationCenterClient` protocol + `SystemNotifications` (UserNotifications, tap → Trash); `AlbumSizes` (background size sums, cached in `album-sizes.json`; a cached size shimmers until it is measured again); `ThumbnailLoader` (PHCachingImageManager) |
+| `Mediant/Model/` | Pure logic, unit-tested: `visibleAssets` (album filter: no 👹, 💖 only with "Show 💖"), `orderedAlbums` (Recents, then Favorites, Recently Added, Videos, Screenshots, Selfies, then A–Z), `TabSwipe` (which tab a swipe leads to), `TipJar` (loads the four tips through `TipStore`, buys one at a time, the thank-you / failure message and the "celebration" event for the fireworks), `TipSize` (the four fixed product IDs, `TipProduct`, `TipPurchaseResult`), `FireworksPlan` (the seeded fireworks show per tip size, in fractions of the screen width), `AppLanguage` (English / Russian, saved or from the phone), `TrashReminder` (one local reminder for a forgotten Trash: schedule on leaving, cancel on return, never twice for the same Trash), `DecisionStore` (kept/trashed per photo id, JSON in Application Support), `CleanupStats` (all-time deleted count + freed bytes, `stats.json`; reset from Settings), `SwipeSession` (current index + undo stack), `ByteFormat` / `counted()`, `VideoTime` (time text, scrub math) |
+| `Mediant/Library/` | `PhotoLibrary` protocol + `PhotoKitLibrary`; `NotificationCenterClient` protocol + `SystemNotifications` (UserNotifications, tap → Trash); `AlbumSizes` (background size sums, cached in `album-sizes.json`; a cached size shimmers until it is measured again); `ThumbnailLoader` (PHCachingImageManager); `TipStore` protocol + `StoreKitTipStore` (StoreKit 2) + `DemoTipStore` (Debug only: `-fakeTips usd|kzt|idr|fail|none`) |
 | `Mediant/App/` | `AppModel` (owns everything, reloads on library changes), `RootView` (both tabs stay alive and slide; edge swipe), `FloatingTabBar` (tap or swipe), `AccessView`, `LaunchScreen.storyboard` (the `LaunchArt` image, aspect-fill), `CrashReporting` (starts Firebase Crashlytics; off in unit tests), `GoogleService-Info.plist` (Firebase project `mediant-ba64c`) |
 | `Mediant/Splash/` | `LaunchArt` (launch picture geometry in screen points, unit-tested), `SplashView` (launch ✨ flies into the title), `TitleSparkle` (the drawn ✨ cluster in the Albums / access titles, the landing spot) |
 | `Mediant/Albums/`, `Album/` | Albums list (main page) with the `ProgressCard` (space freed / items deleted), and the album grid |
@@ -25,7 +26,7 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
 | `Mediant/Tips/` | `TipButtons` (the four tip buttons for Settings and the Trash: row, 2 × 2 or column; Reduce Motion glow), `FireworksView` (the show after a tip, over the whole app from `RootView`: draws `FireworksPlan` in a `Canvas`, a haptic at each burst, nothing with Reduce Motion) |
 | `Mediant/Localizable.xcstrings`, `InfoPlist.xcstrings` | All UI texts, English + Russian (plural forms) |
 | `Mediant/Shared/` | `Chip` (the glass capsule button), `AssetImage`, `.shimmering(_:)` (a value that is not final yet) |
-| `MediantTests/` | Swift Testing; `FakePhotoLibrary` stands in for PhotoKit |
+| `MediantTests/` | Swift Testing; `FakePhotoLibrary` stands in for PhotoKit, `FakeTipStore` for the tip store; `Tips.storekit` (the four tips) is the StoreKit test file for `StoreKitTipStoreTests` and the `Mediant` scheme |
 | `Design/AppIcon/` | App icon sources: `light.svg` (✨ on the delete/keep diagonal split), `dark.svg`, `tinted.svg`; launch screen sources `launch-light.svg` / `launch-dark.svg` (the icon art in a 100×220 canvas). `Design/Tips/tip-*.svg`: the 4 tip images (more ✨ for a bigger tip, same art). Edit the SVG, then `swift Design/AppIcon/render.swift` from the repo root writes the PNGs into `AppIcon.appiconset`, `LaunchArt.imageset` and `fastlane/tips/` |
 | `fastlane/` | App Store Connect automation: `tips.json` (the tip in-app purchases), `asc.rb` (direct App Store Connect API calls — Spaceship has no in-app purchase models), `Fastfile` (`tips` lane), `tips/` (rendered tip images, 1024×1024, uploaded by the lane as promotional images). `Gemfile` pins fastlane |
 
@@ -35,6 +36,10 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
   `FakePhotoLibrary`. Only `PhotoKitLibrary` and `ThumbnailLoader` import Photos
   (`ThumbnailLoader.playerItem(for:)` loads videos). Likewise only `SystemNotifications` imports
   UserNotifications; logic takes `NotificationCenterClient` and is tested with a fake.
+- **StoreKit stays behind `TipStore`.** Only `StoreKitTipStore` imports StoreKit; logic (`TipJar`)
+  takes the protocol and is tested with `FakeTipStore`. The real store is tested with `Tips.storekit` and
+  `SKTestSession`. Prices are always `Product.displayPrice`, never formatted or hard-coded. A tip
+  unlocks nothing; never the word "donate"; no popup, badge or reminder for tips.
 - **Firebase is crash reports only.** Only `CrashReporting` imports Firebase. Link only the
   `FirebaseCrashlytics` product — never `FirebaseAnalytics` or anything that tracks users (design
   anti-goal). Firebase stays on 12.x while the Mac builds with Xcode 16.3 (13.x needs Xcode 26).
