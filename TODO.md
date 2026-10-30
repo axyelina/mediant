@@ -4,6 +4,13 @@ Loose backlog, not a plan. Before building an item, check it against the design'
 anti-goals (`docs/superpowers/specs/2026-10-28-mediant-photo-cleaner-design.md`): no ads, no
 subscription, no tracking, no per-swipe delete dialog, compact controls in thumb reach.
 
+## ⚠️ Before the first release
+
+- [ ] **Firebase: fill in the App Store ID.** In the Firebase console, open Project settings →
+      Your apps → the iOS app `app.mediant` and enter the App Store ID. That is the numeric Apple ID
+      from App Store Connect (App Information → Apple ID); it exists once the app record is created
+      there, before the first upload to the store.
+
 ## From the user
 
 - [ ] **Working with video.** Shipped: looping playback on the top card, scrub on the ▶ chip,
