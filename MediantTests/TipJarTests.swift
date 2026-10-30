@@ -99,8 +99,13 @@ struct TipJarTests {
         store.hold = true
         let jar = TipJar(store: store)
         let first = Task { await jar.buy(Self.small, from: .settings) }
-        // `purchase` runs off the main actor: wait until the store has really seen the first tap.
-        while store.purchases.isEmpty { await Task.yield() }
+        // `purchase` runs off the main actor: wait until the first tap is parked in the store.
+        guard await store.waitUntilHeld() else {
+            Issue.record("The first purchase never reached the store")
+            store.release()
+            await first.value
+            return
+        }
         await jar.buy(Self.large, from: .trash)
         #expect(store.purchases == ["app.mediant.tip.small"])
         #expect(jar.purchasing == TipJar.Purchase(productID: "app.mediant.tip.small", place: .settings))
@@ -126,19 +131,21 @@ struct TipJarTests {
     }
 
     @Test func messageClearsAfterDuration() async throws {
-        let jar = TipJar(store: store, messageDuration: .milliseconds(50))
+        let jar = TipJar(store: store, messageDuration: .milliseconds(300))
         await jar.buy(Self.small, from: .settings)
+        try await Task.sleep(for: .milliseconds(100))
         #expect(jar.message != nil)
-        try await Task.sleep(for: .milliseconds(150))
+        try await Task.sleep(for: .milliseconds(500))
         #expect(jar.message == nil)
     }
 
     @Test func newerMessageIsNotClearedByTheOlderTimer() async throws {
-        let jar = TipJar(store: store, messageDuration: .milliseconds(200))
+        let jar = TipJar(store: store, messageDuration: .milliseconds(500))
         await jar.buy(Self.small, from: .settings)
-        try await Task.sleep(for: .milliseconds(120))
+        try await Task.sleep(for: .milliseconds(300))
         await jar.buy(Self.small, from: .trash)
-        try await Task.sleep(for: .milliseconds(120))
+        // The first message's timer would have fired at 500 ms; the second one's fires at 800 ms.
+        try await Task.sleep(for: .milliseconds(350))
         #expect(jar.message == TipJar.Message(kind: .thanks, place: .trash))
     }
 }
