@@ -16,7 +16,7 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
 |---|---|
 | `Mediant/Model/` | Pure logic, unit-tested: `visibleAssets` (album filter: no 👹, 💖 only with "Show 💖"), `orderedAlbums` (Recents, then Favorites, Recently Added, Videos, Screenshots, Selfies, then A–Z), `TabSwipe` (which tab a swipe leads to), `AppLanguage` (English / Russian, saved or from the phone), `TrashReminder` (one local reminder for a forgotten Trash: schedule on leaving, cancel on return, never twice for the same Trash), `DecisionStore` (kept/trashed per photo id, JSON in Application Support), `CleanupStats` (all-time deleted count + freed bytes, `stats.json`; reset from Settings), `SwipeSession` (current index + undo stack), `ByteFormat` / `counted()`, `VideoTime` (time text, scrub math) |
 | `Mediant/Library/` | `PhotoLibrary` protocol + `PhotoKitLibrary`; `NotificationCenterClient` protocol + `SystemNotifications` (UserNotifications, tap → Trash); `AlbumSizes` (background size sums, cached in `album-sizes.json`; a cached size shimmers until it is measured again); `ThumbnailLoader` (PHCachingImageManager) |
-| `Mediant/App/` | `AppModel` (owns everything, reloads on library changes), `RootView` (both tabs stay alive and slide; edge swipe), `FloatingTabBar` (tap or swipe), `AccessView`, `LaunchScreen.storyboard` (the `LaunchArt` image, aspect-fill) |
+| `Mediant/App/` | `AppModel` (owns everything, reloads on library changes), `RootView` (both tabs stay alive and slide; edge swipe), `FloatingTabBar` (tap or swipe), `AccessView`, `LaunchScreen.storyboard` (the `LaunchArt` image, aspect-fill), `CrashReporting` (starts Firebase Crashlytics; off in unit tests), `GoogleService-Info.plist` (Firebase project `mediant-ba64c`) |
 | `Mediant/Splash/` | `LaunchArt` (launch picture geometry in screen points, unit-tested), `SplashView` (launch ✨ flies into the title), `TitleSparkle` (the drawn ✨ cluster in the Albums / access titles, the landing spot) |
 | `Mediant/Albums/`, `Album/` | Albums list (main page) with the `ProgressCard` (space freed / items deleted), and the album grid |
 | `Mediant/Swipe/` | Swipe screen: `SwipeView` (card-stack drag: top card tilts, next waits behind; tap = skip), `PreviewStrip` (💖/👹 + ogre pop, drag to scroll), `SparkleEdge`/`SparkleShape` (✨ edges), `PhotoPage` (photo or video card), `LoopingVideo` (shows the top card's video), `VideoPlayback` (the one looping player: time, pause, mute, scrub), `VideoChip` (time chip: tap = pause/play, drag = scrub) |
@@ -33,6 +33,10 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
   `FakePhotoLibrary`. Only `PhotoKitLibrary` and `ThumbnailLoader` import Photos
   (`ThumbnailLoader.playerItem(for:)` loads videos). Likewise only `SystemNotifications` imports
   UserNotifications; logic takes `NotificationCenterClient` and is tested with a fake.
+- **Firebase is crash reports only.** Only `CrashReporting` imports Firebase. Link only the
+  `FirebaseCrashlytics` product — never `FirebaseAnalytics` or anything that tracks users (design
+  anti-goal). Firebase stays on 12.x while the Mac builds with Xcode 16.3 (13.x needs Xcode 26).
+  The `Upload dSYM to Crashlytics` build phase runs only for device builds.
 - **Deleting is only `TrashModel.emptyTrash()`** → one iOS dialog for the whole Trash. Never add an
   app-made confirmation on top, never delete per swipe. The UI calls it through
   `AppModel.emptyTrash()`, which also closes a swipe screen whose photos may be gone.
@@ -77,7 +81,9 @@ Real iPhone (the user's phone `LINK`): `.claude/skills/run-device/scripts/run-de
 `run-device` skill. Signing uses the free personal team `NDCC8HH7D8`
 (Lina Barkhatova); the app expires after 7 days. Bundle ID: `app.mediant` (tests `app.mediant.tests`).
 
-DerivedData goes to `./build/` (gitignored). `simctl privacy grant photos` does not work on
+DerivedData and Swift packages go to `./build/` (gitignored); the scripts pass
+`-clonedSourcePackagesDirPath build/SourcePackages` because Xcode on this Mac shares one package
+folder between projects (`IDEClonedSourcePackagesDirPathOverride`). `simctl privacy grant photos` does not work on
 iOS 18.4 here: accept the app's permission dialog in the simulator instead. The Trash reminder
 fires 30 s after leaving the app in Debug builds; the simulator ignores injected taps on
 notification banners, so check "tap opens the Trash" on the phone.

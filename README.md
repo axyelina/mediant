@@ -12,7 +12,9 @@
 ---
 
 You have paid for apps like this before. Median't is the one you don't pay for: **no ads, no
-subscription, no in-app purchases, no tracking — ever.** Your photos never leave your phone.
+subscription, no in-app purchases, no tracking — ever.** Your photos never leave your phone. The
+only data the app sends is for crash reporting (Firebase Crashlytics): crash reports and anonymous
+app-session counts for crash-free statistics.
 
 ## Features
 
@@ -35,7 +37,8 @@ subscription, no in-app purchases, no tracking — ever.** Your photos never lea
 
 - iPhone with iOS 17 or later (portrait only).
 - To build: Xcode 16+, [XcodeGen](https://github.com/yonaskolb/XcodeGen)
-  (`brew install xcodegen`). No third-party dependencies.
+  (`brew install xcodegen`). The only dependency is Firebase Crashlytics (Swift Package Manager,
+  resolved on the first build).
 
 ## Build and run
 

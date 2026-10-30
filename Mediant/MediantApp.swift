@@ -4,6 +4,10 @@ import SwiftUI
 struct MediantApp: App {
     @State private var model = AppModel()
 
+    init() {
+        CrashReporting.start()
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView()

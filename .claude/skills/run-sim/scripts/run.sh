@@ -34,8 +34,11 @@ xcrun simctl ui "$UDID" appearance dark
 ACTION=build
 [[ "${1:-}" == "--test" ]] && ACTION=test
 
+# Own package checkouts: Xcode's shared IDEClonedSourcePackagesDirPathOverride folder holds other
+# projects' Firebase versions.
 xcodebuild -project Mediant.xcodeproj -scheme Mediant \
-  -destination "id=$UDID,arch=arm64" -derivedDataPath build -quiet "$ACTION"
+  -destination "id=$UDID,arch=arm64" -derivedDataPath build \
+  -clonedSourcePackagesDirPath build/SourcePackages -quiet "$ACTION"
 
 if [[ "$ACTION" == build ]]; then
   xcrun simctl install "$UDID" build/Build/Products/Debug-iphonesimulator/Mediant.app

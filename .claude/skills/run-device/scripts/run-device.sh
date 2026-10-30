@@ -21,7 +21,8 @@ rm -f "$JSON"
 
 [[ project.yml -nt Mediant.xcodeproj/project.pbxproj ]] && xcodegen generate --quiet
 xcodebuild -project Mediant.xcodeproj -scheme Mediant -configuration Debug \
-  -destination "id=$UDID" -derivedDataPath build -allowProvisioningUpdates -quiet build
+  -destination "id=$UDID" -derivedDataPath build -clonedSourcePackagesDirPath build/SourcePackages \
+  -allowProvisioningUpdates -quiet build
 xcrun devicectl device install app --device "$DEVICE" build/Build/Products/Debug-iphoneos/Mediant.app >/dev/null
 if LAUNCH_OUT="$(xcrun devicectl device process launch --device "$DEVICE" "$BUNDLE_ID" 2>&1)"; then
   echo "Launched $BUNDLE_ID on $NAME"
