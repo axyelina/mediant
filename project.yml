@@ -12,7 +12,7 @@ settings:
   base:
     SWIFT_VERSION: "5.0"
     MARKETING_VERSION: "1.0"
-    # Free personal team (Lina Barkhatova). Apps signed with it expire after 7 days on a device.
+    # Paid individual team (Angelina Odegova). Development profiles last a year.
     DEVELOPMENT_TEAM: NDCC8HH7D8
     CURRENT_PROJECT_VERSION: "1"
 targets:
@@ -37,7 +37,7 @@ targets:
         DEVELOPMENT_ASSET_PATHS: "\"Mediant/Preview Content\""
         ENABLE_PREVIEWS: YES
         CODE_SIGN_STYLE: Automatic
-        # Crashlytics needs a dSYM in Debug too: free-team builds never go through TestFlight.
+        # Crashlytics needs a dSYM in Debug too: development builds on the phone crash as well.
         DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
     dependencies:
       # Crash reports only. Never add FirebaseAnalytics: the design forbids tracking.

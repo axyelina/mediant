@@ -78,8 +78,8 @@ It is kept in **dark appearance**. Use the `run-sim` skill (`.claude/skills/run-
 ```
 
 Real iPhone (the user's phone `LINK`): `.claude/skills/run-device/scripts/run-device.sh` — see the
-`run-device` skill. Signing uses the free personal team `NDCC8HH7D8`
-(Lina Barkhatova); the app expires after 7 days. Bundle ID: `app.mediant` (tests `app.mediant.tests`).
+`run-device` skill. Signing uses the paid individual team `NDCC8HH7D8`
+(Angelina Odegova); development profiles last a year. Bundle ID: `app.mediant` (tests `app.mediant.tests`).
 
 DerivedData and Swift packages go to `./build/` (gitignored); the scripts pass
 `-clonedSourcePackagesDirPath build/SourcePackages` because Xcode on this Mac shares one package
