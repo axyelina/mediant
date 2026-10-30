@@ -321,6 +321,26 @@
         }
       }
     },
+    "Copied": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скопировано"
+          }
+        }
+      }
+    },
+    "Copies the version": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Копирует версию"
+          }
+        }
+      }
+    },
     "Couldn't delete": {
       "localizations": {
         "ru": {
@@ -377,6 +397,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Язык"
+          }
+        }
+      }
+    },
+    "Median't is free: no ads, no subscription. I build it in my free time. If it helps you, you can leave a tip. It unlocks nothing.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Median't бесплатный: без рекламы и подписок. Я делаю его в свободное время. Если он вам помог, можно оставить чаевые. Они ничего не открывают."
           }
         }
       }
@@ -591,12 +621,42 @@
         }
       }
     },
+    "Thank you! ✨": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Спасибо! ✨"
+          }
+        }
+      }
+    },
+    "The tip did not go through.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чаевые не прошли."
+          }
+        }
+      }
+    },
     "Tip, %@": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
             "value": "Чаевые, %@"
+          }
+        }
+      }
+    },
+    "Tips are not available right now.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чаевые сейчас недоступны."
           }
         }
       }
@@ -631,22 +691,22 @@
         }
       }
     },
+    "Treat the developer ✨": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Угостить разработчика ✨"
+          }
+        }
+      }
+    },
     "Undo": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
             "value": "Отменить"
-          }
-        }
-      }
-    },
-    "Version": {
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Версия"
           }
         }
       }

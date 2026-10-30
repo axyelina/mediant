@@ -21,7 +21,7 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
 | `Mediant/Albums/`, `Album/` | Albums list (main page) with the `ProgressCard` (space freed / items deleted), and the album grid |
 | `Mediant/Swipe/` | Swipe screen: `SwipeView` (card-stack drag: top card tilts, next waits behind; tap = skip), `PreviewStrip` (💖/👹 + ogre pop, drag to scroll), `SparkleEdge`/`SparkleShape` (✨ edges), `PhotoPage` (photo or video card), `LoopingVideo` (shows the top card's video), `VideoPlayback` (the one looping player: time, pause, mute, scrub), `VideoChip` (time chip: tap = pause/play, drag = scrub) |
 | `Mediant/Trash/` | `TrashModel` (one-batch delete, restore) and `TrashView` |
-| `Mediant/Settings/` | `SettingsView` (third tab: language chips, Trash reminder on/off, progress reset, version) |
+| `Mediant/Settings/` | `SettingsView` (third tab: language chips, Trash reminder on/off, `TipCard`, progress reset), `TipCard` (the icon-art card with the tip buttons), `VersionPin` (version line pinned above the tab bar; tap or long-press copies it) |
 | `Mediant/Localizable.xcstrings`, `InfoPlist.xcstrings` | All UI texts, English + Russian (plural forms) |
 | `Mediant/Shared/` | `Chip` (the glass capsule button), `AssetImage`, `.shimmering(_:)` (a value that is not final yet) |
 | `MediantTests/` | Swift Testing; `FakePhotoLibrary` stands in for PhotoKit |

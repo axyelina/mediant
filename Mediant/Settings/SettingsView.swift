@@ -1,6 +1,7 @@
 import SwiftUI
 
-/// The third tab: app language, the Trash reminder, resetting the progress dashboard, the version.
+/// The third tab: app language, the Trash reminder, the tip card, resetting the progress dashboard.
+/// The version is pinned above the tab bar.
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.openURL) private var openURL
@@ -31,6 +32,8 @@ struct SettingsView: View {
 
                 reminderSection
 
+                TipCard()
+
                 section {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Progress").font(.headline)
@@ -43,17 +46,12 @@ struct SettingsView: View {
                         .disabled(isProgressZero)
                         .opacity(isProgressZero ? 0.4 : 1)
                 }
-
-                section {
-                    Text("Version").font(.headline)
-                    Spacer()
-                    Text(Self.version)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .monospacedDigit()
-                }
             }
-            .padding(.bottom, FloatingTabBar.height + 24)
+            // Progress scrolls fully above the pinned version and the tab bar.
+            .padding(.bottom, Self.pinBottom + VersionPin.height + 16)
+        }
+        .overlay(alignment: .bottom) {
+            VersionPin().padding(.bottom, Self.pinBottom)
         }
         .confirmationDialog("Reset progress?", isPresented: $confirmsReset, titleVisibility: .visible) {
             Button("Reset", role: .destructive) { model.stats.reset() }
@@ -97,13 +95,8 @@ struct SettingsView: View {
 
     private var isProgressZero: Bool { model.stats.deletedCount == 0 && model.stats.freedBytes == 0 }
 
-    /// "1.0 (1)": the marketing version and the build number.
-    private static var version: String {
-        let info = Bundle.main.infoDictionary
-        let short = info?["CFBundleShortVersionString"] as? String ?? "?"
-        let build = info?["CFBundleVersion"] as? String ?? "?"
-        return "\(short) (\(build))"
-    }
+    /// The pinned version sits 8 pt above the tab bar, which sits 8 pt above the bottom (`RootView`).
+    private static let pinBottom: CGFloat = 8 + FloatingTabBar.height + 8
 
     /// One glass card row, in the style of the progress card.
     private func section(@ViewBuilder _ content: () -> some View) -> some View {
