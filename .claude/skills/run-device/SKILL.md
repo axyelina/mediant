@@ -16,7 +16,9 @@ description: Build, install and launch Median't on a real iPhone (default the ph
    Exit code 3 = installed, but the connection dropped during the launch ("timed out", "tunnel
    was interrupted"; common over Wi-Fi or with the phone locked). The app is on the phone: the
    user can open it by hand, or run the script again with the phone unlocked.
-4. Crash on the phone: list the logs with `xcrun devicectl device info files --device <id>
+4. Sandbox tip check: always install with `run-device.sh` (devicectl). A Run from Xcode, also on
+   the phone, uses the scheme's local StoreKit file `MediantTests/Tips.storekit`, not sandbox.
+5. Crash on the phone: list the logs with `xcrun devicectl device info files --device <id>
    --domain-type systemCrashLogs`, copy one with `xcrun devicectl device copy from ... --source
    <name>.ips --destination <file>`, and read the faulting thread's frames.
 
