@@ -31,15 +31,27 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
       (videos are where the space is).
 - [ ] **Settings tab — what is left.** Shipped: language switch, progress reset, version. Still to add:
       - about the creator (name, short text, link) — waits for the text;
-      - an optional donation link ("Buy me a coffee" style): one quiet row, never a popup,
-        badge, reminder or nag, and nothing in the app is locked behind it — waits for the URL.
+      - an optional tip jar: one quiet row, never a popup, badge, reminder or nag, and nothing in
+        the app is locked behind it.
 
-      Open questions before the donation row:
-      - The design says "no payments — ever" — update the spec when this lands (donation stays
-        optional, the app stays fully free).
-      - App Store review: a link to an outside donation page is often rejected for individual
-        developers (guidelines 3.1.1 / 3.2.2); the alternative is an in-app "tip" purchase, which
-        is in-app purchase. Check the current rules before choosing.
+      Decided (App Review Guidelines, checked 2026-10-30, page updated 2026-10-16): **tips are
+      consumable in-app purchases (StoreKit), not an outside "Buy me a coffee" link.**
+      - 3.1.1 lets apps take "tips" for the developer through in-app purchase. Outside links to
+        other payment methods are banned in every storefront except the US (3.1.1(a) / 3.1.3), and
+        the app ships in Russian too. Forum reports show "Tips" / "Support the developer" links
+        rejected under 3.1.1. Collecting "donations" is for approved nonprofits only (3.2.1(vi),
+        3.2.2(iv)) — say "tip", never "donate". The 3.2.1(vii) gift rule needs 100% of the money to
+        reach the receiver, which Buy Me a Coffee / Ko-fi fees break.
+      - 3–4 consumable tips (small / medium / large), prices from `Product.displayPrice`, never
+        hard-coded. A tip unlocks nothing — no features, badges or icons. One "thank you" after a
+        tip, then silence. Friendly text, no guilt.
+      - StoreKit stays behind a protocol (like `PhotoLibrary`), tested with a fake; test purchases
+        with a `.storekit` file on the dedicated sim.
+      - App Store Connect: Paid Apps Agreement (bank + tax), join the Small Business Program (15%
+        instead of 30%). Review notes: "Optional tips, they unlock nothing, the app is fully free."
+        Seller name on the purchase sheet is the team's (Angelina Odegova).
+      - Update the spec's anti-goal ("no … in-app purchase") and "no payments — ever" in
+        `CLAUDE.md` to "optional tips that unlock nothing" when this lands.
 ## From Claude
 
 ### Video
