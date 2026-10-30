@@ -17,6 +17,7 @@ final class AppModel {
     let trash: TrashModel
     let stats: CleanupStats
     let reminder: TrashReminder
+    let tips: TipJar
     let thumbs = ThumbnailLoader()
 
     var access: AccessLevel = .notDetermined
@@ -40,7 +41,8 @@ final class AppModel {
     @ObservationIgnored private var startTask: Task<Void, Never>?
 
     init(library: PhotoLibrary = PhotoKitLibrary(), storeURL: URL = AppModel.defaultStoreURL,
-         defaults: UserDefaults = .standard, notifications: NotificationCenterClient = SystemNotifications()) {
+         defaults: UserDefaults = .standard, notifications: NotificationCenterClient = SystemNotifications(),
+         tipStore: TipStore = StoreKitTipStore()) {
         self.library = library
         self.defaults = defaults
         language = AppLanguage.resolve(saved: defaults.string(forKey: Self.languageKey),
@@ -51,6 +53,7 @@ final class AppModel {
         stats = CleanupStats(fileURL: folder.appending(path: "stats.json"))
         trash = TrashModel(store: store, library: library, stats: stats)
         reminder = TrashReminder(center: notifications, defaults: defaults)
+        tips = TipJar(store: tipStore)
         access = library.accessLevel()
         notifications.setTapHandler { [weak self] in self?.openTrash() }
     }

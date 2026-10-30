@@ -79,6 +79,9 @@ schemes:
       targets:
         Mediant: all
         MediantTests: [test]
+    run:
+      # The four tips for Debug runs on the simulator; no App Store needed.
+      storeKitConfiguration: MediantTests/Tips.storekit
     test:
       targets:
         - MediantTests
