@@ -118,7 +118,9 @@ struct TrashView: View {
                 if let bytes = emptied.bytes {
                     Text("\(ByteFormat.string(bytes, locale: locale)) freed")
                         .font(.title.weight(.heavy))
-                        .foregroundStyle(LinearGradient(colors: [Self.lightPink, Self.pink],
+                        // Light pink vanishes on a white page, so light appearance runs pink to wine.
+                        .foregroundStyle(LinearGradient(colors: colorScheme == .light ? [Self.pink, Self.wine]
+                                                                                      : [Self.lightPink, Self.pink],
                                                         startPoint: .leading, endPoint: .trailing))
                 }
                 Text("\(emptied.count) photos deleted")
