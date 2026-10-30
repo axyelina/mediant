@@ -33,8 +33,10 @@ the App Store Connect API directly and only borrows Spaceship's JWT.
    price, and uploads each tip's promotional `image` and App Review screenshot
    (`review_screenshot`; a file with the same MD5 is left alone, a changed one is replaced). Run
    it again: a second run must report no changes. A tip goes from `MISSING_METADATA` to
-   `READY_TO_SUBMIT` once it has the screenshot. Apple may need a minute to process an upload,
-   so run a third time if the second one re-uploads a screenshot.
+   `READY_TO_SUBMIT` once it has the screenshot. An upload that Apple still processes (no
+   checksum yet, not `FAILED`) is reported as "still processing" and left alone; only a
+   different checksum or a `FAILED` upload is replaced. The state line at the end of each tip is
+   read after the changes.
 4. A new tip also needs an image: copy a `Design/Tips/tip-*.svg`, add it to the jobs in
    `Design/AppIcon/render.swift`, run `swift Design/AppIcon/render.swift`, and set the tip's
    `image` in `tips.json` (path relative to `fastlane/`). Re-render and re-run the lane after an

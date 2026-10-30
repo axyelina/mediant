@@ -127,6 +127,8 @@ module MediantASC
         sync_availability(iap)
         sync_image(iap, tip)
         sync_review_screenshot(iap, tip)
+        # Read it again: the state changes with the uploads above (a dry run changed nothing).
+        iap = @client.get("/v2/inAppPurchases/#{iap['id']}")["data"] unless @dry_run
         @ui.message("#{tip['product_id']}: #{iap.dig('attributes', 'state')}")
       end
     end
@@ -136,6 +138,21 @@ module MediantASC
     def change(text)
       @ui.important("#{@dry_run ? '[dry run] would ' : ''}#{text}")
       yield unless @dry_run
+    end
+
+    # An uploaded image or screenshot has no checksum while Apple still processes it. Deleting it
+    # then would throw away a good upload, so it stays until it has a checksum or has FAILED.
+    def asset_in_progress?(attrs)
+      state = attrs.dig("assetDeliveryState", "state") || attrs["state"]
+      attrs["sourceFileChecksum"].to_s.empty? && state != "FAILED"
+    end
+
+    # True (and says so) when any of the existing assets is still being processed.
+    def skip_processing?(what, existing_attrs)
+      return false unless existing_attrs.any? { |attrs| asset_in_progress?(attrs) }
+
+      @ui.message("#{what} is still processing, left alone")
+      true
     end
 
     def create_iap(app, tip)
@@ -248,6 +265,7 @@ module MediantASC
       checksum = Digest::MD5.hexdigest(data)
       current = @client.all("/v2/inAppPurchases/#{iap['id']}/images")
       return if current.any? { |image| image.dig("attributes", "sourceFileChecksum") == checksum }
+      return if skip_processing?("image of #{tip['product_id']}", current.map { |image| image["attributes"] })
 
       verb = current.empty? ? "upload" : "replace"
       change("#{verb} image of #{tip['product_id']}: #{tip['image']}") do
@@ -275,6 +293,7 @@ module MediantASC
       checksum = Digest::MD5.hexdigest(data)
       current = @client.find("/v2/inAppPurchases/#{iap['id']}/appStoreReviewScreenshot")&.dig("data")
       return if current && current.dig("attributes", "sourceFileChecksum") == checksum
+      return if current && skip_processing?("review screenshot of #{tip['product_id']}", [current["attributes"]])
 
       verb = current ? "replace" : "upload"
       change("#{verb} review screenshot of #{tip['product_id']}: #{tip['review_screenshot']}") do
