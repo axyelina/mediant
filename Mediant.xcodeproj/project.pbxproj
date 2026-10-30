@@ -68,9 +68,11 @@
 		BFE2524A11F9737BAFF83040 /* TipSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E44B90B2DF9578334F57E6 /* TipSize.swift */; };
 		C1695A850B6B02B36C86B7A2 /* AlbumOrderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54027219526A60FE9BCE03FB /* AlbumOrderTests.swift */; };
 		C408A26C2877F14D9576821F /* StoreKitTipStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 982DDCD09206D58B6CFFAAA1 /* StoreKitTipStore.swift */; };
+		C6514F56C5D836AE6D08BE79 /* FireworksPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3D57E5D6922B8F668577AF /* FireworksPlan.swift */; };
 		C6B66A159C6258EF58BE7001 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = F710E882CFE02CF0AE199041 /* FirebaseCrashlytics */; };
 		CB71CF07965531F87E6EB0D2 /* TipJar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B3ED2C431DB66655B28A93 /* TipJar.swift */; };
 		CC36355B35FEE3849369862D /* TrashReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6FC22BBF9415E3FFC2C995 /* TrashReminder.swift */; };
+		DCE06FBED79E8570E565FF36 /* FireworksPlanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36267727288734F43433C77A /* FireworksPlanTests.swift */; };
 		DD0CBDE9A85226CDE0CC294D /* TabSwipeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14497B9FE25D48B2AC8BBB9D /* TabSwipeTests.swift */; };
 		DD891070C888ECAEEEEBC1F0 /* Tips.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 575250369C17CAC417ACEE68 /* Tips.storekit */; };
 		DF10D90E7A9E907D7A669052 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0DECFBFB4F7877183073163E /* GoogleService-Info.plist */; };
@@ -112,6 +114,7 @@
 		26A3453BBE0FA1771FD7AD6B /* PhotoKitLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoKitLibrary.swift; sourceTree = "<group>"; };
 		2B2DBD88C12820282BEDF539 /* NotificationCenterClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterClient.swift; sourceTree = "<group>"; };
 		2BD7C31EE7E1AEFDDDBCA0D2 /* DecisionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecisionStore.swift; sourceTree = "<group>"; };
+		36267727288734F43433C77A /* FireworksPlanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireworksPlanTests.swift; sourceTree = "<group>"; };
 		37AF4CF122A661D00503B634 /* VideoPlaybackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlaybackTests.swift; sourceTree = "<group>"; };
 		37F1AE4C1CC02F43ABBD6FE6 /* DecisionStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecisionStoreTests.swift; sourceTree = "<group>"; };
 		39964D3CAF40E333CE9F38C2 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
@@ -145,6 +148,7 @@
 		A63478135307D4B7799434EA /* ByteFormatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ByteFormatTests.swift; sourceTree = "<group>"; };
 		AA0CDD6131EF9D61D5AD060D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		AA802C76682386D812EA129A /* ThumbnailLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailLoader.swift; sourceTree = "<group>"; };
+		AF3D57E5D6922B8F668577AF /* FireworksPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireworksPlan.swift; sourceTree = "<group>"; };
 		AFDB848C852B704127DB781A /* AlbumSizesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumSizesTests.swift; sourceTree = "<group>"; };
 		B966FF0D78C2AD5D228B994D /* TipStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipStore.swift; sourceTree = "<group>"; };
 		BB543E4BDC5D4163CA9C7634 /* FakeTipStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeTipStore.swift; sourceTree = "<group>"; };
@@ -283,6 +287,7 @@
 				DCE08EC501AE1D107F730A48 /* CleanupStats.swift */,
 				3F7D283517554BB3A2827263 /* Decision.swift */,
 				2BD7C31EE7E1AEFDDDBCA0D2 /* DecisionStore.swift */,
+				AF3D57E5D6922B8F668577AF /* FireworksPlan.swift */,
 				193059841FE73FA07627E93F /* SwipeSession.swift */,
 				4A65C65F66614B3CBC24E625 /* TabSwipe.swift */,
 				72B3ED2C431DB66655B28A93 /* TipJar.swift */,
@@ -306,6 +311,7 @@
 				37F1AE4C1CC02F43ABBD6FE6 /* DecisionStoreTests.swift */,
 				CDE0DC556CA80ACA0ED183FE /* FakePhotoLibrary.swift */,
 				BB543E4BDC5D4163CA9C7634 /* FakeTipStore.swift */,
+				36267727288734F43433C77A /* FireworksPlanTests.swift */,
 				8F530D0E120C59DE789626A5 /* LaunchArtTests.swift */,
 				2532B53E986EE09841C67283 /* StoreKitTipStoreTests.swift */,
 				F262B57EB936D37E5D6FC508 /* SwipeSessionTests.swift */,
@@ -530,6 +536,7 @@
 				2666D1F79E0E002296926EAE /* DecisionStoreTests.swift in Sources */,
 				DF5792A19BF48D7CC75945D7 /* FakePhotoLibrary.swift in Sources */,
 				7F752C965CC97EB77076A182 /* FakeTipStore.swift in Sources */,
+				DCE06FBED79E8570E565FF36 /* FireworksPlanTests.swift in Sources */,
 				179E9308DA080B68CE601AD0 /* LaunchArtTests.swift in Sources */,
 				AF8177C83C87FF2C157F2575 /* StoreKitTipStoreTests.swift in Sources */,
 				90A74C7C422D8768658B0F92 /* SwipeSessionTests.swift in Sources */,
@@ -563,6 +570,7 @@
 				7CA45C873AD7A5F7E7AC0D9F /* CrashReporting.swift in Sources */,
 				18D362878A17A0C83B786253 /* Decision.swift in Sources */,
 				A9DA57F0DB185727E3408A44 /* DecisionStore.swift in Sources */,
+				C6514F56C5D836AE6D08BE79 /* FireworksPlan.swift in Sources */,
 				8358BA470BBD99DEFE0E4F1F /* FloatingTabBar.swift in Sources */,
 				56F87360147A9269D144D9BC /* LaunchArt.swift in Sources */,
 				56A5DAC30E111CAC27502AED /* LoopingVideo.swift in Sources */,
