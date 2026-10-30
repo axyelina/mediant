@@ -9,3 +9,4 @@ fastlane/.env
 fastlane/report.xml
 fastlane/README.md
 *.p8
+.claude/worktrees/
