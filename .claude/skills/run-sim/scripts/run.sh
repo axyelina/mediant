@@ -2,6 +2,7 @@
 # Build and launch Median't (or run its tests) on the dedicated "Median't iPhone 16" simulator.
 # Creates the simulator if it doesn't exist, boots it, and keeps it in dark appearance.
 # Usage: run.sh [--test]
+#        run.sh [-- <launch arguments>]   e.g. run.sh -- -fakeTips kzt (see SKILL.md)
 set -euo pipefail
 
 SIM_NAME="Median't iPhone 16"
@@ -32,7 +33,13 @@ xcrun simctl ui "$UDID" appearance dark
 [[ project.yml -nt Mediant.xcodeproj/project.pbxproj ]] && xcodegen generate --quiet
 
 ACTION=build
-[[ "${1:-}" == "--test" ]] && ACTION=test
+LAUNCH_ARGS=()
+if [[ "${1:-}" == "--test" ]]; then
+  ACTION=test
+elif [[ "${1:-}" == "--" ]]; then
+  shift
+  LAUNCH_ARGS=("$@")
+fi
 
 # Own package checkouts: Xcode's shared IDEClonedSourcePackagesDirPathOverride folder holds other
 # projects' Firebase versions.
@@ -42,7 +49,7 @@ xcodebuild -project Mediant.xcodeproj -scheme Mediant \
 
 if [[ "$ACTION" == build ]]; then
   xcrun simctl install "$UDID" build/Build/Products/Debug-iphonesimulator/Mediant.app
-  xcrun simctl launch --terminate-running-process "$UDID" "$BUNDLE_ID" >/dev/null
+  xcrun simctl launch --terminate-running-process "$UDID" "$BUNDLE_ID" ${LAUNCH_ARGS[@]+"${LAUNCH_ARGS[@]}"} >/dev/null
   echo "Launched $BUNDLE_ID on $SIM_NAME ($UDID)"
 else
   echo "Tests passed on $SIM_NAME ($UDID)"

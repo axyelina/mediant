@@ -25,6 +25,19 @@ simulator, even if one is booted or the panel is attached elsewhere.
    Wait ~1 s after a tap that pushes a screen, and after `run.sh`, before the next tap — taps sent
    during launch land on the home screen.
 
+**Fake tips (Debug only):** `run.sh -- -fakeTips <preset>` passes the arguments after `--` to
+`simctl launch`. `DemoTipStore` then replaces the App Store, so the tips work on the simulator
+with fixed prices. Purchases succeed after 0.5 s unless the preset is `fail`. Without the
+argument the app uses StoreKit.
+
+| Preset | Prices | Use it to check |
+|---|---|---|
+| `usd` | $0.99 / $2.99 / $4.99 / $9.99 | one row of four buttons, the normal case |
+| `kzt` | 499,00 ₸ … 5 990,00 ₸ | long prices: the 2 × 2 grid |
+| `idr` | Rp 19.000,00 … Rp 199.000,00 | the longest prices: 2 × 2 (or one column with large text) |
+| `fail` | as `usd` | every purchase fails: the failed line, no fireworks |
+| `none` | none | the products never load: the "not available" states |
+
 Tests: `.claude/skills/run-sim/scripts/run.sh --test` (runs `MediantTests` on the same simulator).
 The test run **replaces the running app** with the test host, so relaunch with `run.sh` before
 driving the UI again. Failure details are hidden by `-quiet`; on failure, look for

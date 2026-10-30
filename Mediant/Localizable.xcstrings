@@ -591,6 +591,16 @@
         }
       }
     },
+    "Tip, %@": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чаевые, %@"
+          }
+        }
+      }
+    },
     "Trash": {
       "localizations": {
         "ru": {
