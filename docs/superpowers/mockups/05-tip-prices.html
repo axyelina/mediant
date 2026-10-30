@@ -1,0 +1,81 @@
+<h2>Layout B with long prices</h2>
+<p class="subtitle">Real prices of your 4 tips from App Store Connect. Text is the StoreKit format at its longest (with decimals). Click the version you like.</p>
+
+<style>
+  .flow { display:flex; gap:22px; flex-wrap:wrap; justify-content:center; align-items:flex-start; margin-top:14px; }
+  .ph { width:262px; height:300px; border-radius:40px 40px 0 0; border:8px solid #2a2a2e; border-bottom:none; overflow:hidden; position:relative;
+        font-family:-apple-system,system-ui,sans-serif; color:#fff; background:#000; }
+  .glass { background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.12); }
+  .h { font-size:11.5px; font-weight:700; }
+  .s { font-size:9px; color:#8e8e93; margin-top:2px; line-height:1.25; }
+  .tipcard { margin:12px 10px 7px; border-radius:16px; padding:10px; position:relative; overflow:hidden;
+             background:linear-gradient(135deg,#470112 0 48%,#75013d 48% 100%); border:1px solid rgba(255,92,147,.35); }
+  .tipcard .h { font-size:12.5px; }
+  .tipcard .s { color:#ffd1e3; opacity:.85; }
+  .row4 { display:flex; gap:4px; margin-top:8px; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:8px; }
+  .tipbtn { flex:1; height:26px; border-radius:13px; display:flex; align-items:center; justify-content:center; gap:4px;
+            font-size:9.5px; font-weight:700; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.22); white-space:nowrap; }
+  .tipbtn .nm { font-weight:500; opacity:.75; }
+  .cap { text-align:center; margin-top:10px; font-size:13px; }
+  .cap small { display:block; opacity:.7; font-size:11.5px; margin-top:3px; }
+  .bad { outline:2px dashed #ff453a; outline-offset:2px; }
+</style>
+
+<div class="flow">
+  <div>
+    <div class="ph">
+      <div style="height:30px"></div>
+      <div class="tipcard">
+        <div class="h">Treat the developer ✨</div>
+        <div class="s">Median't is free: no ads, no subscription. I build it in my free time. If it helps you, you can leave a tip. It unlocks nothing.</div>
+        <div class="row4 bad"><div class="tipbtn">499,00 ₸</div><div class="tipbtn">1 790,00 ₸</div><div class="tipbtn">2 990,00 ₸</div><div class="tipbtn">5 990,00 ₸</div></div>
+      </div>
+    </div>
+    <div class="cap"><b>Problem: KZT in one row</b><small>4 buttons do not have space. Text is cut or too small.</small></div>
+  </div>
+
+  <div class="option" data-choice="auto" onclick="toggleSelect(this)" style="display:block; padding:0; border:none; background:none">
+    <div style="display:flex; gap:12px">
+      <div class="ph" style="width:200px">
+        <div style="height:30px"></div>
+        <div class="tipcard">
+          <div class="h">Treat the developer ✨</div>
+          <div class="s">Median't is free: no ads, no subscription. If it helps you, you can leave a tip.</div>
+          <div class="row4"><div class="tipbtn">$0.99</div><div class="tipbtn">$2.99</div><div class="tipbtn">$4.99</div><div class="tipbtn">$9.99</div></div>
+        </div>
+        <div style="text-align:center;font-size:9px;color:#8e8e93">USD, EUR, RUB, INR, JPY: one row</div>
+      </div>
+      <div class="ph" style="width:200px">
+        <div style="height:30px"></div>
+        <div class="tipcard">
+          <div class="h">Treat the developer ✨</div>
+          <div class="s">Median't is free: no ads, no subscription. If it helps you, you can leave a tip.</div>
+          <div class="grid2"><div class="tipbtn">499,00 ₸</div><div class="tipbtn">1 790,00 ₸</div><div class="tipbtn">2 990,00 ₸</div><div class="tipbtn">5 990,00 ₸</div></div>
+        </div>
+        <div style="text-align:center;font-size:9px;color:#8e8e93">KZT, IDR, VND, KRW: 2 × 2</div>
+      </div>
+    </div>
+    <div class="cap"><b>A · Auto: one row, or 2 × 2 when it does not fit</b><small>The app measures the prices and picks the layout. Most users see one row.</small></div>
+  </div>
+
+  <div class="option" data-choice="grid" onclick="toggleSelect(this)" style="display:block; padding:0; border:none; background:none">
+    <div class="ph">
+      <div style="height:30px"></div>
+      <div class="tipcard">
+        <div class="h">Treat the developer ✨</div>
+        <div class="s">Median't is free: no ads, no subscription. I build it in my free time. If it helps you, you can leave a tip. It unlocks nothing.</div>
+        <div class="grid2"><div class="tipbtn"><span class="nm">✨</span>Rp 19.000,00</div><div class="tipbtn"><span class="nm">✨✨</span>Rp 59.000,00</div><div class="tipbtn"><span class="nm">✨✨✨</span>Rp 99.000,00</div><div class="tipbtn"><span class="nm">🌟</span>Rp 199.000,00</div></div>
+      </div>
+    </div>
+    <div class="cap"><b>B · Always 2 × 2, with a size mark</b><small>Same layout in every country. Here: IDR, the longest.</small></div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:22px">
+  <h3>Real prices of your tips</h3>
+  <p style="font-size:13px; line-height:1.6">
+    KZT 499 · 1 790 · 2 990 · 5 990 &nbsp;|&nbsp; RUB 99 · 249 · 449 · 899 &nbsp;|&nbsp; IDR 19 000 · 59 000 · 99 000 · 199 000<br>
+    VND 29 000 · 99 000 · 149 000 · 299 000 &nbsp;|&nbsp; KRW 1 100 · 4 400 · 7 700 · 17 000 &nbsp;|&nbsp; EUR 0.99 · 2.99 · 5.99 · 9.99
+  </p>
+</div>

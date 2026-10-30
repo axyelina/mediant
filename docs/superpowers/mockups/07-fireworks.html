@@ -1,0 +1,172 @@
+<h2>Fireworks, "more Disney"</h2>
+<p class="subtitle">Live prototype. Long glowing streaks in two colors, a star flash in the center, dots and twinkling ✨, curved trails. "haptic" flashes at each explosion. Press a tip to replay. Click the look you like.</p>
+
+<style>
+  .bar { display:flex; gap:8px; justify-content:center; margin:10px 0 16px; flex-wrap:wrap; }
+  .bar button { font:600 14px -apple-system,system-ui,sans-serif; padding:8px 16px; border-radius:18px; border:1px solid rgba(255,255,255,.25);
+                background:rgba(255,92,147,.18); color:#fff; cursor:pointer; }
+  .flow { display:flex; gap:22px; flex-wrap:wrap; justify-content:center; }
+  .phone { width:270px; height:560px; border-radius:40px; border:8px solid #2a2a2e; overflow:hidden; position:relative; }
+  .phone canvas { width:100%; height:100%; display:block; }
+  .hap { position:absolute; left:50%; top:46px; transform:translateX(-50%); font:700 11px -apple-system,system-ui,sans-serif;
+         padding:3px 9px; border-radius:10px; background:rgba(255,92,147,.85); color:#fff; opacity:0; transition:opacity .08s; }
+  .cap { text-align:center; margin-top:10px; font-size:13px; max-width:270px; }
+  .cap small { display:block; opacity:.7; font-size:11.5px; margin-top:3px; }
+</style>
+
+<div class="bar">
+  <button onclick="play('small')">Small · 1</button>
+  <button onclick="play('medium')">Medium · 2</button>
+  <button onclick="play('large')">Large · 3</button>
+  <button onclick="play('huge')">Huge · 5 + finale</button>
+</div>
+
+<div class="flow">
+  <div class="option" data-choice="app" onclick="toggleSelect(this)" style="display:block; padding:0; border:none; background:none">
+    <div class="phone" style="background:#000"><canvas id="c1" width="540" height="1120"></canvas><div class="hap" id="h1">haptic</div></div>
+    <div class="cap"><b>A · App colors</b><small>White, light pink, pink, wine.</small></div>
+  </div>
+  <div class="option" data-choice="gold" onclick="toggleSelect(this)" style="display:block; padding:0; border:none; background:none">
+    <div class="phone" style="background:#000"><canvas id="c2" width="540" height="1120"></canvas><div class="hap" id="h2">haptic</div></div>
+    <div class="cap"><b>B · App colors + gold</b><small>Adds warm gold, the classic "magic" sparkle.</small></div>
+  </div>
+  <div class="option" data-choice="light" onclick="toggleSelect(this)" style="display:block; padding:0; border:none; background:none">
+    <div class="phone" style="background:#f2f2f7"><canvas id="c3" width="540" height="1120"></canvas><div class="hap" id="h3">haptic</div></div>
+    <div class="cap"><b>Light mode</b><small>Darker pinks and wines, no glow. Same shapes.</small></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const W = 540, H = 1120;
+  const looks = {
+    c1: { light:false, pairs:[["#ff5c93","#ffd1e3"],["#c2184e","#ffffff"],["#ffd1e3","#ff5c93"],["#ffffff","#c2184e"]], trail:"#ffd1e3", star:"#ffffff" },
+    c2: { light:false, pairs:[["#ff5c93","#ffd27a"],["#ffd27a","#ffffff"],["#c2184e","#ffd1e3"],["#ffffff","#ff5c93"]], trail:"#ffe2a8", star:"#fff4d6" },
+    c3: { light:true,  pairs:[["#c2184e","#ff5c93"],["#470112","#ff5c93"],["#ff5c93","#75013d"]], trail:"#c2184e", star:"#c2184e" },
+  };
+  const plans = { small:1, medium:2, large:3, huge:5 };
+  let shows = [];
+
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+
+  function makeShow(size) {
+    const n = plans[size], rockets = [];
+    for (let i = 0; i < n; i++) {
+      const radius = (n === 1 ? rnd(190, 220) : rnd(130, 175));
+      const x0 = rnd(0.3, 0.7) * W, tx = rnd(radius + 10, W - radius - 10), ty = rnd(0.2, 0.45) * H;
+      rockets.push({ start: i * 0.38, x0, y0: H + 10, tx, ty, bend: rnd(-90, 90), fly: rnd(0.75, 0.95),
+                     radius, pair: i, big: false });
+    }
+    if (size === "huge") rockets.push({ start: n * 0.38 + 0.35, x0: W / 2, y0: H + 10, tx: W / 2, ty: H * 0.36, bend: 0, fly: 0.9, radius: 250, pair: 0, big: true });
+    return rockets.map(r => ({ ...r, streaks: makeStreaks(r), dots: makeDots(r), twinkles: makeTwinkles(r) }));
+  }
+  function makeStreaks(r) {
+    const n = r.big ? 72 : 48, out = [];
+    for (let i = 0; i < n; i++) out.push({ a: i / n * Math.PI * 2 + rnd(-0.05, 0.05), v: rnd(0.75, 1) * r.radius, c: i % 2, w: rnd(2.2, 4) });
+    return out;
+  }
+  function makeDots(r) {
+    const out = [];
+    for (let i = 0; i < (r.big ? 60 : 36); i++) out.push({ a: rnd(0, Math.PI * 2), v: rnd(1.02, 1.25) * r.radius, s: rnd(2, 4.5), c: i % 2, ph: rnd(0, 6) });
+    return out;
+  }
+  function makeTwinkles(r) {
+    const out = [];
+    for (let i = 0; i < (r.big ? 12 : 7); i++) out.push({ a: rnd(0, Math.PI * 2), d: rnd(0.3, 1.1) * r.radius, s: rnd(10, 20), delay: rnd(0.25, 0.7), ph: rnd(0, 6) });
+    return out;
+  }
+
+  function sparkle(ctx, x, y, h, color) {
+    const w = h * 0.58, p = 0.07;
+    ctx.beginPath();
+    ctx.moveTo(x, y - h / 2);
+    ctx.quadraticCurveTo(x + w * p, y - h * p, x + w / 2, y);
+    ctx.quadraticCurveTo(x + w * p, y + h * p, x, y + h / 2);
+    ctx.quadraticCurveTo(x - w * p, y + h * p, x - w / 2, y);
+    ctx.quadraticCurveTo(x - w * p, y - h * p, x, y - h / 2);
+    ctx.fillStyle = color; ctx.fill();
+  }
+  function flashStar(ctx, x, y, R, color) {
+    ctx.beginPath();
+    for (let i = 0; i < 16; i++) {
+      const a = i / 16 * Math.PI * 2, r = i % 2 ? R * 0.28 : R;
+      ctx.lineTo(x + Math.cos(a) * r, y + Math.sin(a) * r);
+    }
+    ctx.closePath(); ctx.fillStyle = color; ctx.fill();
+  }
+  function bez(r, t) {
+    const cx = (r.x0 + r.tx) / 2 + r.bend, cy = (r.y0 + r.ty) / 2;
+    const u = 1 - t;
+    return [u * u * r.x0 + 2 * u * t * cx + t * t * r.tx, u * u * r.y0 + 2 * u * t * cy + t * t * r.ty];
+  }
+
+  function drawShow(ctx, look, rockets, t, hapEl) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalCompositeOperation = look.light ? "source-over" : "lighter";
+    let hap = false;
+    for (const r of rockets) {
+      const lt = t - r.start;
+      if (lt < 0) continue;
+      const k = Math.min(lt / r.fly, 1), ease = 1 - Math.pow(1 - k, 2.2);
+      // trail: drawn up to the rocket, fades after the burst
+      const trailAlpha = k < 1 ? 0.9 : Math.max(0, 0.9 - (lt - r.fly) * 1.6);
+      if (trailAlpha > 0) {
+        ctx.lineCap = "round";
+        for (let s = 0; s < 24; s++) {
+          const a = Math.max(0, ease - 0.45 + s / 24 * 0.45), b = Math.max(0, ease - 0.45 + (s + 1) / 24 * 0.45);
+          const [x1, y1] = bez(r, a), [x2, y2] = bez(r, b);
+          ctx.strokeStyle = look.trail; ctx.globalAlpha = trailAlpha * (s / 24); ctx.lineWidth = 1 + s / 24 * 3;
+          ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+        }
+        if (k < 1) { const [hx, hy] = bez(r, ease); ctx.globalAlpha = 1; ctx.shadowBlur = look.light ? 0 : 18; ctx.shadowColor = look.trail; sparkle(ctx, hx, hy, 18, look.star); ctx.shadowBlur = 0; }
+      }
+      if (k < 1) continue;
+      const bt = lt - r.fly;
+      if (bt < 0.05) hap = true;
+      const [cx, cy] = [r.tx, r.ty], pair = look.pairs[r.pair % look.pairs.length];
+      const grow = 1 - Math.exp(-bt * 4.2), fall = 38 * bt * bt, fade = Math.max(0, 1 - Math.max(0, bt - 0.7) / 0.9);
+      if (fade <= 0) continue;
+      ctx.shadowBlur = look.light ? 0 : 10;
+      // streaks
+      for (const s of r.streaks) {
+        const r2 = s.v * grow, r1 = r2 * (0.08 + 0.42 * Math.max(0, bt - 0.35));
+        const x1 = cx + Math.cos(s.a) * r1, y1 = cy + Math.sin(s.a) * r1 + fall * 0.6;
+        const x2 = cx + Math.cos(s.a) * r2, y2 = cy + Math.sin(s.a) * r2 + fall;
+        const g = ctx.createLinearGradient(x1, y1, x2, y2);
+        g.addColorStop(0, pair[s.c] + "00"); g.addColorStop(0.55, pair[s.c] + "aa"); g.addColorStop(1, pair[s.c]);
+        ctx.strokeStyle = g; ctx.shadowColor = pair[s.c]; ctx.globalAlpha = fade; ctx.lineWidth = s.w * (r.big ? 1.3 : 1);
+        ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+      }
+      // dots on the rim, flickering
+      for (const d of r.dots) {
+        const rr = d.v * grow, flick = 0.55 + 0.45 * Math.sin(bt * 22 + d.ph);
+        ctx.globalAlpha = fade * flick; ctx.fillStyle = pair[d.c];
+        ctx.beginPath(); ctx.arc(cx + Math.cos(d.a) * rr, cy + Math.sin(d.a) * rr + fall * 1.1, d.s, 0, 7); ctx.fill();
+      }
+      // center star flash
+      if (bt < 0.6) { ctx.globalAlpha = 1 - bt / 0.6; ctx.shadowBlur = look.light ? 0 : 30; ctx.shadowColor = look.star; flashStar(ctx, cx, cy, (r.big ? 60 : 38) * (0.6 + bt), look.star); }
+      // twinkling ✨ around
+      for (const w of r.twinkles) {
+        const tt = bt - w.delay; if (tt < 0) continue;
+        const tw = Math.max(0, Math.sin(tt * 9 + w.ph)) * Math.max(0, 1 - tt / 1.3);
+        if (tw <= 0) continue;
+        ctx.globalAlpha = tw; ctx.shadowBlur = look.light ? 0 : 14; ctx.shadowColor = look.star;
+        sparkle(ctx, cx + Math.cos(w.a) * w.d, cy + Math.sin(w.a) * w.d + fall, w.s * (0.6 + tw * 0.6), look.light ? pair[0] : look.star);
+      }
+      ctx.shadowBlur = 0;
+    }
+    ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over";
+    hapEl.style.opacity = hap ? 1 : 0;
+  }
+
+  window.play = function (size) {
+    shows = Object.keys(looks).map((id, i) => ({ id, ctx: document.getElementById(id).getContext("2d"), hap: document.getElementById("h" + (i + 1)), rockets: makeShow(size), t0: performance.now() }));
+  };
+  function frame(now) {
+    for (const s of shows) drawShow(s.ctx, looks[s.id], s.rockets, (now - s.t0) / 1000, s.hap);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  play("large");
+})();
+</script>

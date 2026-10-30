@@ -1,0 +1,137 @@
+<h2>Settings with tips — where do the tips go?</h2>
+<p class="subtitle">Three layouts. In all three, the version is pinned at the bottom, above the tab bar. Tap it to copy. Click the layout you like.</p>
+
+<style>
+  .flow { display:flex; gap:26px; flex-wrap:wrap; justify-content:center; align-items:flex-start; margin-top:14px; }
+  .ph { width:260px; height:540px; border-radius:40px; border:8px solid #2a2a2e; overflow:hidden; position:relative;
+        font-family:-apple-system,system-ui,sans-serif; color:#fff; background:#000; box-shadow:0 10px 34px rgba(0,0,0,.45); }
+  .isl { position:absolute; top:8px; left:50%; transform:translateX(-50%); width:76px; height:21px; background:#000; border-radius:12px; z-index:20; }
+  .glass { background:rgba(255,255,255,.10); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,.12); }
+  .scroll { position:absolute; inset:0; padding-top:40px; overflow:hidden; }
+  .title { font-size:24px; font-weight:800; padding:0 12px 8px; }
+  .card { margin:0 10px 7px; border-radius:14px; padding:9px 10px; display:flex; align-items:center; gap:6px; }
+  .h { font-size:11.5px; font-weight:700; }
+  .s { font-size:9px; color:#8e8e93; margin-top:2px; line-height:1.25; }
+  .grow { flex:1; }
+  .chip { font-size:9.5px; font-weight:600; padding:0 8px; height:22px; display:inline-flex; align-items:center; border-radius:11px; white-space:nowrap; }
+  .chip.on { background:rgba(255,55,95,.22); border-color:rgba(255,55,95,.4); color:#ff5c93; }
+  .chip.red { background:rgba(255,69,58,.18); border-color:rgba(255,69,58,.35); color:#ff6961; }
+  .chips { display:flex; gap:4px; }
+  .tipcard { margin:0 10px 7px; border-radius:16px; padding:10px; position:relative; overflow:hidden;
+             background:linear-gradient(135deg,#470112 0 48%,#75013d 48% 100%); border:1px solid rgba(255,92,147,.35); }
+  .tipcard .h { font-size:12.5px; }
+  .tipcard .s { color:#ffd1e3; opacity:.85; }
+  .tipbtns { display:flex; gap:4px; margin-top:8px; }
+  .tipbtn { flex:1; height:26px; border-radius:13px; display:flex; align-items:center; justify-content:center; gap:2px;
+            font-size:9.5px; font-weight:700; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.22); }
+  .tiles { display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-top:8px; }
+  .tile { border-radius:11px; overflow:hidden; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14); display:flex; align-items:center; gap:6px; padding:4px; }
+  .tile img { width:30px; height:30px; border-radius:7px; }
+  .tile .n { font-size:9px; font-weight:600; } .tile .p { font-size:9px; color:#ff8fb5; font-weight:700; }
+  .icons { display:flex; gap:3px; margin-top:6px; }
+  .icons img { width:22px; height:22px; border-radius:5px; }
+  .version { position:absolute; left:0; right:0; bottom:58px; text-align:center; font-size:9px; color:#8e8e93; z-index:11; }
+  .version span { padding:3px 8px; border-radius:9px; }
+  .fade { position:absolute; left:0; right:0; bottom:0; height:96px; background:linear-gradient(transparent,#000 45%); z-index:9; }
+  .tabbar { position:absolute; left:50%; transform:translateX(-50%); width:120px; bottom:14px; height:36px; border-radius:18px; display:flex; padding:3px; gap:3px; z-index:10; }
+  .tab { flex:1; border-radius:15px; display:flex; align-items:center; justify-content:center; color:#aeaeb2; }
+  .tab.on { background:rgba(255,255,255,.16); color:#fff; }
+  .tab svg { width:16px; height:16px; }
+  .opt-label { text-align:center; margin-top:10px; }
+</style>
+
+<div class="cards flow">
+
+  <!-- A -->
+  <div class="card-wrap option" data-choice="a" onclick="toggleSelect(this)" style="display:block">
+    <div class="ph">
+      <div class="isl"></div>
+      <div class="scroll">
+        <div class="title">Settings</div>
+        <div class="tipcard">
+          <div class="h">Treat the developer ✨</div>
+          <div class="s">Median't is free: no ads, no subscription. I build it in my free time. If it helps you, you can leave a tip. It unlocks nothing.</div>
+          <div class="tipbtns"><div class="tipbtn">$0.99</div><div class="tipbtn">$2.99</div><div class="tipbtn">$4.99</div><div class="tipbtn">$9.99</div></div>
+        </div>
+        <div class="card glass"><div class="h grow">Language</div><div class="chips"><span class="chip glass">English</span><span class="chip glass on">Русский</span></div></div>
+        <div class="card glass"><div class="grow"><div class="h">Trash reminder</div><div class="s">One reminder when you leave photos in the Trash.</div></div><div class="chips"><span class="chip glass on">On</span><span class="chip glass">Off</span></div></div>
+        <div class="card glass"><div class="grow"><div class="h">Progress</div><div class="s">Space freed and items deleted on the Albums page.</div></div><span class="chip glass red">Reset</span></div>
+      </div>
+      <div class="fade"></div>
+      <div class="version"><span class="glass">Median't 1.0 (12) · tap to copy</span></div>
+      <div class="tabbar glass">
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg></div>
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></div>
+        <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></div>
+      </div>
+    </div>
+    <div class="opt-label"><b>A · Tips first</b><br><span class="s" style="font-size:12px">A big ✨ card at the top. The first thing you see.</span></div>
+  </div>
+
+  <!-- B -->
+  <div class="card-wrap option" data-choice="b" onclick="toggleSelect(this)" style="display:block">
+    <div class="ph">
+      <div class="isl"></div>
+      <div class="scroll">
+        <div class="title">Settings</div>
+        <div class="card glass"><div class="h grow">Language</div><div class="chips"><span class="chip glass">English</span><span class="chip glass on">Русский</span></div></div>
+        <div class="card glass"><div class="grow"><div class="h">Trash reminder</div><div class="s">One reminder when you leave photos in the Trash.</div></div><div class="chips"><span class="chip glass on">On</span><span class="chip glass">Off</span></div></div>
+        <div class="card glass"><div class="grow"><div class="h">Progress</div><div class="s">Space freed and items deleted on the Albums page.</div></div><span class="chip glass red">Reset</span></div>
+        <div class="tipcard" style="margin-top:12px">
+          <div class="h">Treat the developer ✨</div>
+          <div class="s">Median't is free: no ads, no subscription. I build it in my free time. If it helps you, you can leave a tip. It unlocks nothing.</div>
+          <div class="tipbtns"><div class="tipbtn">$0.99</div><div class="tipbtn">$2.99</div><div class="tipbtn">$4.99</div><div class="tipbtn">$9.99</div></div>
+        </div>
+      </div>
+      <div class="fade"></div>
+      <div class="version"><span class="glass">Median't 1.0 (12) · tap to copy</span></div>
+      <div class="tabbar glass">
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg></div>
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></div>
+        <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></div>
+      </div>
+    </div>
+    <div class="opt-label"><b>B · Tips last, price chips</b><br><span class="s" style="font-size:12px">Settings first. The ✨ card sits low, in thumb reach.</span></div>
+  </div>
+
+  <!-- C -->
+  <div class="card-wrap option" data-choice="c" onclick="toggleSelect(this)" style="display:block">
+    <div class="ph">
+      <div class="isl"></div>
+      <div class="scroll">
+        <div class="title">Settings</div>
+        <div class="card glass"><div class="h grow">Language</div><div class="chips"><span class="chip glass">English</span><span class="chip glass on">Русский</span></div></div>
+        <div class="card glass"><div class="grow"><div class="h">Trash reminder</div><div class="s">One reminder when you leave photos in the Trash.</div></div><div class="chips"><span class="chip glass on">On</span><span class="chip glass">Off</span></div></div>
+        <div class="card glass"><div class="grow"><div class="h">Progress</div><div class="s">Space freed and items deleted on the Albums page.</div></div><span class="chip glass red">Reset</span></div>
+        <div class="card glass" style="display:block; margin-top:12px">
+          <div class="h">Treat the developer</div>
+          <div class="s">Median't is free: no ads, no subscription. If it helps you, you can leave a tip. It unlocks nothing.</div>
+          <div class="tiles">
+            <div class="tile"><img src="../../../fastlane/tips/tip-small.png"><div><div class="n">Small</div><div class="p">$0.99</div></div></div>
+            <div class="tile"><img src="../../../fastlane/tips/tip-medium.png"><div><div class="n">Medium</div><div class="p">$2.99</div></div></div>
+            <div class="tile"><img src="../../../fastlane/tips/tip-large.png"><div><div class="n">Large</div><div class="p">$4.99</div></div></div>
+            <div class="tile"><img src="../../../fastlane/tips/tip-huge.png"><div><div class="n">Huge</div><div class="p">$9.99</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="fade"></div>
+      <div class="version"><span class="glass">Median't 1.0 (12) · tap to copy</span></div>
+      <div class="tabbar glass">
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg></div>
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></div>
+        <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></div>
+      </div>
+    </div>
+    <div class="opt-label"><b>C · Tips last, picture tiles</b><br><span class="s" style="font-size:12px">The four tip images from App Store Connect, 2 × 2.</span></div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:22px">
+  <h3>My guesses — correct me</h3>
+  <ul>
+    <li>The tip text speaks as you, the developer ("I build it in my free time").</li>
+    <li>Prices come from the App Store, so a Russian user sees rubles.</li>
+    <li>"About the creator" from the TODO is not on this screen yet. It can go inside the tip card later.</li>
+    <li>The version text is the only thing pinned. All cards scroll.</li>
+  </ul>
+</div>
