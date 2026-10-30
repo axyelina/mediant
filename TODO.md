@@ -65,8 +65,8 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 
 ### 2026-10-30
 - [x] Firebase Crashlytics (crash reports only, no Analytics); dSYMs upload on device builds.
-- [x] Final bundle ID `app.mediant` (tests `app.mediant.tests`), signed with the free personal team
-      `NDCC8HH7D8` (Lina Barkhatova).
+- [x] Final bundle ID `app.mediant` (tests `app.mediant.tests`), signed with team `NDCC8HH7D8`
+      (Angelina Odegova, paid individual team; development profiles last a year).
 - [x] Settings tab: English / Русский switch, progress reset, version; all texts in Russian.
 - [x] Trash reminder: one local notification 2 h after leaving a full Trash (30 s in Debug), tap
       opens the Trash, never twice for the same Trash; On / Off in Settings.
