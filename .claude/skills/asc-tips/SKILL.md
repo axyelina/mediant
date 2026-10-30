@@ -30,9 +30,12 @@ the App Store Connect API directly and only borrows Spaceship's JWT.
    (max 45). Keep "tip", never "donate" (guideline 3.2.2(iv)).
 2. `bundle exec fastlane tips dry_run:true` — shows what would change, writes nothing.
 3. `bundle exec fastlane tips` — creates missing tips, fixes names, descriptions, review note and
-   price. Run it again: a second run must report no changes.
+   price, and uploads each tip's promotional `image` (an image with the same MD5 is left alone, a
+   changed one is replaced). Run it again: a second run must report no changes.
 4. A new tip also needs an image: copy a `Design/Tips/tip-*.svg`, add it to the jobs in
-   `Design/AppIcon/render.swift`, run `swift Design/AppIcon/render.swift`.
+   `Design/AppIcon/render.swift`, run `swift Design/AppIcon/render.swift`, and set the tip's
+   `image` in `tips.json` (path relative to `fastlane/`). Re-render and re-run the lane after an
+   art change.
 5. Commit `tips.json`. The app's StoreKit code and `.storekit` test file use the same product IDs.
 
 ## Rules
@@ -41,8 +44,6 @@ the App Store Connect API directly and only borrows Spaceship's JWT.
   selling one, remove it from the app and mark it "Removed from Sale" by hand.
 - Availability is set once (all territories, new territories on) and then left alone.
 - Not automated — do these by hand in App Store Connect:
-  - the 1024×1024 tip images in `fastlane/tips/`, as each purchase's promotional image (optional,
-    only if you promote the tips on the App Store);
   - the App Review screenshot of the tip screen (needed before the first submission);
   - submitting the tips together with an app version.
 - An API error is printed with Apple's own text (`POST /v2/inAppPurchases → 403 …`). A 403 on

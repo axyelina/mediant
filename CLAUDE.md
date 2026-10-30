@@ -26,7 +26,7 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
 | `Mediant/Shared/` | `Chip` (the glass capsule button), `AssetImage`, `.shimmering(_:)` (a value that is not final yet) |
 | `MediantTests/` | Swift Testing; `FakePhotoLibrary` stands in for PhotoKit |
 | `Design/AppIcon/` | App icon sources: `light.svg` (✨ on the delete/keep diagonal split), `dark.svg`, `tinted.svg`; launch screen sources `launch-light.svg` / `launch-dark.svg` (the icon art in a 100×220 canvas). `Design/Tips/tip-*.svg`: the 4 tip images (more ✨ for a bigger tip, same art). Edit the SVG, then `swift Design/AppIcon/render.swift` from the repo root writes the PNGs into `AppIcon.appiconset`, `LaunchArt.imageset` and `fastlane/tips/` |
-| `fastlane/` | App Store Connect automation: `tips.json` (the tip in-app purchases), `asc.rb` (direct App Store Connect API calls — Spaceship has no in-app purchase models), `Fastfile` (`tips` lane), `tips/` (rendered tip images, 1024×1024). `Gemfile` pins fastlane |
+| `fastlane/` | App Store Connect automation: `tips.json` (the tip in-app purchases), `asc.rb` (direct App Store Connect API calls — Spaceship has no in-app purchase models), `Fastfile` (`tips` lane), `tips/` (rendered tip images, 1024×1024, uploaded by the lane as promotional images). `Gemfile` pins fastlane |
 
 ## Rules
 

@@ -1,3 +1,4 @@
+require "digest"
 require "json"
 require "net/http"
 require "uri"
@@ -57,6 +58,23 @@ module MediantASC
       request(Net::HTTP::Patch, path, body: body)
     end
 
+    def delete(path)
+      request(Net::HTTP::Delete, path)
+    end
+
+    # Sends a file through the upload operations App Store Connect returns for a reserved asset.
+    # These go to Apple's upload URLs, which take no Authorization header.
+    def upload(operations, data)
+      operations.each do |op|
+        uri = URI(op["url"])
+        req = Net::HTTPGenericRequest.new(op["method"], true, true, uri)
+        (op["requestHeaders"] || []).each { |header| req[header["name"]] = header["value"] }
+        req.body = data.byteslice(op["offset"], op["length"])
+        res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req) }
+        raise APIError.new(res.code.to_i, "upload #{uri.host} → #{res.code}") unless res.is_a?(Net::HTTPSuccess)
+      end
+    end
+
     private
 
     def request(method, path, params: {}, body: nil)
@@ -80,13 +98,15 @@ module MediantASC
   end
 
   # Makes App Store Connect match fastlane/tips.json: creates missing tips and fixes names,
-  # descriptions, review note and price. Availability is set once (all territories) and then
-  # left alone. Nothing is ever deleted: a deleted product ID can never be used again.
+  # descriptions, review note, price and promotional image. Availability is set once (all
+  # territories) and then left alone. A tip is never deleted: a deleted product ID can never be
+  # used again. Image paths in the config are relative to `dir`.
   class Tips
-    def initialize(client:, config:, ui:)
+    def initialize(client:, config:, ui:, dir:)
       @client = client
       @config = config
       @ui = ui
+      @dir = dir
     end
 
     def sync(dry_run: false)
@@ -105,6 +125,7 @@ module MediantASC
         sync_localizations(iap, tip)
         sync_price(iap, tip)
         sync_availability(iap)
+        sync_image(iap, tip)
         @ui.message("#{tip['product_id']}: #{iap.dig('attributes', 'state')}")
       end
     end
@@ -214,6 +235,33 @@ module MediantASC
       point_id = prices["data"].first&.dig("relationships", "inAppPurchasePricePoint", "data", "id")
       (prices["included"] || []).find { |item| item["type"] == "inAppPurchasePricePoints" && item["id"] == point_id }
                                 &.dig("attributes", "customerPrice")
+    end
+
+    # The promotional image (1024×1024) shown when the tip is promoted on the App Store. An image
+    # with the same MD5 stays; a different one is replaced.
+    def sync_image(iap, tip)
+      return unless tip["image"]
+
+      path = File.join(@dir, tip["image"])
+      data = File.binread(path)
+      checksum = Digest::MD5.hexdigest(data)
+      current = @client.all("/v2/inAppPurchases/#{iap['id']}/images")
+      return if current.any? { |image| image.dig("attributes", "sourceFileChecksum") == checksum }
+
+      verb = current.empty? ? "upload" : "replace"
+      change("#{verb} image of #{tip['product_id']}: #{tip['image']}") do
+        current.each { |image| @client.delete("/v1/inAppPurchaseImages/#{image['id']}") }
+        reserved = @client.post("/v1/inAppPurchaseImages", data: {
+          type: "inAppPurchaseImages",
+          attributes: { fileName: File.basename(path), fileSize: data.bytesize },
+          relationships: { inAppPurchase: { data: { type: "inAppPurchases", id: iap["id"] } } }
+        })["data"]
+        @client.upload(reserved.dig("attributes", "uploadOperations"), data)
+        @client.patch("/v1/inAppPurchaseImages/#{reserved['id']}", data: {
+          type: "inAppPurchaseImages", id: reserved["id"],
+          attributes: { sourceFileChecksum: checksum, uploaded: true }
+        })
+      end
     end
 
     def sync_availability(iap)
