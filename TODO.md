@@ -29,14 +29,17 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [ ] **Working with video.** Shipped: looping playback on the top card, scrub on the ▶ chip,
       🔊/🔇 chip, ▶ badge in the album grid. Still open: show the video size more prominently
       (videos are where the space is).
-- [ ] **Settings tab — what is left.** Shipped: language switch, progress reset, version. Still to add:
-      - about the creator (name, short text, link) — waits for the text;
-      - an optional tip jar: one quiet row, never a popup, badge, reminder or nag, and nothing in
-        the app is locked behind it;
-      - the same tips in the just-emptied Trash: right after "Empty" really deletes photos, the
-        empty Trash shows what was freed and the tip chips inline, under the Recently Deleted
-        hint. Not a sheet or popup; gone on the next visit; nothing when the purchase sheet is
-        cancelled. This is the second place for tips, so update the "one quiet row" wording.
+- [ ] **Settings tab — what is left.** Shipped: language switch, progress reset, version, the tip
+      card (see "Shipped, 2026-10-31"). Still to add:
+      - about the creator (name, short text, link) — waits for the text.
+- [ ] **Tips — what is left.** The tip jar and the Trash tips shipped (2026-10-31). Still open:
+      - one real sandbox tip on the phone `LINK` (Settings › App Store › Sandbox Account): check the
+        real price, the purchase sheet, the fireworks and the haptic on each burst. If the products
+        do not load, the App Review screenshots are not processed yet.
+      - App Store Connect: Paid Apps Agreement (bank + tax), join the Small Business Program (15%
+        instead of 30%). Review notes: "Optional tips, they unlock nothing, the app is fully free."
+        Seller name on the purchase sheet is the team's (Angelina Odegova).
+      - Submit the 4 tips together with an app version (by hand in App Store Connect).
 
       Decided (App Review Guidelines, checked 2026-10-30, page updated 2026-10-16): **tips are
       consumable in-app purchases (StoreKit), not an outside "Buy me a coffee" link.**
@@ -46,19 +49,9 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
         rejected under 3.1.1. Collecting "donations" is for approved nonprofits only (3.2.1(vi),
         3.2.2(iv)) — say "tip", never "donate". The 3.2.1(vii) gift rule needs 100% of the money to
         reach the receiver, which Buy Me a Coffee / Ko-fi fees break.
-      - 3–4 consumable tips (small / medium / large), prices from `Product.displayPrice`, never
-        hard-coded. A tip unlocks nothing — no features, badges or icons. One "thank you" after a
-        tip, then silence. Friendly text, no guilt.
-      - Done 2026-10-30: the 4 tips exist in App Store Connect ($0.99 / $2.99 / $4.99 / $9.99,
-        `app.mediant.tip.small|medium|large|huge`, from `fastlane/tips.json`, `asc-tips` skill).
-        They stay "Missing Metadata" until each gets an App Review screenshot of the tip screen.
-      - StoreKit stays behind a protocol (like `PhotoLibrary`), tested with a fake; test purchases
-        with a `.storekit` file on the dedicated sim.
-      - App Store Connect: Paid Apps Agreement (bank + tax), join the Small Business Program (15%
-        instead of 30%). Review notes: "Optional tips, they unlock nothing, the app is fully free."
-        Seller name on the purchase sheet is the team's (Angelina Odegova).
-      - Update the spec's anti-goal ("no … in-app purchase") and "no payments — ever" in
-        `CLAUDE.md` to "optional tips that unlock nothing" when this lands.
+      - 4 consumable tips, prices from `Product.displayPrice`, never hard-coded. A tip unlocks
+        nothing — no features, badges or icons. One "thank you" after a tip, then silence.
+
 ## From Claude
 
 ### Video
@@ -88,6 +81,15 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [ ] Reduce Motion: tone down sparkles and the ogre pop.
 
 ## Shipped
+
+### 2026-10-31
+- [x] Tip jar: four consumable tips (StoreKit 2 behind `TipStore`, `Tips.storekit` for tests), a
+      tip card in Settings, Disney-style fireworks with a haptic per burst after a tip. Created in
+      App Store Connect on 2026-10-30 (`fastlane/tips.json`, `asc-tips` skill); the `tips` lane now
+      also uploads the App Review screenshot.
+- [x] Tips in the just-emptied Trash: right after "Empty" deletes photos, the empty Trash shows
+      what was freed and the tip chips inline; gone on the next visit.
+- [x] Settings: the version is a pinned capsule above the tab bar; tap or long-press copies it.
 
 ### 2026-10-30
 - [x] Firebase Crashlytics (crash reports only, no Analytics); dSYMs upload on device builds.
