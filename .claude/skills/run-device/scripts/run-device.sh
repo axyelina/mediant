@@ -23,10 +23,18 @@ rm -f "$JSON"
 xcodebuild -project Mediant.xcodeproj -scheme Mediant -configuration Debug \
   -destination "id=$UDID" -derivedDataPath build -allowProvisioningUpdates -quiet build
 xcrun devicectl device install app --device "$DEVICE" build/Build/Products/Debug-iphoneos/Mediant.app >/dev/null
-if xcrun devicectl device process launch --device "$DEVICE" "$BUNDLE_ID" >/dev/null 2>&1; then
+if LAUNCH_OUT="$(xcrun devicectl device process launch --device "$DEVICE" "$BUNDLE_ID" 2>&1)"; then
   echo "Launched $BUNDLE_ID on $NAME"
 else
-  echo "Installed on $NAME, but iOS blocked the launch. On the phone: Settings › General ›" \
-       "VPN & Device Management › Apple Development: … › Trust. Then run this again." >&2
+  ERRORS="$(echo "$LAUNCH_OUT" | grep -iE "error|BSErrorCodeDescription")"
+  echo "Installed on $NAME, but the launch failed:" >&2
+  echo "$ERRORS" | head -3 >&2
+  if echo "$ERRORS" | grep -qiE "timed out|interrupted|disconnected"; then
+    echo "The connection to the phone dropped. Unlock the phone, keep it near (or plug it in)," \
+         "and open the app by hand or run this again." >&2
+    exit 3
+  fi
+  echo "iOS denied the launch: unlock the phone. If it still fails, trust the developer once:" \
+       "Settings › General › VPN & Device Management › Apple Development: … › Trust." >&2
   exit 2
 fi
