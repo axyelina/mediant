@@ -19,24 +19,17 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [ ] **Working with video.** Shipped: looping playback on the top card, scrub on the ▶ chip,
       🔊/🔇 chip, ▶ badge in the album grid. Still open: show the video size more prominently
       (videos are where the space is).
-- [ ] **Russian localization.** All strings are inline English today. Move them to a String
-      Catalog (`Localizable.xcstrings`) and add Russian, including plurals ("1 фото", "5 фото",
-      "items deleted") and byte formats.
-- [ ] **Settings / About tab.** Third tab in the floating tab bar with:
-      - app version and build number;
-      - about the creator (name, short text, link);
+- [ ] **Settings tab — what is left.** Shipped: language switch, progress reset, version. Still to add:
+      - about the creator (name, short text, link) — waits for the text;
       - an optional donation link ("Buy me a coffee" style): one quiet row, never a popup,
-        badge, reminder or nag, and nothing in the app is locked behind it;
-      - reset the little dashboard on the Albums page (the `ProgressCard`: space freed / items
-        deleted from `CleanupStats`, `stats.json`) back to zero.
+        badge, reminder or nag, and nothing in the app is locked behind it — waits for the URL.
 
-      Open questions before building:
-      - The design lists "A Settings tab" as a v1 non-goal and "no payments — ever" — update the
-        spec when this lands (donation stays optional, the app stays fully free).
+      Open questions before the donation row:
+      - The design says "no payments — ever" — update the spec when this lands (donation stays
+        optional, the app stays fully free).
       - App Store review: a link to an outside donation page is often rejected for individual
         developers (guidelines 3.1.1 / 3.2.2); the alternative is an in-app "tip" purchase, which
         is in-app purchase. Check the current rules before choosing.
-      - Maybe "About" fits better than "Settings" while there is nothing to set.
 - [ ] **Research: local push for a forgotten Trash.** Example: the user marked photos to delete,
       did not empty the Trash and left the app for hours → one local notification ("12 photos ·
       340 MB wait in the Trash"); tapping it opens the Trash.
