@@ -45,6 +45,9 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
       - 3–4 consumable tips (small / medium / large), prices from `Product.displayPrice`, never
         hard-coded. A tip unlocks nothing — no features, badges or icons. One "thank you" after a
         tip, then silence. Friendly text, no guilt.
+      - Done 2026-10-30: the 4 tips exist in App Store Connect ($0.99 / $2.99 / $4.99 / $9.99,
+        `app.mediant.tip.small|medium|large|huge`, from `fastlane/tips.json`, `asc-tips` skill).
+        They stay "Missing Metadata" until each gets an App Review screenshot of the tip screen.
       - StoreKit stays behind a protocol (like `PhotoLibrary`), tested with a fake; test purchases
         with a `.storekit` file on the dedicated sim.
       - App Store Connect: Paid Apps Agreement (bank + tax), join the Small Business Program (15%
