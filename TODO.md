@@ -11,6 +11,12 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
       from App Store Connect (App Information → Apple ID); it exists once the app record is created
       there, before the first upload to the store.
 
+## ⚠️ Before the first release
+
+- [ ] **App Store privacy label for Crashlytics:** "Crash Data" and "Other Diagnostic Data"
+      (sessions), used for App Functionality, not linked to the user, no tracking. Check against
+      Firebase's current data-disclosure page.
+
 ## From the user
 
 - [ ] **Working with video.** Shipped: looping playback on the top card, scrub on the ▶ chip,
@@ -58,6 +64,7 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 ## Shipped
 
 ### 2026-10-30
+- [x] Firebase Crashlytics (crash reports only, no Analytics); dSYMs upload on device builds.
 - [x] Final bundle ID `app.mediant` (tests `app.mediant.tests`), signed with the free personal team
       `NDCC8HH7D8` (Lina Barkhatova).
 - [x] Settings tab: English / Русский switch, progress reset, version; all texts in Russian.
