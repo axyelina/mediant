@@ -83,8 +83,11 @@ notification banners, so check "tap opens the Trash" on the phone.
 
 ## Git
 
-No remote yet. The repo-local identity (`git config --local user.*`) is set by the user for this
-repo; use it. If a remote is added, re-check the identity rule in the global instructions.
+Remote: `origin` = `git@github.com:axyelina/mediant.git` (private, branch `master`). Commits go
+out as `axyelina <axyelina@gmail.com>`, set repo-locally (`git config --local user.*`) — use it,
+never change it. Git in this repo talks to GitHub with its own SSH key through the repo-local
+`core.sshCommand` (see `CLAUDE.local.md`); do not switch the remote to HTTPS or to `gh` auth,
+which is logged in as a different account.
 
 ## Chat language
 
