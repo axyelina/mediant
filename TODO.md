@@ -10,12 +10,19 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
       Your apps → the iOS app `app.mediant` and enter the App Store ID. That is the numeric Apple ID
       from App Store Connect (App Information → Apple ID); it exists once the app record is created
       there, before the first upload to the store.
-
-## ⚠️ Before the first release
-
 - [ ] **App Store privacy label for Crashlytics:** "Crash Data" and "Other Diagnostic Data"
       (sessions), used for App Functionality, not linked to the user, no tracking. Check against
       Firebase's current data-disclosure page.
+- [ ] **No personal or sensitive info in the binary — before the first TestFlight build.**
+      Archive a Release build and look inside the `.ipa` / `.app`:
+      - list every file in the bundle: no sample photos/videos, test fixtures, notes, `.md`,
+        local configs or keys that only belong on this Mac;
+      - `strings` on the executable, then grep for real names, e-mail addresses, phone numbers,
+        `/Users/` paths (from `#file` / `#filePath` in asserts and logs), tokens and URLs that are
+        not meant for users;
+      - `print` / debug logs and Debug-only shortcuts (e.g. the 30 s Trash reminder) must not be in
+        Release;
+      - `Info.plist` and the signing profile: only what the store build needs.
 
 ## From the user
 
