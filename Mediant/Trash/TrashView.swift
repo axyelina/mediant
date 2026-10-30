@@ -4,6 +4,7 @@ struct TrashView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.openURL) private var openURL
     @Environment(\.locale) private var locale
+    @Environment(\.colorScheme) private var colorScheme
 
     /// Opens the Photos app. iOS has no public link to the Recently Deleted album itself.
     private static let photosURL = URL(string: "photos-redirect://")!
@@ -157,7 +158,7 @@ struct TrashView: View {
         let thanks = tips.message == .init(kind: .thanks, place: .trash)
         let failed = tips.message == .init(kind: .failed, place: .trash)
         return VStack(spacing: 10) {
-            Rectangle().fill(.white.opacity(0.12)).frame(height: 1).padding(.horizontal, 24)
+            Rectangle().fill(Color.primary.opacity(0.12)).frame(height: 1).padding(.horizontal, 24)
             Group {
                 if thanks {
                     Text("Thank you! ✨")
@@ -168,7 +169,8 @@ struct TrashView: View {
                 }
             }
             .font(.subheadline)
-            .foregroundStyle(Self.lightPink)
+            // Light pink vanishes on a white page, so light appearance takes the wine.
+            .foregroundStyle(colorScheme == .light ? Self.wine : Self.lightPink)
             TipButtons(place: .trash, style: .pink)
                 .padding(.horizontal, 16)
         }
@@ -178,4 +180,5 @@ struct TrashView: View {
 
     private static let lightPink = Color(red: 1, green: 0.820, blue: 0.890)  // #ffd1e3
     private static let pink = Color(red: 1, green: 0.361, blue: 0.576)  // #ff5c93
+    private static let wine = Color(red: 0.761, green: 0.094, blue: 0.306)  // #c2184e
 }

@@ -11,6 +11,7 @@ struct TipButtons: View {
 
     @Environment(AppModel.self) private var model
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
     @State private var glowCount = 0
     @State private var hapticCount = 0
 
@@ -35,7 +36,7 @@ struct TipButtons: View {
         case .loading:
             EqualGrid(columns: 4) {
                 ForEach(0..<4, id: \.self) { _ in
-                    Capsule().fill(style.fill).frame(height: Self.height)
+                    Capsule().fill(style.fill(colorScheme)).frame(height: Self.height)
                 }
             }
             .shimmering(true)
@@ -70,12 +71,12 @@ struct TipButtons: View {
                 .monospacedDigit()
                 .fixedSize()
                 .opacity(isBuying ? 0 : 1)
-                .overlay { if isBuying { ProgressView().tint(style.text) } }
-                .foregroundStyle(style.text)
+                .overlay { if isBuying { ProgressView().tint(style.text(colorScheme)) } }
+                .foregroundStyle(style.text(colorScheme))
                 .padding(.horizontal, 12)
                 .frame(maxWidth: .infinity, minHeight: Self.height)
-                .background(Capsule().fill(style.fill))
-                .overlay(Capsule().strokeBorder(style.border, lineWidth: 1))
+                .background(Capsule().fill(style.fill(colorScheme)))
+                .overlay(Capsule().strokeBorder(style.border(colorScheme), lineWidth: 1))
                 .contentShape(Capsule())
         }
         .buttonStyle(.plain)
@@ -105,25 +106,28 @@ struct TipButtons: View {
     private static let height: CGFloat = 32
 }
 
+/// `.glass` sits on the dark tip card in both appearances. `.pink` sits on the page, so light
+/// appearance gives it darker text and a stronger border.
 private extension TipButtons.Style {
-    var fill: Color {
+    func fill(_ scheme: ColorScheme) -> Color {
         switch self {
         case .glass: .white.opacity(0.14)
-        case .pink: Color(red: 1, green: 0.216, blue: 0.373).opacity(0.18)  // #ff375f
+        case .pink: Color(red: 1, green: 0.216, blue: 0.373).opacity(scheme == .light ? 0.12 : 0.18)  // #ff375f
         }
     }
 
-    var border: Color {
+    func border(_ scheme: ColorScheme) -> Color {
         switch self {
         case .glass: .white.opacity(0.22)
-        case .pink: Color(red: 1, green: 0.361, blue: 0.576).opacity(0.40)  // #ff5c93
+        case .pink: Color(red: 1, green: 0.361, blue: 0.576).opacity(scheme == .light ? 0.50 : 0.40)  // #ff5c93
         }
     }
 
-    var text: Color {
+    func text(_ scheme: ColorScheme) -> Color {
         switch self {
         case .glass: .white
-        case .pink: Color(red: 1, green: 0.702, blue: 0.769)  // #ffb3c4
+        case .pink: scheme == .light ? Color(red: 0.761, green: 0.094, blue: 0.306)  // #c2184e
+                                     : Color(red: 1, green: 0.702, blue: 0.769)  // #ffb3c4
         }
     }
 }
