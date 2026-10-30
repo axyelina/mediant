@@ -57,6 +57,11 @@ struct RootView: View {
         .onChange(of: scenePhase) { _, phase in
             // Coming back from Settings with new access.
             if phase == .active, !model.hasAccess { Task { await model.start() } }
+            model.sceneChanged(to: phase)
+        }
+        .onChange(of: model.tab) { _, tab in
+            // The first look at a full Trash is when iOS asks to allow the reminder.
+            if tab == .trash { Task { await model.reminder.trashOpened(count: model.store.trashCount) } }
         }
     }
 

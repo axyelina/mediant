@@ -105,6 +105,110 @@
         }
       }
     },
+    "%lld photos (%@) wait in the Trash. Empty it to free the space.": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld photo (%@) waits in the Trash. Empty it to free the space."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld photos (%@) wait in the Trash. Empty it to free the space."
+                }
+              }
+            }
+          }
+        },
+        "ru": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "В Корзине ждёт %lld фото (%@). Очистите её, чтобы освободить место."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "В Корзине ждут %lld фото (%@). Очистите её, чтобы освободить место."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "В Корзине ждут %lld фото (%@). Очистите её, чтобы освободить место."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "В Корзине ждут %lld фото (%@). Очистите её, чтобы освободить место."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld photos wait in the Trash. Empty it to free the space.": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld photo waits in the Trash. Empty it to free the space."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld photos wait in the Trash. Empty it to free the space."
+                }
+              }
+            }
+          }
+        },
+        "ru": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "В Корзине ждёт %lld фото. Очистите её, чтобы освободить место."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "В Корзине ждут %lld фото. Очистите её, чтобы освободить место."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "В Корзине ждут %lld фото. Очистите её, чтобы освободить место."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "В Корзине ждут %lld фото. Очистите её, чтобы освободить место."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld photos · %@ to free": {
       "localizations": {
         "en": {
@@ -297,12 +401,52 @@
         }
       }
     },
+    "Notifications are off in iOS Settings.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Уведомления выключены в настройках iOS."
+          }
+        }
+      }
+    },
     "OK": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
             "value": "OK"
+          }
+        }
+      }
+    },
+    "Off": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выкл."
+          }
+        }
+      }
+    },
+    "On": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вкл."
+          }
+        }
+      }
+    },
+    "One reminder when you leave photos in the Trash.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Одно напоминание, если вы оставили фото в Корзине."
           }
         }
       }
@@ -463,6 +607,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Корзина пуста"
+          }
+        }
+      }
+    },
+    "Trash reminder": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Напоминание о Корзине"
           }
         }
       }

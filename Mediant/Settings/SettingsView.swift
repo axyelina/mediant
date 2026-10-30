@@ -1,8 +1,9 @@
 import SwiftUI
 
-/// The third tab: app language, resetting the progress dashboard, and the app version.
+/// The third tab: app language, the Trash reminder, resetting the progress dashboard, the version.
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
+    @Environment(\.openURL) private var openURL
     @State private var confirmsReset = false
 
     var body: some View {
@@ -27,6 +28,8 @@ struct SettingsView: View {
                         }
                     }
                 }
+
+                reminderSection
 
                 section {
                     VStack(alignment: .leading, spacing: 4) {
@@ -58,6 +61,37 @@ struct SettingsView: View {
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("Space freed and items deleted go back to zero. Your photos do not change.")
+        }
+    }
+
+    /// On / Off chips; when iOS blocks notifications, a link to the app's iOS notification settings.
+    private var reminderSection: some View {
+        let reminder = model.reminder
+        let blocked = reminder.isEnabled && reminder.permission == .denied
+        return section {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Trash reminder").font(.headline)
+                Group {
+                    if blocked {
+                        Text("Notifications are off in iOS Settings.")
+                    } else {
+                        Text("One reminder when you leave photos in the Trash.")
+                    }
+                }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                if blocked {
+                    Chip("Open Settings") {
+                        if let url = URL(string: UIApplication.openNotificationSettingsURLString) { openURL(url) }
+                    }
+                    .padding(.top, 4)
+                }
+            }
+            Spacer(minLength: 12)
+            HStack(spacing: 6) {
+                Chip("On", tint: reminder.isEnabled ? .pink : nil) { Task { await reminder.turnOn() } }
+                Chip("Off", tint: reminder.isEnabled ? nil : .pink) { reminder.isEnabled = false }
+            }
         }
     }
 

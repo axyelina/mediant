@@ -85,4 +85,15 @@ struct RussianCatalogTests {
         #expect(String(format: format, locale: locale, 4) == "объекта удалено")
         #expect(String(format: format, locale: locale, 7) == "объектов удалено")
     }
+
+    @Test func reminderTexts() {
+        let withSize = text("%lld photos (%@) wait in the Trash. Empty it to free the space.")
+        #expect(String(format: withSize, locale: locale, 1, "2 МБ")
+                == "В Корзине ждёт 1 фото (2 МБ). Очистите её, чтобы освободить место.")
+        #expect(String(format: withSize, locale: locale, 12, "340 МБ")
+                == "В Корзине ждут 12 фото (340 МБ). Очистите её, чтобы освободить место.")
+        let noSize = text("%lld photos wait in the Trash. Empty it to free the space.")
+        #expect(String(format: noSize, locale: locale, 21)
+                == "В Корзине ждёт 21 фото. Очистите её, чтобы освободить место.")
+    }
 }

@@ -16,6 +16,7 @@ final class AppModel {
     let sizes: AlbumSizes
     let trash: TrashModel
     let stats: CleanupStats
+    let reminder: TrashReminder
     let thumbs = ThumbnailLoader()
 
     var access: AccessLevel = .notDetermined
@@ -39,7 +40,7 @@ final class AppModel {
     @ObservationIgnored private var startTask: Task<Void, Never>?
 
     init(library: PhotoLibrary = PhotoKitLibrary(), storeURL: URL = AppModel.defaultStoreURL,
-         defaults: UserDefaults = .standard) {
+         defaults: UserDefaults = .standard, notifications: NotificationCenterClient = SystemNotifications()) {
         self.library = library
         self.defaults = defaults
         language = AppLanguage.resolve(saved: defaults.string(forKey: Self.languageKey),
@@ -49,7 +50,9 @@ final class AppModel {
         sizes = AlbumSizes(library: library, cacheURL: folder.appending(path: "album-sizes.json"))
         stats = CleanupStats(fileURL: folder.appending(path: "stats.json"))
         trash = TrashModel(store: store, library: library, stats: stats)
+        reminder = TrashReminder(center: notifications, defaults: defaults)
         access = library.accessLevel()
+        notifications.setTapHandler { [weak self] in self?.openTrash() }
     }
 
     /// Asks for access and loads the library. Calls while one is running wait for it.
@@ -86,6 +89,42 @@ final class AppModel {
         let before = trash.deleteCount
         await trash.emptyTrash()
         if trash.deleteCount != before { albumsPath = NavigationPath() }
+    }
+
+    /// Leaving with photos in the Trash schedules the reminder; coming back cancels it. A tap on the
+    /// reminder opens the Trash.
+    func sceneChanged(to phase: ScenePhase) {
+        switch phase {
+        case .background:
+            let ids = store.trashedIDs
+            let title = "Median't"
+            let body = reminderText(count: ids.count, bytes: trash.totalBytes)
+            // A few seconds of background time, so the schedule call can finish.
+            let task = UIApplication.shared.beginBackgroundTask()
+            Task {
+                await reminder.appLeft(trash: ids, title: title, body: body)
+                UIApplication.shared.endBackgroundTask(task)
+            }
+        case .active:
+            reminder.appCameBack()
+            Task { await reminder.refreshPermission() }
+        default:
+            break
+        }
+    }
+
+    /// In the app's language, not the phone's: it is written now and shown later.
+    private func reminderText(count: Int, bytes: Int64?) -> String {
+        let bundle = Bundle.main.path(forResource: language.rawValue, ofType: "lproj").flatMap(Bundle.init(path:))
+            ?? .main
+        let locale = language.locale(region: Locale.current.region)
+        guard let bytes else {
+            return String(localized: "\(count) photos wait in the Trash. Empty it to free the space.",
+                          bundle: bundle, locale: locale)
+        }
+        let size = ByteFormat.string(bytes, locale: locale)
+        return String(localized: "\(count) photos (\(size)) wait in the Trash. Empty it to free the space.",
+                      bundle: bundle, locale: locale)
     }
 
     func reload() async {
