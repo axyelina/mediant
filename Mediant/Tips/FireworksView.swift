@@ -4,7 +4,8 @@ import SwiftUI
 ///
 /// Draws `FireworksPlan` the way the prototype `07-fireworks.html` (look A) does. The prototype
 /// was drawn on a 540 px canvas for a 393 pt phone, so its sizes are scaled by `width / 540`.
-/// With Reduce Motion on it draws nothing: `TipButtons` shows a glow and taps the haptic.
+/// With Reduce Motion on it draws nothing and taps one haptic; `TipButtons` shows a glow. The
+/// haptic lives here because this view is always there, while the tapped place may be gone.
 struct FireworksView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -13,6 +14,7 @@ struct FireworksView: View {
     @State private var canvas: CGSize = .zero
     @State private var burstCount = 0
     @State private var finaleCount = 0
+    @State private var quietCount = 0
 
     var body: some View {
         ZStack {
@@ -32,9 +34,13 @@ struct FireworksView: View {
         .accessibilityHidden(true)
         // `celebration` is never cleared and its id grows, so every change is a new tip.
         .onChange(of: model.tips.celebration) { _, celebration in
-            guard let celebration, !reduceMotion,
-                  // The plan needs a real canvas (it traps below about 111 pt).
-                  canvas.width >= 200, canvas.height >= 200 else { return }
+            guard let celebration else { return }
+            if reduceMotion {
+                quietCount += 1
+                return
+            }
+            // The plan needs a real canvas (it traps below about 111 pt).
+            guard canvas.width >= 200, canvas.height >= 200 else { return }
             let seed = UInt64.random(in: 0...UInt64.max)
             show = Show(id: celebration.id, plan: FireworksPlan(size: celebration.size, canvas: canvas, seed: seed),
                         seed: seed, width: canvas.width, start: .now)
@@ -46,6 +52,7 @@ struct FireworksView: View {
         .task(id: show?.id) { await play() }
         .sensoryFeedback(.impact(weight: .medium), trigger: burstCount)
         .sensoryFeedback(.impact(weight: .heavy), trigger: finaleCount)
+        .sensoryFeedback(.impact, trigger: quietCount)
     }
 
     /// Taps a haptic at each burst, then ends the show. A new show cancels the old one.

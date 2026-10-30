@@ -13,7 +13,6 @@ struct TipButtons: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.colorScheme) private var colorScheme
     @State private var glowCount = 0
-    @State private var hapticCount = 0
 
     private var tips: TipJar { model.tips }
 
@@ -22,12 +21,11 @@ struct TipButtons: View {
             .background(glow)
             .task { await tips.loadIfNeeded() }
             .onChange(of: tips.celebration) { _, celebration in
-                // With Reduce Motion off, the fireworks overlay shows the success and taps the haptic.
+                // The fireworks overlay taps the haptic in both modes; with Reduce Motion off it
+                // also shows the success.
                 guard reduceMotion, let celebration, celebration.place == place else { return }
                 glowCount += 1
-                hapticCount += 1
             }
-            .sensoryFeedback(.impact, trigger: hapticCount)
     }
 
     @ViewBuilder
