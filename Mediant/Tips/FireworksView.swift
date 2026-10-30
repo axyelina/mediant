@@ -18,7 +18,7 @@ struct FireworksView: View {
         ZStack {
             if let show, !reduceMotion {
                 let palette = colorScheme == .light ? Palette.light : Palette.dark
-                TimelineView(.animation) { timeline in
+                TimelineView(.animation(minimumInterval: 1.0 / 60)) { timeline in
                     Canvas { context, _ in
                         show.draw(in: &context, at: timeline.date.timeIntervalSince(show.start), palette: palette)
                     }
@@ -39,6 +39,10 @@ struct FireworksView: View {
             show = Show(id: celebration.id, plan: FireworksPlan(size: celebration.size, canvas: canvas, seed: seed),
                         seed: seed, width: canvas.width, start: .now)
         }
+        // Turned on during a show: the show ends at once, with its remaining haptics.
+        .onChange(of: reduceMotion) { _, on in
+            if on { show = nil }
+        }
         .task(id: show?.id) { await play() }
         .sensoryFeedback(.impact(weight: .medium), trigger: burstCount)
         .sensoryFeedback(.impact(weight: .heavy), trigger: finaleCount)
@@ -49,7 +53,10 @@ struct FireworksView: View {
         guard let show else { return }
         for rocket in show.plan.rockets.sorted(by: { $0.burstTime < $1.burstTime }) {
             guard await sleep(until: rocket.burstTime, of: show) else { return }
-            guard !reduceMotion else { continue }
+            // A burst that is long gone (e.g. the app was in the background) gets no haptic, so
+            // missed bursts do not tap in a row.
+            guard show.start.addingTimeInterval(rocket.burstTime).timeIntervalSinceNow > -Self.hapticLateness
+            else { continue }
             if rocket.isFinale { finaleCount += 1 } else { burstCount += 1 }
         }
         guard await sleep(until: show.plan.duration, of: show) else { return }
@@ -62,13 +69,40 @@ struct FireworksView: View {
         if wait > 0 { try? await Task.sleep(for: .seconds(wait)) }
         return !Task.isCancelled
     }
+
+    /// Seconds after its burst that a haptic still fires.
+    private static let hapticLateness: TimeInterval = 0.1
 }
 
 private struct Palette {
-    let pairs: [(Color, Color)]
-    let trail: Color
-    let star: Color
+    /// One burst color with everything drawn from it, built once.
+    struct Ink {
+        let color: GraphicsContext.Shading
+        /// A streak: clear at its inner end, brightest outside.
+        let streak: Gradient
+        /// A streak in the blurred glow pass, where the taper does not show.
+        let glow: GraphicsContext.Shading
+
+        init(_ color: Color) {
+            self.color = .color(color)
+            streak = Gradient(stops: [.init(color: color.opacity(0), location: 0),
+                                      .init(color: color.opacity(0.67), location: 0.55),
+                                      .init(color: color, location: 1)])
+            glow = .color(color.opacity(0.6))
+        }
+    }
+
+    let pairs: [(Ink, Ink)]
+    let trail: GraphicsContext.Shading
+    let star: GraphicsContext.Shading
     let glows: Bool
+
+    init(pairs: [(Color, Color)], trail: Color, star: Color, glows: Bool) {
+        self.pairs = pairs.map { (Ink($0.0), Ink($0.1)) }
+        self.trail = .color(trail)
+        self.star = .color(star)
+        self.glows = glows
+    }
 
     static let dark = Palette(
         pairs: [(.hex(0xff5c93), .hex(0xffd1e3)), (.hex(0xc2184e), .white),
@@ -171,7 +205,7 @@ private struct Show {
             path.move(to: point(of: rocket, at: a))
             path.addLine(to: point(of: rocket, at: b))
             context.opacity = alpha * Double(s) / Double(segments)
-            context.stroke(path, with: .color(palette.trail),
+            context.stroke(path, with: palette.trail,
                            style: StrokeStyle(lineWidth: (1 + CGFloat(s) / CGFloat(segments) * 3) * scale,
                                               lineCap: .round))
         }
@@ -180,13 +214,14 @@ private struct Show {
             // The prototype's head glows wider than the rest (shadow 18 px in the trail color).
             let head = point(of: rocket, at: ease)
             context.fill(sparkle(at: head, height: 18 * scale * (glow ? 1.6 : 1)),
-                         with: .color(glow ? palette.trail : palette.star))
+                         with: glow ? palette.trail : palette.star)
         }
     }
 
     private func drawBurst(_ burst: Burst, of rocket: FireworksPlan.Rocket, age: CGFloat,
                            in context: inout GraphicsContext, palette: Palette, glow: Bool) {
-        let fade = max(0, 1 - max(0, age - 0.7) / 0.9)
+        // Full strength for 0.7 s, then gone when the plan ends the burst.
+        let fade = max(0, 1 - max(0, age - 0.7) / (FireworksPlan.burstLife - 0.7))
         guard fade > 0 else { return }
         let pair = palette.pairs[rocket.pair % palette.pairs.count]
         let center = rocket.burst
@@ -196,7 +231,7 @@ private struct Show {
         // Streaks: clear at the inner end, brightest outside; the inner ends move out after 0.35 s.
         context.opacity = fade
         for streak in burst.streaks {
-            let color = streak.second ? pair.1 : pair.0
+            let ink = streak.second ? pair.1 : pair.0
             let outer = streak.length * grow
             let inner = outer * (0.08 + 0.42 * max(0, age - 0.35))
             let from = point(around: center, angle: streak.angle, distance: inner, drop: fall * 0.6)
@@ -204,11 +239,8 @@ private struct Show {
             var path = Path()
             path.move(to: from)
             path.addLine(to: to)
-            let gradient = Gradient(stops: [.init(color: color.opacity(0), location: 0),
-                                            .init(color: color.opacity(0.67), location: 0.55),
-                                            .init(color: color, location: 1)])
-            context.stroke(path, with: .linearGradient(gradient, startPoint: from, endPoint: to),
-                           lineWidth: streak.width)
+            let shading = glow ? ink.glow : .linearGradient(ink.streak, startPoint: from, endPoint: to)
+            context.stroke(path, with: shading, lineWidth: streak.width)
         }
 
         // Flickering dots just outside the streaks.
@@ -219,14 +251,14 @@ private struct Show {
             context.opacity = fade * flicker
             context.fill(Path(ellipseIn: CGRect(x: c.x - dot.radius, y: c.y - dot.radius,
                                                 width: 2 * dot.radius, height: 2 * dot.radius)),
-                         with: .color(dot.second ? pair.1 : pair.0))
+                         with: (dot.second ? pair.1 : pair.0).color)
         }
 
         // The 16-point star flash in the center, fading in 0.6 s (its glow is wider: 30 px).
         if age < 0.6 {
             context.opacity = 1 - age / 0.6
             let radius = (rocket.isFinale ? 60 : 38) * scale * (0.6 + age) * (glow ? 1.5 : 1)
-            context.fill(flash(at: center, radius: radius), with: .color(palette.star))
+            context.fill(flash(at: center, radius: radius), with: palette.star)
         }
 
         // Twinkling ✨ around the burst.
@@ -236,9 +268,9 @@ private struct Show {
             let strength = max(0, sin(t * 9 + twinkle.phase)) * max(0, 1 - t / 1.3)
             guard strength > 0 else { continue }
             let c = point(around: center, angle: twinkle.angle, distance: twinkle.distance, drop: fall)
-            context.opacity = strength
+            context.opacity = strength * fade
             context.fill(sparkle(at: c, height: twinkle.height * (0.6 + strength * 0.6)),
-                         with: .color(palette.glows ? palette.star : pair.0))
+                         with: palette.glows ? palette.star : pair.0.color)
         }
     }
 
