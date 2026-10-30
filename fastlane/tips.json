@@ -6,6 +6,7 @@
     {
       "product_id": "app.mediant.tip.small",
       "image": "tips/tip-small.png",
+      "review_screenshot": "tips/review-settings.png",
       "reference_name": "Tip - Small",
       "price": "0.99",
       "localizations": {
@@ -16,6 +17,7 @@
     {
       "product_id": "app.mediant.tip.medium",
       "image": "tips/tip-medium.png",
+      "review_screenshot": "tips/review-settings.png",
       "reference_name": "Tip - Medium",
       "price": "2.99",
       "localizations": {
@@ -26,6 +28,7 @@
     {
       "product_id": "app.mediant.tip.large",
       "image": "tips/tip-large.png",
+      "review_screenshot": "tips/review-settings.png",
       "reference_name": "Tip - Large",
       "price": "4.99",
       "localizations": {
@@ -36,6 +39,7 @@
     {
       "product_id": "app.mediant.tip.huge",
       "image": "tips/tip-huge.png",
+      "review_screenshot": "tips/review-settings.png",
       "reference_name": "Tip - Huge",
       "price": "9.99",
       "localizations": {

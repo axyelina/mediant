@@ -30,8 +30,11 @@ the App Store Connect API directly and only borrows Spaceship's JWT.
    (max 45). Keep "tip", never "donate" (guideline 3.2.2(iv)).
 2. `bundle exec fastlane tips dry_run:true` — shows what would change, writes nothing.
 3. `bundle exec fastlane tips` — creates missing tips, fixes names, descriptions, review note and
-   price, and uploads each tip's promotional `image` (an image with the same MD5 is left alone, a
-   changed one is replaced). Run it again: a second run must report no changes.
+   price, and uploads each tip's promotional `image` and App Review screenshot
+   (`review_screenshot`; a file with the same MD5 is left alone, a changed one is replaced). Run
+   it again: a second run must report no changes. A tip goes from `MISSING_METADATA` to
+   `READY_TO_SUBMIT` once it has the screenshot. Apple may need a minute to process an upload,
+   so run a third time if the second one re-uploads a screenshot.
 4. A new tip also needs an image: copy a `Design/Tips/tip-*.svg`, add it to the jobs in
    `Design/AppIcon/render.swift`, run `swift Design/AppIcon/render.swift`, and set the tip's
    `image` in `tips.json` (path relative to `fastlane/`). Re-render and re-run the lane after an
@@ -43,8 +46,11 @@ the App Store Connect API directly and only borrows Spaceship's JWT.
 - Never delete a tip in App Store Connect: a deleted product ID can never be used again. To stop
   selling one, remove it from the app and mark it "Removed from Sale" by hand.
 - Availability is set once (all territories, new territories on) and then left alone.
-- Not automated — do these by hand in App Store Connect:
-  - the App Review screenshot of the tip screen (needed before the first submission);
-  - submitting the tips together with an app version.
+- The App Review screenshot is `fastlane/tips/review-settings.png`, one file shared by all tips:
+  the Settings tab with the tip card, English, dark. Retake it after a change of that screen:
+  `run.sh -- -fakeTips usd`, open Settings, then
+  `xcrun simctl io <udid> screenshot fastlane/tips/review-settings.png`, and run the lane.
+- Not automated — do this by hand in App Store Connect: submitting the tips together with an app
+  version.
 - An API error is printed with Apple's own text (`POST /v2/inAppPurchases → 403 …`). A 403 on
   create usually means the Paid Apps Agreement is not active or the key's role is too low.

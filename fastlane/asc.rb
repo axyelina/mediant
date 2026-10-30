@@ -98,7 +98,7 @@ module MediantASC
   end
 
   # Makes App Store Connect match fastlane/tips.json: creates missing tips and fixes names,
-  # descriptions, review note, price and promotional image. Availability is set once (all
+  # descriptions, review note, price, promotional image and App Review screenshot. Availability is set once (all
   # territories) and then left alone. A tip is never deleted: a deleted product ID can never be
   # used again. Image paths in the config are relative to `dir`.
   class Tips
@@ -126,6 +126,7 @@ module MediantASC
         sync_price(iap, tip)
         sync_availability(iap)
         sync_image(iap, tip)
+        sync_review_screenshot(iap, tip)
         @ui.message("#{tip['product_id']}: #{iap.dig('attributes', 'state')}")
       end
     end
@@ -259,6 +260,33 @@ module MediantASC
         @client.upload(reserved.dig("attributes", "uploadOperations"), data)
         @client.patch("/v1/inAppPurchaseImages/#{reserved['id']}", data: {
           type: "inAppPurchaseImages", id: reserved["id"],
+          attributes: { sourceFileChecksum: checksum, uploaded: true }
+        })
+      end
+    end
+
+    # The App Review screenshot of the screen where the tip is bought (Apple wants it before the
+    # first submission). One per tip; the same MD5 stays, a different file is replaced.
+    def sync_review_screenshot(iap, tip)
+      return unless tip["review_screenshot"]
+
+      path = File.join(@dir, tip["review_screenshot"])
+      data = File.binread(path)
+      checksum = Digest::MD5.hexdigest(data)
+      current = @client.find("/v2/inAppPurchases/#{iap['id']}/appStoreReviewScreenshot")&.dig("data")
+      return if current && current.dig("attributes", "sourceFileChecksum") == checksum
+
+      verb = current ? "replace" : "upload"
+      change("#{verb} review screenshot of #{tip['product_id']}: #{tip['review_screenshot']}") do
+        @client.delete("/v1/inAppPurchaseAppStoreReviewScreenshots/#{current['id']}") if current
+        reserved = @client.post("/v1/inAppPurchaseAppStoreReviewScreenshots", data: {
+          type: "inAppPurchaseAppStoreReviewScreenshots",
+          attributes: { fileName: File.basename(path), fileSize: data.bytesize },
+          relationships: { inAppPurchaseV2: { data: { type: "inAppPurchases", id: iap["id"] } } }
+        })["data"]
+        @client.upload(reserved.dig("attributes", "uploadOperations"), data)
+        @client.patch("/v1/inAppPurchaseAppStoreReviewScreenshots/#{reserved['id']}", data: {
+          type: "inAppPurchaseAppStoreReviewScreenshots", id: reserved["id"],
           attributes: { sourceFileChecksum: checksum, uploaded: true }
         })
       end
