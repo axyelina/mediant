@@ -64,6 +64,7 @@
 		AF8177C83C87FF2C157F2575 /* StoreKitTipStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2532B53E986EE09841C67283 /* StoreKitTipStoreTests.swift */; };
 		AF94477DAD6993A1DFB1B8A9 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B78503B35A6592C2AC3574 /* AppModel.swift */; };
 		AFD803A279CC078518C4C3D7 /* TrashModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC53976D2DC29F49A971D6C /* TrashModel.swift */; };
+		B1CFE6AB0F6CD1776B7AD158 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = FFFAADD9DD74E8BF057A8A7B /* PrivacyInfo.xcprivacy */; };
 		B284AF5B4D8107DCE39A8F52 /* AppLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA126C4C6976E8E36BF9B09 /* AppLanguage.swift */; };
 		B35F72DD2D2FCB4456722D7B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BC11CE03F1961FC5745CDA5 /* Preview Assets.xcassets */; };
 		B8B2AE8CABDE018ABA5DF103 /* AlbumFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91AEA651B09AF98E286EDCA /* AlbumFilter.swift */; };
@@ -189,6 +190,7 @@
 		F416AA8FF3F6F37FA5300C08 /* AppLanguageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguageTests.swift; sourceTree = "<group>"; };
 		F6D15CD87947B2C39FE87846 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		FAAF56233406D2E54DE8D043 /* SparkleShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleShape.swift; sourceTree = "<group>"; };
+		FFFAADD9DD74E8BF057A8A7B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -277,6 +279,7 @@
 				7B98BFD23377E206374C13D6 /* InfoPlist.xcstrings */,
 				CC6CB65918FD9C02A021813E /* Localizable.xcstrings */,
 				DB1EE5C1F4779576F5FD9615 /* MediantApp.swift */,
+				FFFAADD9DD74E8BF057A8A7B /* PrivacyInfo.xcprivacy */,
 				3A20024C4BCC327D092ADCC1 /* Album */,
 				A3E697C02D48AEBB413EEBF8 /* Albums */,
 				A1A4FEED92B52EEFD4A410A0 /* App */,
@@ -510,6 +513,7 @@
 				2A93D821BB4BA9A5D3EE422A /* LaunchScreen.storyboard in Resources */,
 				BDF8BB6F8F6273217B7A1361 /* Localizable.xcstrings in Resources */,
 				B35F72DD2D2FCB4456722D7B /* Preview Assets.xcassets in Resources */,
+				B1CFE6AB0F6CD1776B7AD158 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -24,6 +24,7 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
 | `Mediant/Trash/` | `TrashModel` (one-batch delete, restore, `justEmptied`: what the last delete freed, ended by `AppModel` when the user leaves the tab or the app goes to the background) and `TrashView` (the just-emptied state shows the freed size and the pink tip chips) |
 | `Mediant/Settings/` | `SettingsView` (third tab: language chips, Trash reminder on/off, `TipCard`, progress reset, Privacy card, Version card), `PrivacyPolicyView` (the privacy policy sheet: what the app never collects, then crash reports and tips), `TipCard` (the icon-art card with the tip buttons), `VersionRow` (the Version card: version line and a Copy chip) |
 | `Mediant/Tips/` | `TipButtons` (the four tip buttons for Settings and the Trash: row, 2 × 2 or column; Reduce Motion glow), `FireworksView` (the show after a tip, over the whole app from `RootView`: draws `FireworksPlan` in a `Canvas`, a haptic at each burst, nothing with Reduce Motion) |
+| `Mediant/PrivacyInfo.xcprivacy` | The app's privacy manifest: no tracking; collects only Crashlytics crash + diagnostic data (not linked, app functionality); `UserDefaults` with reason `CA92.1` |
 | `Mediant/Localizable.xcstrings`, `InfoPlist.xcstrings` | All UI texts, English + Russian (plural forms) |
 | `Mediant/Shared/` | `Chip` (the glass capsule button), `AssetImage`, `.shimmering(_:)` (a value that is not final yet) |
 | `MediantTests/` | Swift Testing; `FakePhotoLibrary` stands in for PhotoKit, `FakeTipStore` for the tip store; `Tips.storekit` (the four tips) is the StoreKit test file for `StoreKitTipStoreTests` and the `Mediant` scheme |
@@ -47,7 +48,9 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
 - **The privacy policy tells the truth about the code.** `PrivacyPolicyView` lists everything
   that leaves the phone (Crashlytics crash reports, App Store tips, iCloud downloads by iOS). A new
   SDK, server, network call or stored file means a new or changed paragraph there (both languages)
-  and a new "Last updated" date.
+  and a new "Last updated" date. Update `PrivacyInfo.xcprivacy` in the same change: collected
+  data types, and a reason for every required-reason API (file timestamps, disk space, system
+  boot time, `UserDefaults`, …) the app code starts to use.
 - **Deleting is only `TrashModel.emptyTrash()`** → one iOS dialog for the whole Trash. Never add an
   app-made confirmation on top, never delete per swipe. The UI calls it through
   `AppModel.emptyTrash()`, which also closes a swipe screen whose photos may be gone.
