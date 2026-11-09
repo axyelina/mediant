@@ -29,7 +29,7 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
 | `Mediant/Shared/` | `Chip` (the glass capsule button), `AssetImage`, `.shimmering(_:)` (a value that is not final yet) |
 | `MediantTests/` | Swift Testing; `FakePhotoLibrary` stands in for PhotoKit, `FakeTipStore` for the tip store; `Tips.storekit` (the four tips) is the StoreKit test file for `StoreKitTipStoreTests` and the `Mediant` scheme |
 | `Design/AppIcon/` | App icon sources: `light.svg` (✨ on the delete/keep diagonal split), `dark.svg`, `tinted.svg`; launch screen sources `launch-light.svg` / `launch-dark.svg` (the icon art in a 100×220 canvas). `Design/Tips/tip-*.svg`: the 4 tip images (more ✨ for a bigger tip, same art). Edit the SVG, then `swift Design/AppIcon/render.swift` from the repo root writes the PNGs into `AppIcon.appiconset`, `LaunchArt.imageset` and `fastlane/tips/` |
-| `fastlane/` | App Store Connect automation: `tips.json` (the tip in-app purchases), `asc.rb` (direct App Store Connect API calls — Spaceship has no in-app purchase models), `Fastfile` (`tips` lane), `tips/` (rendered tip images, 1024×1024, uploaded by the lane as promotional images). `Gemfile` pins fastlane |
+| `fastlane/` | App Store Connect automation: `tips.json` (the tip in-app purchases), `asc.rb` (direct App Store Connect API calls — Spaceship has no in-app purchase models), `Fastfile` (`tips` lane; `beta` uploads to TestFlight, `bump_build`, `set_version`), `versioning.rb` (version / build number in `project.yml`, tested by `test/versioning_test.rb`), `tips/` (rendered tip images, 1024×1024, uploaded by the lane as promotional images). `Gemfile` pins fastlane |
 
 ## Rules
 
@@ -94,6 +94,10 @@ It is kept in **dark appearance**. Use the `run-sim` skill (`.claude/skills/run-
 Real iPhone (the user's phone `LINK`): `.claude/skills/run-device/scripts/run-device.sh` — see the
 `run-device` skill. Signing uses the paid individual team `NDCC8HH7D8`
 (Angelina Odegova); development profiles last a year. Bundle ID: `app.mediant` (tests `app.mediant.tests`).
+
+TestFlight: `bundle exec fastlane beta` archives, uploads, then raises the build number and commits
+— see the `testflight` skill. Change the version and build number only with the lanes
+(`set_version version:1.1` puts the build number back to 1), never by hand in Xcode.
 
 Tip in-app purchases in App Store Connect: `fastlane/tips.json` is the source of truth,
 `bundle exec fastlane tips [dry_run:true]` applies it — see the `asc-tips` skill. The API key lives

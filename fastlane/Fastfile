@@ -1,19 +1,99 @@
-# Median't — App Store Connect automation. How to use it: .claude/skills/asc-tips/SKILL.md.
+# Median't — App Store Connect automation. Tips: .claude/skills/asc-tips/SKILL.md;
+# TestFlight uploads and version/build numbers: .claude/skills/testflight/SKILL.md.
 # The API key comes from fastlane/.env (gitignored, see .env.example); the .p8 stays outside the repo.
 require_relative "asc"
+require_relative "versioning"
 
 default_platform(:ios)
 
 platform :ios do
   desc "Create or update the tip in-app purchases and their images from fastlane/tips.json (dry_run:true only shows the changes)"
   lane :tips do |options|
-    %w[ASC_KEY_ID ASC_ISSUER_ID ASC_KEY_PATH].each do |name|
-      UI.user_error!("#{name} is not set — copy fastlane/.env.example to fastlane/.env") if ENV[name].to_s.empty?
-    end
+    require_asc_key!
     client = MediantASC::Client.new(
       key_id: ENV["ASC_KEY_ID"], issuer_id: ENV["ASC_ISSUER_ID"], key_path: ENV["ASC_KEY_PATH"]
     )
     config = JSON.parse(File.read(File.join(__dir__, "tips.json")))
     MediantASC::Tips.new(client: client, config: config, ui: UI, dir: __dir__).sync(dry_run: options[:dry_run] == true)
   end
+
+  desc "Archive a Release build, upload it to TestFlight, then raise the build number by one and commit"
+  lane :beta do
+    ensure_git_status_clean
+    require_asc_key!
+    info = MediantVersion.read(File.read(PROJECT_YML))
+    UI.message("Uploading Median't #{info[:version]} (#{info[:build]})")
+    Dir.chdir(ROOT) { sh("xcodegen", "generate", "--quiet") }
+    ipa = build_app(
+      project: File.join(ROOT, "Mediant.xcodeproj"),
+      scheme: "Mediant",
+      configuration: "Release",
+      export_method: "app-store",
+      export_team_id: "NDCC8HH7D8",
+      derived_data_path: File.join(ROOT, "build"),
+      cloned_source_packages_path: File.join(ROOT, "build/SourcePackages"),
+      output_directory: File.join(ROOT, "build/ipa"),
+      output_name: "Mediant-#{info[:version]}-#{info[:build]}",
+      # Automatic signing: Xcode's signed-in account creates or renews the distribution certificate
+      # and the App Store profile. The prefix map removes this Mac's /Users/… path from __FILE__ in
+      # package code (GoogleDataTransport asserts); a command-line setting reaches package targets
+      # too, project.yml does not.
+      xcargs: "-allowProvisioningUpdates 'OTHER_CFLAGS=$(inherited) -fmacro-prefix-map=#{ROOT}/='",
+      export_xcargs: "-allowProvisioningUpdates",
+      include_symbols: true
+    )
+    upload_to_testflight(api_key: asc_api_key, ipa: ipa, skip_waiting_for_build_processing: true)
+    # Only after a successful upload: that build number is used now.
+    commit_next_build("TestFlight upload of #{info[:version]} (#{info[:build]})")
+  end
+
+  desc "Raise the build number by one and commit (after an upload done by hand, e.g. from Xcode Organizer)"
+  lane :bump_build do
+    ensure_git_status_clean
+    info = MediantVersion.read(File.read(PROJECT_YML))
+    commit_next_build("upload of #{info[:version]} (#{info[:build]})")
+  end
+
+  desc "Start a new version: set_version version:1.1 sets the version and puts the build number back to 1, then commits"
+  lane :set_version do |options|
+    ensure_git_status_clean
+    text = File.read(PROJECT_YML)
+    old = MediantVersion.read(text)
+    begin
+      text = MediantVersion.new_version(text, options[:version])
+    rescue ArgumentError => e
+      UI.user_error!(e.message)
+    end
+    new = MediantVersion.read(text)
+    write_project(text, "build: version #{new[:version]} (#{new[:build]}), was #{old[:version]} (#{old[:build]})")
+  end
+end
+
+ROOT = File.expand_path("..", __dir__)
+PROJECT_YML = File.join(ROOT, "project.yml")
+
+def require_asc_key!
+  %w[ASC_KEY_ID ASC_ISSUER_ID ASC_KEY_PATH].each do |name|
+    UI.user_error!("#{name} is not set — copy fastlane/.env.example to fastlane/.env") if ENV[name].to_s.empty?
+  end
+end
+
+def asc_api_key
+  app_store_connect_api_key(
+    key_id: ENV["ASC_KEY_ID"], issuer_id: ENV["ASC_ISSUER_ID"], key_filepath: File.expand_path(ENV["ASC_KEY_PATH"])
+  )
+end
+
+def commit_next_build(reason)
+  text = MediantVersion.next_build(File.read(PROJECT_YML))
+  info = MediantVersion.read(text)
+  write_project(text, "build: build number #{info[:build]} after the #{reason}")
+end
+
+# Writes project.yml, regenerates the Xcode project and commits both. Does not push.
+def write_project(text, message)
+  File.write(PROJECT_YML, text)
+  Dir.chdir(ROOT) { sh("xcodegen", "generate", "--quiet") }
+  git_commit(path: [PROJECT_YML, File.join(ROOT, "Mediant.xcodeproj/project.pbxproj")], message: message)
+  UI.success(message)
 end

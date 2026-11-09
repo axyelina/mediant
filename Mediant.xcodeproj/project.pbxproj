@@ -550,7 +550,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Simulator builds and test runs have no crashes worth a report.\n[ \"$PLATFORM_NAME\" = \"iphonesimulator\" ] && exit 0\n# Packages are in DerivedData, or in Xcode's shared folder when one is set.\nfor packages in \"${BUILD_DIR%/Build/*}/SourcePackages\" \\\n    \"$(defaults read com.apple.dt.Xcode IDEClonedSourcePackagesDirPathOverride 2>/dev/null)\"; do\n  run=\"$packages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n  [ -x \"$run\" ] && exec \"$run\"\ndone\necho \"warning: Crashlytics run script not found, dSYM not uploaded\"\n";
+			shellScript = "# Simulator builds and test runs have no crashes worth a report.\n[ \"$PLATFORM_NAME\" = \"iphonesimulator\" ] && exit 0\n# Unsigned builds (the local binary check) never reach a phone.\n[ \"$CODE_SIGNING_ALLOWED\" = \"NO\" ] && exit 0\n# Packages are in DerivedData, or in Xcode's shared folder when one is set.\nfor packages in \"${BUILD_DIR%/Build/*}/SourcePackages\" \\\n    \"$(defaults read com.apple.dt.Xcode IDEClonedSourcePackagesDirPathOverride 2>/dev/null)\"; do\n  run=\"$packages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n  [ -x \"$run\" ] && exec \"$run\"\ndone\necho \"warning: Crashlytics run script not found, dSYM not uploaded\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -734,6 +734,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Median't";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Median't shows your photos so you can swipe to keep or delete them. Nothing leaves your phone.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -853,6 +854,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Median't";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Median't shows your photos so you can swipe to keep or delete them. Nothing leaves your phone.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
