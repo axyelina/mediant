@@ -16,16 +16,17 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [ ] **Privacy policy URL for App Store Connect.** The policy is in the app (Settings › Privacy,
       `PrivacyPolicyView`), but App Store Connect needs a public URL. Put the same text (English
       and Russian) on a web page, e.g. GitHub Pages, and add a contact (e-mail) there and in the app.
-- [ ] **No personal or sensitive info in the binary — before the first TestFlight build.**
-      Archive a Release build and look inside the `.ipa` / `.app`:
-      - list every file in the bundle: no sample photos/videos, test fixtures, notes, `.md`,
-        local configs or keys that only belong on this Mac;
-      - `strings` on the executable, then grep for real names, e-mail addresses, phone numbers,
-        `/Users/` paths (from `#file` / `#filePath` in asserts and logs), tokens and URLs that are
-        not meant for users;
-      - `print` / debug logs and Debug-only shortcuts (e.g. the 30 s Trash reminder) must not be in
-        Release;
-      - `Info.plist` and the signing profile: only what the store build needs.
+- [ ] **First TestFlight build.** Done: export compliance key, build number lanes
+      (`fastlane beta`, see the `testflight` skill), binary check. Still to do:
+      - Apple Distribution certificate for team `NDCC8HH7D8` (the user does it: Xcode › Settings ›
+        Accounts with an Admin / Account Holder Apple ID; the first `fastlane beta` makes it);
+      - an internal tester group in App Store Connect › TestFlight;
+      - external testers only: Test Information (description, feedback e-mail, review contact,
+        privacy policy URL) and Beta App Review.
+- [ ] **Binary check again before the store release** (or after a new dependency or resource) —
+      steps in the `testflight` skill. First check 2026-11-10: clean except `/Users/…` paths
+      from GoogleDataTransport `__FILE__`, which `fastlane beta` now removes
+      (`-fmacro-prefix-map`); an Xcode Organizer archive still has them.
 
 ## From the user
 
