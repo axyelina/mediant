@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// The third tab: app language, the Trash reminder, the tip card, resetting the progress dashboard,
-/// the privacy policy and the version.
+/// the privacy policy, the creator's Instagram and the version.
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.openURL) private var openURL
@@ -59,6 +59,19 @@ struct SettingsView: View {
                     Chip("Read") { showsPrivacy = true }
                 }
 
+                section {
+                    VStack(alignment: .leading, spacing: 4) {
+                        // A brand and a handle, nothing to translate.
+                        Text(verbatim: "Instagram").font(.headline)
+                        Text(verbatim: "@\(Self.instagramHandle)")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer(minLength: 12)
+                    Chip("Open") { openURL(Self.instagramURL) }
+                        .accessibilityHint("Opens Instagram")
+                }
+
                 section { VersionRow() }
             }
             // The last card scrolls fully above the tab bar.
@@ -107,6 +120,10 @@ struct SettingsView: View {
             }
         }
     }
+
+    /// The creator's Instagram. iOS opens it in the Instagram app when it is installed, else in Safari.
+    private static let instagramHandle = "axyelina"
+    private static let instagramURL = URL(string: "https://www.instagram.com/\(instagramHandle)/")!
 
     private var isProgressZero: Bool { model.stats.deletedCount == 0 && model.stats.freedBytes == 0 }
 
