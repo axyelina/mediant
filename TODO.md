@@ -13,6 +13,9 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [ ] **App Store privacy label for Crashlytics:** "Crash Data" and "Other Diagnostic Data"
       (sessions), used for App Functionality, not linked to the user, no tracking. Check against
       Firebase's current data-disclosure page.
+- [ ] **Privacy policy URL for App Store Connect.** The policy is in the app (Settings › Privacy,
+      `PrivacyPolicyView`), but App Store Connect needs a public URL. Put the same text (English
+      and Russian) on a web page, e.g. GitHub Pages, and add a contact (e-mail) there and in the app.
 - [ ] **No personal or sensitive info in the binary — before the first TestFlight build.**
       Archive a Release build and look inside the `.ipa` / `.app`:
       - list every file in the bundle: no sample photos/videos, test fixtures, notes, `.md`,
@@ -81,6 +84,10 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [ ] Reduce Motion: tone down sparkles and the ogre pop.
 
 ## Shipped
+
+### 2026-11-10
+- [x] Settings: Privacy card and the in-app privacy policy (what the app never collects; crash
+      reports and tips said plainly), English + Russian.
 
 ### 2026-10-31
 - [x] Tip jar: four consumable tips (StoreKit 2 behind `TipStore`, `Tips.storekit` for tests), a
