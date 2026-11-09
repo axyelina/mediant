@@ -17,9 +17,13 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
       `PrivacyPolicyView`), but App Store Connect needs a public URL. Put the same text (English
       and Russian) on a web page, e.g. GitHub Pages, and add a contact (e-mail) there and in the app.
 - [ ] **First TestFlight build.** Done: export compliance key, build number lanes
-      (`fastlane beta`, see the `testflight` skill), binary check. Still to do:
-      - Apple Distribution certificate for team `NDCC8HH7D8` (the user does it: Xcode › Settings ›
-        Accounts with an Admin / Account Holder Apple ID; the first `fastlane beta` makes it);
+      (`fastlane beta`, see the `testflight` skill), binary check, distribution certificate and
+      App Store profile (signed export tested 2026-11-10). Still to do:
+      - **Blocker: Xcode 26 or later.** The first upload (2026-11-10) was refused: "All iOS and
+        iPadOS apps must be built with the iOS 26 SDK or later". The Mac has Xcode 16.3 on macOS
+        15.5. Xcode 26.3 needs macOS 15.6+; Xcode 27 needs macOS 26.6+. After the switch: update
+        the Xcode / Firebase rule in CLAUDE.md, check the UI on iOS 26 (system sheets and dialogs
+        get Liquid Glass), then `fastlane beta` again (build 1 was never accepted, so it is free);
       - an internal tester group in App Store Connect › TestFlight;
       - external testers only: Test Information (description, feedback e-mail, review contact,
         privacy policy URL) and Beta App Review.
