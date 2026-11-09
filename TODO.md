@@ -88,6 +88,8 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 ### 2026-11-10
 - [x] Settings: Privacy card and the in-app privacy policy (what the app never collects; crash
       reports and tips said plainly), English + Russian.
+- [x] Settings: the version is a card like the others, with a Copy chip (no longer a capsule
+      pinned above the tab bar).
 
 ### 2026-10-31
 - [x] Tip jar: four consumable tips (StoreKit 2 behind `TipStore`, `Tips.storekit` for tests), a
