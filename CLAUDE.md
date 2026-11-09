@@ -43,8 +43,9 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
   unlocks nothing; never the word "donate"; no popup, badge or reminder for tips.
 - **Firebase is crash reports only.** Only `CrashReporting` imports Firebase. Link only the
   `FirebaseCrashlytics` product — never `FirebaseAnalytics` or anything that tracks users (design
-  anti-goal). Firebase stays on 12.x while the Mac builds with Xcode 16.3 (13.x needs Xcode 26).
-  The `Upload dSYM to Crashlytics` build phase runs only for device builds.
+  anti-goal). Firebase is on 12.19.x; 13.x needs Xcode 26 — move to it only on a Mac with Xcode
+  26+, as its own change. The `Upload dSYM to Crashlytics` build phase runs only for signed device
+  builds (it skips the simulator and `CODE_SIGNING_ALLOWED=NO`).
 - **The privacy policy tells the truth about the code.** `PrivacyPolicyView` lists everything
   that leaves the phone (Crashlytics crash reports, App Store tips, iCloud downloads by iOS). A new
   SDK, server, network call or stored file means a new or changed paragraph there (both languages)
@@ -81,6 +82,10 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
 Use only the dedicated simulator **`Median't iPhone 16`** (iPhone 16, iOS 18.4) for building,
 running and testing. Never target another simulator, even if one is already booted or attached.
 It is kept in **dark appearance**. Use the `run-sim` skill (`.claude/skills/run-sim/`).
+`run.sh` creates the simulator when it is missing (another Mac). If that Mac has no iOS 18.4
+runtime, ask the user before you install one or use another runtime — never just pick a
+different simulator. A UI check on iOS 26+ (Liquid Glass look of system sheets and dialogs) is a
+separate, explicit task.
 
 ## Build, test, sample photos
 
@@ -97,11 +102,41 @@ Real iPhone (the user's phone `LINK`): `.claude/skills/run-device/scripts/run-de
 
 TestFlight: `bundle exec fastlane beta` archives, uploads, then raises the build number and commits
 — see the `testflight` skill. Change the version and build number only with the lanes
-(`set_version version:1.1` puts the build number back to 1), never by hand in Xcode.
+(`set_version version:1.1` puts the build number back to 1), never by hand in Xcode. Push the
+build-number commit after a successful upload, so every Mac starts from the next free number.
 
 Tip in-app purchases in App Store Connect: `fastlane/tips.json` is the source of truth,
 `bundle exec fastlane tips [dry_run:true]` applies it — see the `asc-tips` skill. The API key lives
 in `~/.appstoreconnect/private_keys/` and `fastlane/.env` (gitignored); never read or commit it.
+
+## Toolchain and release state
+
+- **Uploads need the iOS 26 SDK (Xcode 26 or later).** App Store Connect refused the first upload
+  (2026-11-10, build 1.0 (1)) because it was built with Xcode 16.3 / iOS 18.4 SDK. A Mac with an
+  older Xcode can still build, test and run on the phone, but not upload. Xcode 26.3 needs macOS
+  15.6+, Xcode 27 needs macOS 26.6+ and Apple silicon. `SWIFT_VERSION` stays `5.0`.
+- **App Store Connect:** app record "Median't" (SKU `app.mediant`, primary language en-US) and
+  the 4 tip in-app purchases exist. Not yet: any accepted build, TestFlight groups, TestFlight
+  Test Information, privacy policy URL, App Store listing. Open items are in `TODO.md`
+  ("Before the first release").
+- **App Store Connect API key** (`fastlane/.env` → `.p8` in `~/.appstoreconnect/private_keys/`):
+  App Manager role. It uploads builds and manages the tips; it cannot be relied on to create
+  certificates. To read App Store Connect state, reuse `MediantASC::Client` from `fastlane/asc.rb`
+  in a `bundle exec ruby` script that loads `fastlane/.env` with Dotenv (print only what you
+  need, never the key).
+- **Signing:** team `NDCC8HH7D8`, automatic signing. Apple Distribution certificate "Angelina
+  Odegova" valid until 2027-11-09; its private key is only in the keychain of the Mac that made
+  it. On another Mac, sign in to Xcode › Settings › Accounts with an Admin / Account Holder Apple ID
+  and let `-allowProvisioningUpdates` create that Mac's own certificate, or import a `.p12`
+  export from the first Mac. The App Store profile ("iOS Team Store Provisioning Profile:
+  app.mediant") is managed by Xcode.
+- **Export compliance:** `ITSAppUsesNonExemptEncryption = NO` (only standard HTTPS).
+- **Firebase / Crashlytics:** project `mediant-ba64c`, iOS app ID
+  `1:148272214498:ios:0e5313407624f1dee3c9bb`. The Crashlytics MCP tools need a valid Firebase CLI
+  login (`firebase login --reauth`, done by the user). Not yet verified: a crash arriving in the
+  console from a real device.
+
+## Paths and simulator notes
 
 DerivedData and Swift packages go to `./build/` (gitignored); the scripts pass
 `-clonedSourcePackagesDirPath build/SourcePackages` because Xcode on this Mac shares one package
