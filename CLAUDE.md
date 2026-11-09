@@ -22,7 +22,7 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
 | `Mediant/Albums/`, `Album/` | Albums list (main page) with the `ProgressCard` (space freed / items deleted), and the album grid |
 | `Mediant/Swipe/` | Swipe screen: `SwipeView` (card-stack drag: top card tilts, next waits behind; tap = skip), `PreviewStrip` (💖/👹 + ogre pop, drag to scroll), `SparkleEdge`/`SparkleShape` (✨ edges), `PhotoPage` (photo or video card), `LoopingVideo` (shows the top card's video), `VideoPlayback` (the one looping player: time, pause, mute, scrub), `VideoChip` (time chip: tap = pause/play, drag = scrub) |
 | `Mediant/Trash/` | `TrashModel` (one-batch delete, restore, `justEmptied`: what the last delete freed, ended by `AppModel` when the user leaves the tab or the app goes to the background) and `TrashView` (the just-emptied state shows the freed size and the pink tip chips) |
-| `Mediant/Settings/` | `SettingsView` (third tab: language chips, Trash reminder on/off, `TipCard`, progress reset), `TipCard` (the icon-art card with the tip buttons), `VersionPin` (version line pinned above the tab bar; tap or long-press copies it) |
+| `Mediant/Settings/` | `SettingsView` (third tab: language chips, Trash reminder on/off, `TipCard`, progress reset, Privacy card), `PrivacyPolicyView` (the privacy policy sheet: what the app never collects, then crash reports and tips), `TipCard` (the icon-art card with the tip buttons), `VersionPin` (version line pinned above the tab bar; tap or long-press copies it) |
 | `Mediant/Tips/` | `TipButtons` (the four tip buttons for Settings and the Trash: row, 2 × 2 or column; Reduce Motion glow), `FireworksView` (the show after a tip, over the whole app from `RootView`: draws `FireworksPlan` in a `Canvas`, a haptic at each burst, nothing with Reduce Motion) |
 | `Mediant/Localizable.xcstrings`, `InfoPlist.xcstrings` | All UI texts, English + Russian (plural forms) |
 | `Mediant/Shared/` | `Chip` (the glass capsule button), `AssetImage`, `.shimmering(_:)` (a value that is not final yet) |
@@ -44,6 +44,10 @@ Ideas backlog: `TODO.md` — add new ideas there; tick or remove items when they
   `FirebaseCrashlytics` product — never `FirebaseAnalytics` or anything that tracks users (design
   anti-goal). Firebase stays on 12.x while the Mac builds with Xcode 16.3 (13.x needs Xcode 26).
   The `Upload dSYM to Crashlytics` build phase runs only for device builds.
+- **The privacy policy tells the truth about the code.** `PrivacyPolicyView` lists everything
+  that leaves the phone (Crashlytics crash reports, App Store tips, iCloud downloads by iOS). A new
+  SDK, server, network call or stored file means a new or changed paragraph there (both languages)
+  and a new "Last updated" date.
 - **Deleting is only `TrashModel.emptyTrash()`** → one iOS dialog for the whole Trash. Never add an
   app-made confirmation on top, never delete per swipe. The UI calls it through
   `AppModel.emptyTrash()`, which also closes a swipe screen whose photos may be gone.

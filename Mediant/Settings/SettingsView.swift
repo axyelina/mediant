@@ -1,11 +1,12 @@
 import SwiftUI
 
-/// The third tab: app language, the Trash reminder, the tip card, resetting the progress dashboard.
-/// The version is pinned above the tab bar.
+/// The third tab: app language, the Trash reminder, the tip card, resetting the progress dashboard,
+/// the privacy policy. The version is pinned above the tab bar.
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.openURL) private var openURL
     @State private var confirmsReset = false
+    @State private var showsPrivacy = false
 
     var body: some View {
         ScrollView {
@@ -46,12 +47,27 @@ struct SettingsView: View {
                         .disabled(isProgressZero)
                         .opacity(isProgressZero ? 0.4 : 1)
                 }
+
+                section {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Privacy").font(.headline)
+                        Text("Your photos, videos and albums never leave your phone.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer(minLength: 12)
+                    Chip("Read") { showsPrivacy = true }
+                }
             }
             // Progress scrolls fully above the pinned version and the tab bar.
             .padding(.bottom, Self.pinBottom + VersionPin.height + 16)
         }
         .overlay(alignment: .bottom) {
             VersionPin().padding(.bottom, Self.pinBottom)
+        }
+        .sheet(isPresented: $showsPrivacy) {
+            PrivacyPolicyView()
+                .presentationDragIndicator(.visible)
         }
         .confirmationDialog("Reset progress?", isPresented: $confirmsReset, titleVisibility: .visible) {
             Button("Reset", role: .destructive) { model.stats.reset() }

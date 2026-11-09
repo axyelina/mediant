@@ -323,6 +323,16 @@
         }
       }
     },
+    "Album names": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Названия альбомов"
+          }
+        }
+      }
+    },
     "Albums": {
       "localizations": {
         "ru": {
@@ -363,6 +373,16 @@
         }
       }
     },
+    "Anything for ads, analytics or tracking": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ничего для рекламы, аналитики или слежки"
+          }
+        }
+      }
+    },
     "Back to album": {
       "localizations": {
         "ru": {
@@ -379,6 +399,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Отмена"
+          }
+        }
+      }
+    },
+    "Changes": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Изменения"
           }
         }
       }
@@ -413,6 +443,26 @@
         }
       }
     },
+    "Crash reports": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отчёты о сбоях"
+          }
+        }
+      }
+    },
+    "Dates, places and other photo details": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Даты, места и другие данные фото"
+          }
+        }
+      }
+    },
     "Deleting…": {
       "localizations": {
         "ru": {
@@ -429,6 +479,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Не забудьте удалить их и из «Недавно удалённых» в Фото. iOS хранит их там 30 дней, и они всё ещё занимают место."
+          }
+        }
+      }
+    },
+    "Done": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Готово"
           }
         }
       }
@@ -463,6 +523,36 @@
         }
       }
     },
+    "How it works": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Как это работает"
+          }
+        }
+      }
+    },
+    "If the app crashes, it sends a crash report to Firebase Crashlytics (Google) so the bug can be fixed. A report has the place in the code that crashed, the iPhone model, the iOS and app versions, free memory and storage, and a random ID of this install. It has no photos, album names or anything that tells who you are. Reports are kept for 90 days.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Если приложение падает, оно отправляет отчёт о сбое в Firebase Crashlytics (Google), чтобы ошибку можно было исправить. В отчёте есть место в коде, где произошёл сбой, модель iPhone, версии iOS и приложения, свободная память и место, а также случайный ID этой установки. В нём нет фото, названий альбомов и ничего, что говорит, кто вы. Отчёты хранятся 90 дней."
+          }
+        }
+      }
+    },
+    "If this policy changes, the new text comes with an app update.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Если политика изменится, новый текст придёт с обновлением приложения."
+          }
+        }
+      }
+    },
     "Language": {
       "localizations": {
         "ru": {
@@ -473,12 +563,32 @@
         }
       }
     },
+    "Last updated: November 10, 2026": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обновлено: 10 ноября 2026 г."
+          }
+        }
+      }
+    },
     "Liked it? Treat the developer ✨": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
             "value": "Понравилось? Угостите разработчика ✨"
+          }
+        }
+      }
+    },
+    "Median't has no account and no servers. It does not collect your photos, videos or anything about them.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В Median't нет аккаунта и нет серверов. Приложение не собирает ваши фото, видео и ничего о них."
           }
         }
       }
@@ -499,6 +609,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Median't нужен доступ к фото"
+          }
+        }
+      }
+    },
+    "Median't never collects": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Median't никогда не собирает"
           }
         }
       }
@@ -583,12 +703,42 @@
         }
       }
     },
+    "Photos and videos": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фото и видео"
+          }
+        }
+      }
+    },
+    "Privacy": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Конфиденциальность"
+          }
+        }
+      }
+    },
     "Progress": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
             "value": "Прогресс"
+          }
+        }
+      }
+    },
+    "Read": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Читать"
           }
         }
       }
@@ -619,6 +769,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Вернуть (%lld)"
+          }
+        }
+      }
+    },
+    "Saved on your iPhone": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Хранится на вашем iPhone"
           }
         }
       }
@@ -713,6 +873,36 @@
         }
       }
     },
+    "The app keeps a few things in its own storage: what you kept or put in the Trash, the space you freed, album sizes, your language and the reminder setting. They are part of your iPhone backup like other app data and go away when you delete the app.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приложение хранит немного данных в своём хранилище: что вы оставили или отправили в Корзину, сколько места освободили, размеры альбомов, язык и настройку напоминания. Они попадают в резервную копию iPhone, как данные других приложений, и удаляются вместе с приложением."
+          }
+        }
+      }
+    },
+    "The app reads your library on your iPhone to show the photos you swipe. Nothing is uploaded or copied anywhere. With iCloud Photos, iOS can download a photo from iCloud to show it; that stays between your iPhone and Apple.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приложение читает медиатеку на вашем iPhone, чтобы показать фото, которые вы листаете. Ничего не загружается и никуда не копируется. С Фото iCloud iOS может скачать фото из iCloud, чтобы его показать; это остаётся между вашим iPhone и Apple."
+          }
+        }
+      }
+    },
+    "The reminder is made on your iPhone. No server sends it.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Напоминание создаётся на вашем iPhone. Никакой сервер его не отправляет."
+          }
+        }
+      }
+    },
     "The tip did not go through.": {
       "localizations": {
         "ru": {
@@ -733,12 +923,32 @@
         }
       }
     },
+    "Tips": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чаевые"
+          }
+        }
+      }
+    },
     "Tips are not available right now.": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
             "value": "Чаевые сейчас недоступны."
+          }
+        }
+      }
+    },
+    "Tips go through the App Store, and Apple handles the payment. The developer does not get your name, Apple ID or card details. A tip unlocks nothing.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чаевые проходят через App Store, оплату обрабатывает Apple. Разработчик не получает ваше имя, Apple ID или данные карты. Чаевые ничего не открывают."
           }
         }
       }
@@ -793,12 +1003,52 @@
         }
       }
     },
+    "What you keep or delete": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Что вы оставляете или удаляете"
+          }
+        }
+      }
+    },
     "You shared only some photos. Allow all in Settings ›": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
             "value": "Вы открыли доступ не ко всем фото. Разрешите все в Настройках ›"
+          }
+        }
+      }
+    },
+    "Your name, email or contacts": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ваше имя, почту и контакты"
+          }
+        }
+      }
+    },
+    "Your photos stay on your phone.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ваши фото остаются на телефоне."
+          }
+        }
+      }
+    },
+    "Your photos, videos and albums never leave your phone.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ваши фото, видео и альбомы никогда не покидают телефон."
           }
         }
       }

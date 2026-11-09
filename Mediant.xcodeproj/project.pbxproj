@@ -43,6 +43,7 @@
 		56F87360147A9269D144D9BC /* LaunchArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9A5730B48A83BAB327B858 /* LaunchArt.swift */; };
 		5B1CBE778224462E2E875E86 /* SwipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2EF1A587CF8B22CB68A5FD /* SwipeView.swift */; };
 		67E63F9ABBB40F4A71E593F6 /* TipCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF609E86FB61D2F3119EEB6 /* TipCard.swift */; };
+		697110AF00A5E5D2A64DC089 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6D15CD87947B2C39FE87846 /* PrivacyPolicyView.swift */; };
 		69CB4BC3F5B987A4F84FCB4D /* VideoTimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154BAE9761BE3D8FA460D5B2 /* VideoTimeTests.swift */; };
 		7341B169347B50505B50A75F /* Chip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA69708B6A86DDD429E1923 /* Chip.swift */; };
 		73715C364C69FB73CBC9D7F1 /* TipStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B966FF0D78C2AD5D228B994D /* TipStore.swift */; };
@@ -186,6 +187,7 @@
 		F262B57EB936D37E5D6FC508 /* SwipeSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeSessionTests.swift; sourceTree = "<group>"; };
 		F402BCC71436E7CA85DDB615 /* TrashReminderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashReminderTests.swift; sourceTree = "<group>"; };
 		F416AA8FF3F6F37FA5300C08 /* AppLanguageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguageTests.swift; sourceTree = "<group>"; };
+		F6D15CD87947B2C39FE87846 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		FAAF56233406D2E54DE8D043 /* SparkleShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleShape.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -369,6 +371,7 @@
 		B6D2FB0000B44B76E9626ACE /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				F6D15CD87947B2C39FE87846 /* PrivacyPolicyView.swift */,
 				AA0CDD6131EF9D61D5AD060D /* SettingsView.swift */,
 				5CF609E86FB61D2F3119EEB6 /* TipCard.swift */,
 				80C4DEAC31E64F5180016C92 /* VersionPin.swift */,
@@ -609,6 +612,7 @@
 				FE70965FAE9D255EAC735065 /* PhotoLibrary.swift in Sources */,
 				AF16DB916267815A9B127407 /* PhotoPage.swift in Sources */,
 				E1282AB3AB0DD48F5A8DA8D1 /* PreviewStrip.swift in Sources */,
+				697110AF00A5E5D2A64DC089 /* PrivacyPolicyView.swift in Sources */,
 				2DD21714D552B03D928BC342 /* ProgressCard.swift in Sources */,
 				F9BFFA33DC9D45F5079F5D23 /* RootView.swift in Sources */,
 				42DB95A987A42D090C9DBBC1 /* SettingsView.swift in Sources */,
