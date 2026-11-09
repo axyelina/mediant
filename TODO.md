@@ -34,8 +34,9 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
       🔊/🔇 chip, ▶ badge in the album grid. Still open: show the video size more prominently
       (videos are where the space is).
 - [ ] **Settings tab — what is left.** Shipped: language switch, progress reset, version, the tip
-      card (see "Shipped, 2026-10-31"). Still to add:
-      - about the creator (name, short text, link) — waits for the text.
+      card (see "Shipped, 2026-10-31"), the Instagram card (@axyelina). Still to add:
+      - about the creator (name, short text) — waits for the text. The link shipped as the
+        Instagram card.
 - [ ] **Tips — what is left.** The tip jar and the Trash tips shipped (2026-10-31). Still open:
       - one real sandbox tip on the phone `LINK` (Settings › App Store › Sandbox Account): check the
         real price, the purchase sheet, the fireworks and the haptic on each burst. If the products
