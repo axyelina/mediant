@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// The third tab: app language, the Trash reminder, the tip card, resetting the progress dashboard,
-/// the privacy policy. The version is pinned above the tab bar.
+/// the privacy policy and the version.
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.openURL) private var openURL
@@ -58,12 +58,11 @@ struct SettingsView: View {
                     Spacer(minLength: 12)
                     Chip("Read") { showsPrivacy = true }
                 }
+
+                section { VersionRow() }
             }
-            // Progress scrolls fully above the pinned version and the tab bar.
-            .padding(.bottom, Self.pinBottom + VersionPin.height + 16)
-        }
-        .overlay(alignment: .bottom) {
-            VersionPin().padding(.bottom, Self.pinBottom)
+            // The last card scrolls fully above the tab bar.
+            .padding(.bottom, Self.tabBarSpace + 16)
         }
         .sheet(isPresented: $showsPrivacy) {
             PrivacyPolicyView()
@@ -111,8 +110,8 @@ struct SettingsView: View {
 
     private var isProgressZero: Bool { model.stats.deletedCount == 0 && model.stats.freedBytes == 0 }
 
-    /// The pinned version sits 8 pt above the tab bar, which sits 8 pt above the bottom (`RootView`).
-    private static let pinBottom: CGFloat = 8 + FloatingTabBar.height + 8
+    /// The tab bar sits 8 pt above the bottom (`RootView`).
+    private static let tabBarSpace: CGFloat = FloatingTabBar.height + 8
 
     /// One glass card row, in the style of the progress card.
     private func section(@ViewBuilder _ content: () -> some View) -> some View {

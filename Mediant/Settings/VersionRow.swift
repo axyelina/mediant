@@ -1,11 +1,8 @@
 import SwiftUI
 
-/// The version line pinned above the tab bar on the Settings tab. Tap or long-press copies it, so
-/// it can go into a bug report.
-struct VersionPin: View {
-    /// Space the line takes, with its gap to the tab bar, for the scroll content to leave free.
-    static let height: CGFloat = 30
-
+/// The content of the Version card, the last card in Settings: the version line and a Copy chip,
+/// so the version can go into a bug report. The chip says "Copied" for a second.
+struct VersionRow: View {
     @State private var copied = false
     @State private var copyCount = 0
     @State private var resetTask: Task<Void, Never>?
@@ -21,28 +18,25 @@ struct VersionPin: View {
     private var text: String { Self.text(info: Bundle.main.infoDictionary) }
 
     var body: some View {
-        Group {
+        HStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Version").font(.headline)
+                // A name and numbers, nothing to translate.
+                Text(verbatim: text)
+                    .font(.subheadline)
+                    .monospacedDigit()
+                    .foregroundStyle(.secondary)
+                    .textSelection(.enabled)
+            }
+            Spacer(minLength: 12)
             if copied {
-                Text("Copied")
+                Chip("Copied", systemImage: "checkmark", tint: .pink, action: copy)
             } else {
-                Text(text)
+                Chip("Copy", action: copy)
+                    .accessibilityHint("Copies the version")
             }
         }
-        .font(.footnote)
-        .monospacedDigit()
-        .foregroundStyle(.secondary)
-        .padding(.horizontal, 12)
-        .frame(height: 28)
-        .background(Capsule().fill(.ultraThinMaterial))
-        .overlay(Capsule().strokeBorder(.white.opacity(0.12), lineWidth: 1))
-        .contentShape(Capsule())
-        .onTapGesture(perform: copy)
-        .onLongPressGesture(perform: copy)
         .sensoryFeedback(.impact(weight: .light), trigger: copyCount)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(copied ? Text("Copied") : Text(text))
-        .accessibilityAddTraits(.isButton)
-        .accessibilityHint("Copies the version")
     }
 
     private func copy() {
