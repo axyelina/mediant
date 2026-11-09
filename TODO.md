@@ -90,6 +90,8 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
       reports and tips said plainly), English + Russian.
 - [x] Settings: the version is a card like the others, with a Copy chip (no longer a capsule
       pinned above the tab bar).
+- [x] The app's privacy manifest `PrivacyInfo.xcprivacy` (no tracking, Crashlytics data,
+      `UserDefaults` reason CA92.1); Firebase's own manifests are in its bundles.
 
 ### 2026-10-31
 - [x] Tip jar: four consumable tips (StoreKit 2 behind `TipStore`, `Tips.storekit` for tests), a
