@@ -16,15 +16,11 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [ ] **Privacy policy URL for App Store Connect.** The policy is in the app (Settings › Privacy,
       `PrivacyPolicyView`), but App Store Connect needs a public URL. Put the same text (English
       and Russian) on a web page, e.g. GitHub Pages, and add a contact (e-mail) there and in the app.
-- [ ] **First TestFlight build.** Done: export compliance key, build number lanes
-      (`fastlane beta`, see the `testflight` skill), binary check, distribution certificate and
-      App Store profile (signed export tested 2026-11-10). Still to do:
-      - **Blocker: Xcode 26 or later.** The first upload (2026-11-10) was refused: "All iOS and
-        iPadOS apps must be built with the iOS 26 SDK or later". The Mac has Xcode 16.3 on macOS
-        15.5. Xcode 26.3 needs macOS 15.6+; Xcode 27 needs macOS 26.6+. After the switch: update
-        the Xcode / Firebase rule in CLAUDE.md, check the UI on iOS 26 (system sheets and dialogs
-        get Liquid Glass), then `fastlane beta` again (build 1 was never accepted, so it is free);
-      - an internal tester group in App Store Connect › TestFlight;
+- [ ] **TestFlight testers.** Build 1.0 (1) is in TestFlight (uploaded 2026-11-10 with
+      `fastlane beta` from Xcode 27.2, processing `VALID`). Still to do:
+      - an internal tester group in App Store Connect › TestFlight, and add team members;
+      - check the UI on iOS 26+ (the app now builds with the iOS 27.2 SDK: system sheets and
+        dialogs get the Liquid Glass look);
       - external testers only: Test Information (description, feedback e-mail, review contact,
         privacy policy URL) and Beta App Review.
 - [ ] **Binary check again before the store release** (or after a new dependency or resource) —
@@ -92,6 +88,8 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 ## Shipped
 
 ### 2026-11-10
+- [x] First TestFlight build 1.0 (1): export compliance key, `fastlane beta` / `bump_build` /
+      `set_version`, binary check, distribution certificate, Xcode 27.2 (iOS 27.2 SDK).
 - [x] Settings: Privacy card and the in-app privacy policy (what the app never collects; crash
       reports and tips said plainly), English + Russian.
 - [x] Settings: the version is a card like the others, with a Copy chip (no longer a capsule
