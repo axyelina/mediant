@@ -114,7 +114,9 @@ in `~/.appstoreconnect/private_keys/` and `fastlane/.env` (gitignored); never re
 - **Uploads need the iOS 26 SDK (Xcode 26 or later).** App Store Connect refused the first upload
   (2026-11-10, build 1.0 (1)) because it was built with Xcode 16.3 / iOS 18.4 SDK. A Mac with an
   older Xcode can still build, test and run on the phone, but not upload. Xcode 26.3 needs macOS
-  15.6+, Xcode 27 needs macOS 26.6+ and Apple silicon. `SWIFT_VERSION` stays `5.0`.
+  15.6+, Xcode 27 needs macOS 26.6+ and Apple silicon. `SWIFT_VERSION` stays `5.0`. Xcode 27.2
+  (iOS 27.2 SDK) builds the app with 0 warnings and Firebase 12.19.x (checked 2026-11-10 on the
+  phone `LINK`, iOS 27.0.1).
 - **App Store Connect:** app record "Median't" (SKU `app.mediant`, primary language en-US) and
   the 4 tip in-app purchases exist. Not yet: any accepted build, TestFlight groups, TestFlight
   Test Information, privacy policy URL, App Store listing. Open items are in `TODO.md`
