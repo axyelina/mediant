@@ -66,7 +66,9 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [ ] "Biggest first" order for an album, or a "Large videos" smart source — fastest way to free space.
 
 ### Swiping
-- [ ] Swipe up = "decide later" / skip without marking (leaves the photo undecided).
+- [ ] "Decide later": pass a photo without marking it. Swipe up now deletes and tap to skip was
+      removed (2026-11-17), so it needs a new way (a chip?); the run already comes back to
+      undecided photos at the end.
 - [ ] Burst photos and Live Photos: show the count of frames / the "LIVE" badge so the user knows
       what they delete.
 - [ ] "On this day" / by-month source: swipe through one month at a time, a natural session size.
@@ -89,6 +91,22 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [ ] Reduce Motion: tone down sparkles and the ogre pop.
 
 ## Shipped
+
+### 2026-11-17
+- [x] Vertical swipe on the swipe screen: up deletes, down keeps, right goes back to the album.
+      The card moves only up/down with no tilt and flies off that edge; Undo brings it back from
+      there. Sparkle edges on the top (delete) and bottom (keep). Tap to skip removed.
+- [x] After the last photo the run goes on with the unsorted ones from the top of the album;
+      "All done" only when every photo has a decision.
+- [x] The Trash badge no longer blinks when switching tabs (it sits on top of the glass).
+- [x] Settings: the Instagram card is titled "Dev's Instagram 💅🏻" (Russian: "Instagram
+      разработчика 💅🏻").
+
+### 2026-11-16
+- [x] Liquid Glass on iOS 26+ for the tab bar, chips and the video chip (thin material before
+      iOS 26); checked on an iOS 27.2 simulator.
+- [x] Album grid: "Show 💖" is now "Don't show 💖", on by default (same saved setting); a system
+      toolbar button on iOS 26+.
 
 ### 2026-11-10
 - [x] First TestFlight build 1.0 (1): export compliance key, `fastlane beta` / `bump_build` /
@@ -122,7 +140,7 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [x] Splash: the launch ✨ flies from the icon art into the Albums title.
 - [x] Album sizes are cached and shimmer until they are measured again.
 - [x] Swipe screen: every photo shows whole; card-stack drag with a soft sparkle fade-out; drag
-      the preview strip to scroll it; tap the photo to skip it.
+      the preview strip to scroll it; tap the photo to skip it (removed 2026-11-17).
 - [x] Video (part of "Working with video"): looping playback on the top card, tap the time chip
       to pause/play, drag it to scrub, 🔊/🔇 chip (sound plays on silent, volume up turns it on),
       ▶ badge in the album grid.
