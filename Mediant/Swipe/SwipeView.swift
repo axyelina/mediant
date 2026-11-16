@@ -67,7 +67,8 @@ struct SwipeView: View {
     /// Pages are keyed by photo id, so the next page keeps its loaded image when it becomes current.
     private func pages(_ session: SwipeSession, height: CGFloat) -> some View {
         let current = route.assets[session.index]
-        let next = route.assets.indices.contains(session.index + 1) ? [route.assets[session.index + 1]] : []
+        // After the last photo the run goes on with unsorted ones, so "next" is not always index + 1.
+        let next = session.upcomingIndex.map { [route.assets[$0]] } ?? []
         let lift = min(abs(dragY) / height, 1)
         return ZStack {
             ForEach(next + [current]) { asset in
