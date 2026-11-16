@@ -19,7 +19,7 @@ struct SettingsView: View {
                 section {
                     Text("Language").font(.headline)
                     Spacer(minLength: 12)
-                    HStack(spacing: 6) {
+                    GlassGroup { HStack(spacing: 6) {
                         ForEach(AppLanguage.allCases) { language in
                             // Names stay in their own language, so they are not translated.
                             Chip(LocalizedStringKey(language.nativeName),
@@ -28,7 +28,7 @@ struct SettingsView: View {
                             }
                             .accessibilityAddTraits(model.language == language ? .isSelected : [])
                         }
-                    }
+                    } }
                 }
 
                 reminderSection
@@ -114,9 +114,11 @@ struct SettingsView: View {
                 }
             }
             Spacer(minLength: 12)
-            HStack(spacing: 6) {
-                Chip("On", tint: reminder.isEnabled ? .pink : nil) { Task { await reminder.turnOn() } }
-                Chip("Off", tint: reminder.isEnabled ? nil : .pink) { reminder.isEnabled = false }
+            GlassGroup {
+                HStack(spacing: 6) {
+                    Chip("On", tint: reminder.isEnabled ? .pink : nil) { Task { await reminder.turnOn() } }
+                    Chip("Off", tint: reminder.isEnabled ? nil : .pink) { reminder.isEnabled = false }
+                }
             }
         }
     }

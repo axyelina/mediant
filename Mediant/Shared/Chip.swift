@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// The small glass capsule button used for Back, 👹, Undo, Select and Empty.
-/// `systemImage` puts an SF Symbol before the text.
+/// `systemImage` puts an SF Symbol before the text. Liquid Glass on iOS 26+ (`glassBackground`).
 struct Chip: View {
     let text: LocalizedStringKey
     var systemImage: String?
@@ -27,11 +27,8 @@ struct Chip: View {
             .foregroundStyle(tint ?? .white)
             .padding(.horizontal, 12)
             .frame(height: 32)
-            .background {
-                Capsule().fill(.ultraThinMaterial)
-                if let tint { Capsule().fill(tint.opacity(0.22)) }
-            }
-            .overlay(Capsule().strokeBorder((tint ?? .white).opacity(tint == nil ? 0.14 : 0.35), lineWidth: 1))
+            .contentShape(Capsule())
+            .glassBackground(in: Capsule(), tint: tint, interactive: true)
         }
         .buttonStyle(.plain)
     }

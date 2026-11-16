@@ -11,7 +11,8 @@ struct AlbumGridView: View {
     @Environment(AppModel.self) private var model
     let album: AlbumInfo
     @State private var assets: [AssetInfo] = []
-    /// Kept (💖) photos are hidden unless this is on; it stays on until tapped again.
+    /// Kept (💖) photos are hidden unless this is on. The "Don't show 💖" button is on while this
+    /// is off (the default); the choice is remembered.
     @AppStorage("showKept") private var showKept = false
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 3)
@@ -25,7 +26,7 @@ struct AlbumGridView: View {
                     Text("✨").font(.system(size: 44))
                     Text("All sorted").font(.headline)
                     Text(showKept ? LocalizedStringKey("Every photo here is in the Trash.")
-                                  : "Tap Show 💖 to see the photos you kept.")
+                                  : "Tap Don't show 💖 to see the photos you kept.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -64,8 +65,7 @@ struct AlbumGridView: View {
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Chip("Show 💖", tint: showKept ? .pink : nil) { showKept.toggle() }
-                    .accessibilityAddTraits(showKept ? .isSelected : [])
+                HideKeptButton(isOn: !showKept) { showKept.toggle() }
             }
         }
         .task(id: album.id) {
@@ -74,6 +74,31 @@ struct AlbumGridView: View {
             assets = await Task.detached(priority: .userInitiated) { library.assets(inAlbum: id) }.value
             await model.thumbs.prefetch(assets.map(\.id))
         }
+    }
+}
+
+/// "Don't show 💖": hides the kept photos while on (pink). On iOS 26+ the navigation bar puts
+/// Liquid Glass around toolbar items itself, so a system glass button is used there instead of
+/// the `Chip`, which would draw a second capsule inside the system one.
+private struct HideKeptButton: View {
+    let isOn: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Group {
+            if #available(iOS 26, *) {
+                if isOn {
+                    Button("Don't show 💖", action: action)
+                        .buttonStyle(.glassProminent)
+                        .tint(.pink)
+                } else {
+                    Button("Don't show 💖", action: action)
+                }
+            } else {
+                Chip("Don't show 💖", tint: isOn ? .pink : nil, action: action)
+            }
+        }
+        .accessibilityAddTraits(isOn ? .isSelected : [])
     }
 }
 

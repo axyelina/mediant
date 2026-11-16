@@ -26,7 +26,6 @@ struct VideoChip: View {
         .padding(.horizontal, 12)
         .frame(height: 32)
         .background {
-            Capsule().fill(.ultraThinMaterial)
             GeometryReader { proxy in
                 Rectangle()
                     .fill(.white.opacity(0.22))
@@ -34,7 +33,10 @@ struct VideoChip: View {
             }
             .clipShape(Capsule())
         }
-        .overlay(Capsule().strokeBorder(.white.opacity(playback.isScrubbing ? 0.6 : 0.14), lineWidth: 1))
+        .glassBackground(in: Capsule(), interactive: true)
+        .overlay {
+            if playback.isScrubbing { Capsule().strokeBorder(.white.opacity(0.6), lineWidth: 1) }
+        }
         .scaleEffect(playback.isScrubbing ? 1.08 : 1)
         .animation(.easeOut(duration: 0.15), value: playback.isScrubbing)
         .contentShape(Capsule())

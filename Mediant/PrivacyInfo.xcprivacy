@@ -6,7 +6,7 @@
   - Collected: only the Crashlytics crash reports (crash data + other diagnostic data), not linked
     to the user, for app functionality. Firebase declares the same in its own manifest; it is
     repeated here so the app's manifest matches the App Store privacy label.
-  - Required-reason APIs: UserDefaults only (language, Trash reminder, video sound, "Show 💖"),
+  - Required-reason APIs: UserDefaults only (language, Trash reminder, video sound, "Don't show 💖"),
     read and written by the app itself (CA92.1).
 -->
 <plist version="1.0">

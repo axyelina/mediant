@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Icon-only tab bar in a small glass capsule at the bottom center. Tap an icon, or swipe the
+/// Icon-only tab bar in a small glass capsule (Liquid Glass on iOS 26+) at the bottom center. Tap an icon, or swipe the
 /// capsule sideways to the next or previous tab (Albums, Trash, Settings).
 struct FloatingTabBar: View {
     @Binding var selection: AppModel.Tab
@@ -27,9 +27,8 @@ struct FloatingTabBar: View {
         }
         .padding(3)
         .frame(width: 134, height: Self.height)
-        .background(Capsule().fill(.ultraThinMaterial))
-        .overlay(Capsule().strokeBorder(.white.opacity(0.12), lineWidth: 1))
         .contentShape(Capsule())
+        .glassBackground(in: Capsule(), interactive: true)
         // Simultaneous, so a drag that starts on an icon still switches tabs.
         .simultaneousGesture(
             DragGesture(minimumDistance: 10)

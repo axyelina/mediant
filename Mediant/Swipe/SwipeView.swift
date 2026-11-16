@@ -168,7 +168,7 @@ struct SwipeView: View {
                 Spacer()
 
                 if !session.isFinished {
-                    HStack(alignment: .center, spacing: 8) {
+                    GlassGroup { HStack(alignment: .center, spacing: 8) {
                         let asset = route.assets[session.index]
                         if asset.isVideo {
                             VideoChip(asset: asset)
@@ -187,7 +187,7 @@ struct SwipeView: View {
                         Chip("Undo", systemImage: "arrow.uturn.backward") { undo(session, width: proxy.size.width) }
                             .opacity(session.canUndo ? 1 : 0.4)
                             .disabled(!session.canUndo)
-                    }
+                    } }
                     .padding(.horizontal, 14)
                     .padding(.bottom, 10)
 
@@ -211,10 +211,12 @@ struct SwipeView: View {
         VStack(spacing: 12) {
             Text("✨").font(.system(size: 52))
             Text("All done").font(.title2.bold())
-            HStack(spacing: 10) {
-                Chip("Undo", systemImage: "arrow.uturn.backward") { undo(session, width: width) }
-                trashChip
-                Chip("Back to album") { dismiss() }
+            GlassGroup {
+                HStack(spacing: 10) {
+                    Chip("Undo", systemImage: "arrow.uturn.backward") { undo(session, width: width) }
+                    trashChip
+                    Chip("Back to album") { dismiss() }
+                }
             }
         }
     }

@@ -493,6 +493,16 @@
         }
       }
     },
+    "Don't show 💖": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не показывать 💖"
+          }
+        }
+      }
+    },
     "Done": {
       "localizations": {
         "ru": {
@@ -833,16 +843,6 @@
         }
       }
     },
-    "Show 💖": {
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Показать 💖"
-          }
-        }
-      }
-    },
     "Space freed and items deleted go back to zero. Your photos do not change.": {
       "localizations": {
         "ru": {
@@ -883,12 +883,12 @@
         }
       }
     },
-    "Tap Show 💖 to see the photos you kept.": {
+    "Tap Don't show 💖 to see the photos you kept.": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Нажмите «Показать 💖», чтобы увидеть оставленные фото."
+            "value": "Нажмите «Не показывать 💖», чтобы увидеть оставленные фото."
           }
         }
       }
