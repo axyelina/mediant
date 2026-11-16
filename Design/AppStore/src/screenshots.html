@@ -1,0 +1,150 @@
+<!doctype html>
+<!--
+  App Store screenshots for Median't, style C: one wine banner (the icon's diagonal split) runs
+  across all screenshots, with a dotted ✨ trail and a few sparkles; each screenshot has a glowing
+  caption and a real simulator capture in a phone frame.
+  Open with ?shot=1..5&lang=en|ru&w=1320&h=2868. render.sh calls this with headless Chrome.
+  The page is drawn in a 1320 × 2868 design space and scaled to w × h.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; padding: 0; background: #470112; overflow: hidden; }
+  #stage { position: absolute; left: 0; top: 0; width: 1320px; height: 2868px; transform-origin: 0 0; overflow: hidden;
+           font-family: -apple-system, "SF Pro Display", system-ui, sans-serif; color: #fff; }
+  /* One wide banner; each screenshot shows its own 1320 px slice of it. */
+  #banner { position: absolute; top: 0; height: 2868px; }
+  .cap { position: absolute; left: 70px; right: 70px; top: 150px; text-align: center; z-index: 5; }
+  .cap h1 { margin: 0; font-size: 124px; font-weight: 800; line-height: 1.08; letter-spacing: -2px;
+            text-shadow: 0 0 40px rgba(255, 92, 147, .85), 0 0 110px rgba(255, 92, 147, .5), 0 8px 26px rgba(0, 0, 0, .55); }
+  .cap p { margin: 34px 0 0; font-size: 64px; font-weight: 600; line-height: 1.2; color: #ffd1e3;
+           text-shadow: 0 4px 18px rgba(0, 0, 0, .45); }
+  .device { position: absolute; left: 145px; width: 1030px; top: 760px; height: 2236px; border-radius: 172px; background: #111;
+            box-shadow: 0 0 0 4px rgba(255, 209, 227, .10), 0 0 160px rgba(255, 92, 147, .42), 0 40px 120px rgba(0, 0, 0, .5); z-index: 3; }
+  .device img { position: absolute; left: 30px; top: 30px; width: 970px; height: auto; border-radius: 142px; display: block; }
+  /* Overlays drawn over the phone screen (a touch hint), in stage coordinates. */
+  #overlay { position: absolute; left: 0; top: 0; width: 1320px; height: 2868px; z-index: 4; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <svg id="banner" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div class="cap"><h1 id="title"></h1><p id="sub"></p></div>
+  <div class="device"><img id="screen" alt=""></div>
+  <svg id="overlay" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 2868"></svg>
+</div>
+<script>
+  const q = new URLSearchParams(location.search);
+  const shot = +(q.get('shot') || 1), lang = q.get('lang') || 'en';
+  const W = +(q.get('w') || 1320), H = +(q.get('h') || 2868);
+
+  // Captions. Keep each title short: it must read at search-result size.
+  const CAPTIONS = {
+    en: [
+      ['Swipe up to delete', 'Down to keep 💖'],
+      ['Get gigabytes back', 'One tap empties the Trash'],
+      ['See what takes space', 'Every album with its size'],
+      ['Nothing goes until you say so', 'iOS keeps it 30 days in Recently Deleted'],
+      ['Changed your mind?', 'Undo any swipe'],
+    ],
+    ru: [],
+  };
+  const SCREENS = ['01-swipe', '02-freed', '03-albums', '04-trash', '05-undo'];
+  const COUNT = SCREENS.length, SW = 1320, SH = 2868;
+
+  const [title, sub] = CAPTIONS[lang][shot - 1];
+  document.getElementById('title').textContent = title;
+  document.getElementById('sub').textContent = sub;
+  document.getElementById('screen').src = `../screens/${lang}/${SCREENS[shot - 1]}.png`;
+
+  // --- the banner: wine bands, dotted trail, sparkles (fixed positions, so every render matches) ---
+  const BW = SW * COUNT;
+  const svg = document.getElementById('banner');
+  svg.setAttribute('width', BW); svg.setAttribute('height', SH); svg.setAttribute('viewBox', `0 0 ${BW} ${SH}`);
+  svg.style.left = `${-(shot - 1) * SW}px`;
+
+  // Diagonal bands in the icon colors, slanted like the icon's split.
+  const slant = 900; // horizontal run of each band edge over the full height
+  const edges = [0.30, 0.62, 1.05, 1.38, 1.80, 2.15, 2.62, 2.95, 3.40, 3.75, 4.25, 4.60, 5.10].map(x => x * SW);
+  let bands = `<rect width="${BW}" height="${SH}" fill="#470112"/>`;
+  for (let i = 0; i + 1 < edges.length; i += 2) {
+    const a = edges[i], b = edges[i + 1];
+    bands += `<polygon points="${a + slant},0 ${b + slant},0 ${b},${SH} ${a},${SH}" fill="#75013d"/>`;
+  }
+  // A soft dark fade at the top keeps the caption readable on both bands.
+  bands += `<defs><linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".28"/><stop offset=".3" stop-color="#000" stop-opacity="0"/></linearGradient>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9" result="b"/><feFlood flood-color="#ff5c93"/><feComposite in2="b" operator="in" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+            <rect width="${BW}" height="${SH}" fill="url(#fade)"/>`;
+
+  // The dotted trail: a gentle wave between the caption and the phone, across all screenshots.
+  const trailY = x => 690 + 70 * Math.sin(x / BW * Math.PI * 2 * 2.2 + .6);
+  let pts = [];
+  for (let x = 0; x <= BW; x += 20) pts.push(`${x},${trailY(x).toFixed(1)}`);
+  const trail = `<polyline points="${pts.join(' ')}" fill="none" stroke="#ffd1e3" stroke-width="11" stroke-linecap="round" stroke-dasharray="1 46" filter="url(#glow)"/>`;
+
+  // ✨-like four-point star (the app's SparkleShape idea): tall, concave arms.
+  const star = (cx, cy, h) => { const w = h * .58, k = h * .035, c = (x, y, a, b) => `Q${a} ${b} ${x} ${y}`;
+    return `M${cx} ${cy - h / 2}` + c(cx + w / 2, cy, cx + k, cy - k) + c(cx, cy + h / 2, cx + k, cy + k) + c(cx - w / 2, cy, cx - k, cy + k) + c(cx, cy - h / 2, cx - k, cy - k) + 'Z'; };
+  // A few sparkles per screenshot, as in mockup A: [x within the whole banner, y, height].
+  const SPARKS = [
+    [150, 560, 92], [1150, 640, 60],
+    [SW + 210, 600, 80], [SW + 1080, 735, 54],
+    [2 * SW + 300, 760, 58], [2 * SW + 1170, 560, 86],
+    [3 * SW + 160, 640, 70], [3 * SW + 1110, 600, 60],
+    [4 * SW + 230, 590, 84], [4 * SW + 1150, 700, 56],
+  ];
+  const sparks = SPARKS.map(([x, y, h]) => `<path d="${star(x, y, h)}" fill="#ffd1e3" filter="url(#glow)"/>`).join('');
+
+  svg.innerHTML = bands + trail + sparks;
+
+  // Touch hints over the phone screen. Screenshot 1: a right thumb flicking the card up — a glowing
+  // dot at the end of a curved, tapering trail (a thumb tip moves on an arc: up, then up and to the
+  // right), with chevrons ahead of it, in the black space the card leaves behind.
+  const thumbSwipe = () => {
+    const TURN = -60 * Math.PI / 180; // turned around the finger (negative = counterclockwise), so the trail comes from the lower right, where a right thumb sits
+    const P = [[480, 2570], [462, 2390], [560, 2240], [650, 2140]].map(([x, y], _, all) => { // cubic Bézier, start → finger
+      const [fx, fy] = all[3], dx = x - fx, dy = y - fy;
+      return [fx + dx * Math.cos(TURN) - dy * Math.sin(TURN), fy + dx * Math.sin(TURN) + dy * Math.cos(TURN)];
+    });
+    const at = t => { const u = 1 - t, a = u * u * u, b = 3 * u * u * t, c = 3 * u * t * t, d = t * t * t;
+      return [a * P[0][0] + b * P[1][0] + c * P[2][0] + d * P[3][0], a * P[0][1] + b * P[1][1] + c * P[2][1] + d * P[3][1]]; };
+    let trail = '';
+    for (let i = 0; i <= 60; i++) {
+      const t = i / 60, [x, y] = at(t);
+      trail += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(10 + 28 * t).toFixed(1)}" fill="${t > .75 ? '#ffd1e3' : '#ff5c93'}" fill-opacity="${(.04 + .5 * t * t).toFixed(3)}"/>`;
+    }
+    // Chevrons ahead of the finger: tilted only half as much as the trail's end, so they still read "up".
+    const [ex, ey] = P[3], tilt = Math.atan2(P[3][0] - P[2][0], P[2][1] - P[3][1]) / 2;
+    const ux = Math.sin(tilt), uy = -Math.cos(tilt), angle = tilt * 180 / Math.PI;
+    const chevron = (d, o) => `<path transform="translate(${(ex + ux * d).toFixed(1)} ${(ey + uy * d).toFixed(1)}) rotate(${angle.toFixed(1)})" d="M-50 25 L0 -25 L50 25" opacity="${o}"/>`;
+    return { trail, ex, ey, chevrons: chevron(150, .95) + chevron(235, .55) };
+  };
+  const swipe = thumbSwipe();
+  const OVERLAYS = {
+    1: `<defs>
+          <radialGradient id="finger">
+            <stop offset="0" stop-color="#fff" stop-opacity=".95"/>
+            <stop offset=".45" stop-color="#ffd1e3" stop-opacity=".85"/>
+            <stop offset=".7" stop-color="#ff5c93" stop-opacity=".35"/>
+            <stop offset="1" stop-color="#ff5c93" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <g filter="url(#glowO)">${swipe.trail}</g>
+        <circle cx="${swipe.ex}" cy="${swipe.ey}" r="118" fill="url(#finger)"/>
+        <circle cx="${swipe.ex}" cy="${swipe.ey}" r="58" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="7"/>
+        <g fill="none" stroke="#ffd1e3" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" filter="url(#glowO)">${swipe.chevrons}</g>
+        <filter id="glowO" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8" result="b"/><feFlood flood-color="#ff5c93"/><feComposite in2="b" operator="in" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`,
+  };
+  document.getElementById('overlay').innerHTML = OVERLAYS[shot] || '';
+
+  // Scale the 1320 × 2868 design to the requested size (the 6.9" and 6.3" sets differ slightly in aspect;
+  // the stage is scaled to the width and the extra height is wine background below the phone).
+  const stage = document.getElementById('stage');
+  const s = W / SW;
+  stage.style.transform = `scale(${s})`;
+  stage.style.height = `${Math.max(SH, H / s)}px`;
+  document.body.style.width = `${W}px`; document.body.style.height = `${H}px`;
+</script>
+</body>
+</html>
