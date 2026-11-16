@@ -61,8 +61,8 @@ struct SettingsView: View {
 
                 section {
                     VStack(alignment: .leading, spacing: 4) {
-                        // A brand and a handle, nothing to translate.
-                        Text(verbatim: "Instagram").font(.headline)
+                        Text("Dev's instagram 💅🏻").font(.headline)
+                        // A handle, nothing to translate.
                         Text(verbatim: "@\(Self.instagramHandle)")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)

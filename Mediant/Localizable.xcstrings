@@ -483,6 +483,16 @@
         }
       }
     },
+    "Dev's instagram 💅🏻": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instagram разработчика 💅🏻"
+          }
+        }
+      }
+    },
     "Don't forget to delete them from Recently Deleted in Photos too. iOS keeps them there for 30 days, and they still take up space.": {
       "localizations": {
         "ru": {
