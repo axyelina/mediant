@@ -61,7 +61,7 @@ struct SettingsView: View {
 
                 section {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Dev's instagram 💅🏻").font(.headline)
+                        Text("Dev's Instagram 💅🏻").font(.headline)
                         // A handle, nothing to translate.
                         Text(verbatim: "@\(Self.instagramHandle)")
                             .font(.subheadline)
