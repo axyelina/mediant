@@ -140,7 +140,7 @@ struct TrashView: View {
                 Chip("Open Photos", systemImage: "arrow.up.forward.app") { openURL(Self.photosURL) }
                     .padding(.top, 6)
             } else {
-                Text("Swipe left on photos you don't want.")
+                Text("Swipe up on photos you don't want.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }

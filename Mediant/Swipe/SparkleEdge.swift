@@ -1,9 +1,9 @@
 import SwiftUI
 
-/// Twinkling ✨-style sparkles along one screen edge. `progress` (0…1) fades them in with the
+/// Twinkling ✨-style sparkles along the top or bottom screen edge. `progress` (0…1) fades them in with the
 /// finger; when it drops to 0 (a swipe ends) they keep twinkling and fade out slowly.
 struct SparkleEdge: View {
-    enum Side { case leading, trailing }
+    enum Side { case top, bottom }
 
     let side: Side
     let color: Color
@@ -42,9 +42,9 @@ struct SparkleEdge: View {
                     let t = (sin(2 * .pi * (time / sparkle.period + sparkle.phase)) + 1) / 2
                     let scale = 0.4 + 0.7 * t
                     let side = sparkle.size * scale
-                    let x = side == 0 ? 0 : sparkle.inset
-                    let centerX = self.side == .leading ? x : size.width - x
-                    let center = CGPoint(x: centerX, y: sparkle.y * size.height)
+                    let y = side == 0 ? 0 : sparkle.inset
+                    let centerY = self.side == .top ? y : size.height - y
+                    let center = CGPoint(x: sparkle.x * size.width, y: centerY)
                     var star = context
                     star.opacity = 0.3 + 0.7 * t
                     star.translateBy(x: center.x, y: center.y)
@@ -58,7 +58,7 @@ struct SparkleEdge: View {
 
     private struct Sparkle {
         let inset: CGFloat
-        let y: CGFloat
+        let x: CGFloat
         let size: CGFloat
         let period: Double
         let phase: Double
@@ -67,7 +67,7 @@ struct SparkleEdge: View {
         /// Denser near the screen edge.
         static func random() -> Sparkle {
             Sparkle(inset: pow(.random(in: 0...1), 1.8) * 100,
-                    y: .random(in: 0.04...0.92),
+                    x: .random(in: 0.04...0.96),
                     size: .random(in: 12...32),
                     period: .random(in: 0.9...2.1),
                     phase: .random(in: 0...1),

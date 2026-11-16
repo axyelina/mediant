@@ -863,22 +863,22 @@
         }
       }
     },
-    "Swipe left on photos you don't want.": {
+    "Swipe up on photos you don't want.": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Смахните влево ненужные фото."
+            "value": "Смахните вверх ненужные фото."
           }
         }
       }
     },
-    "Swipe left to delete, right to keep. Your photos never leave your phone.": {
+    "Swipe up to delete, down to keep. Your photos never leave your phone.": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Смахните влево, чтобы удалить, и вправо, чтобы оставить. Фото не покидают ваш телефон."
+            "value": "Смахните вверх, чтобы удалить, и вниз, чтобы оставить. Фото не покидают ваш телефон."
           }
         }
       }

@@ -67,23 +67,6 @@ struct SwipeSessionTests {
         #expect(session.lastCommitted == .trashed)
     }
 
-    @Test func skipAdvancesWithoutDeciding() {
-        store.set(.kept, for: "a")
-        let session = SwipeSession(assetIDs: ["a", "b"], startIndex: 0, store: store)
-        session.skip()
-        #expect(session.currentID == "b")
-        #expect(store.decision(for: "a") == .kept)
-        #expect(!session.canUndo)
-    }
-
-    @Test func skipPastLastFinishes() {
-        let session = SwipeSession(assetIDs: ["a", "b"], startIndex: 1, store: store)
-        session.skip()
-        #expect(session.isFinished)
-        session.skip()
-        #expect(session.index == 2)
-    }
-
     @Test func jumpClamps() {
         let session = SwipeSession(assetIDs: ["a", "b", "c"], startIndex: 0, store: store)
         session.jump(to: 2)

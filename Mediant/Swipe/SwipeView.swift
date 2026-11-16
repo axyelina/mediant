@@ -7,35 +7,34 @@ struct SwipeView: View {
     let route: SwipeRoute
 
     @State private var session: SwipeSession?
-    @State private var dragX: CGFloat = 0
-    /// How far the top card has moved up on a skip (a tap on the photo).
-    @State private var skipY: CGFloat = 0
+    /// How far the top card has moved: up (< 0) to delete, down (> 0) to keep.
+    @State private var dragY: CGFloat = 0
     @State private var isAnimating = false
     @State private var justDecidedID: String?
     @State private var currentSize: Int64?
     @State private var playback = VideoPlayback()
 
-    private let commitDistance: CGFloat = 90
-    private let flingDistance: CGFloat = 160
-
     var body: some View {
         GeometryReader { proxy in
-            let width = proxy.size.width
+            let height = proxy.size.height
             ZStack {
                 Color.black
                 if let session {
                     if session.isFinished {
-                        finished(session, width: width)
+                        finished(session, height: height)
                     } else {
-                        pages(session, width: width, height: proxy.size.height)
-                            .onTapGesture { skip(session, height: proxy.size.height) }
-                            .gesture(drag(session, width: width))
-                        SparkleEdge(side: .leading, color: Color(red: 0x47 / 255, green: 0x01 / 255, blue: 0x12 / 255), // #470112
-                                    progress: dragX < 0 ? progress : 0)
-                        SparkleEdge(side: .trailing, color: Color(red: 0x75 / 255, green: 0x01 / 255, blue: 0x3D / 255), // #75013d
-                                    progress: dragX > 0 ? progress : 0)
+                        pages(session, height: height)
+                            .gesture(drag(session, height: height))
                     }
                     overlay(session)
+                    // Over the overlay: its bottom gradient and bar would hide the bottom band.
+                    // Sparkles take no taps, so the chips under them still work.
+                    if !session.isFinished {
+                        SparkleEdge(side: .top, color: Color(red: 0x47 / 255, green: 0x01 / 255, blue: 0x12 / 255), // #470112
+                                    progress: dragY < 0 ? progress : 0)
+                        SparkleEdge(side: .bottom, color: Color(red: 0x75 / 255, green: 0x01 / 255, blue: 0x3D / 255), // #75013d
+                                    progress: dragY > 0 ? progress : 0)
+                    }
                 }
             }
         }
@@ -59,17 +58,17 @@ struct SwipeView: View {
         }
     }
 
-    private var progress: Double { Double(min(abs(dragX) / 110, 1)) }
+    private var progress: Double { Double(min(abs(dragY) / 110, 1)) }
 
     // MARK: Pages
 
-    /// The current photo is a card on top: it follows the finger and tilts. The next one waits
+    /// The current photo is a card on top: it follows the finger up or down. The next one waits
     /// behind it, smaller and darker, and comes forward as the top card leaves.
     /// Pages are keyed by photo id, so the next page keeps its loaded image when it becomes current.
-    private func pages(_ session: SwipeSession, width: CGFloat, height: CGFloat) -> some View {
+    private func pages(_ session: SwipeSession, height: CGFloat) -> some View {
         let current = route.assets[session.index]
         let next = route.assets.indices.contains(session.index + 1) ? [route.assets[session.index + 1]] : []
-        let lift = min(max(abs(dragX) / width, -skipY / height), 1)
+        let lift = min(abs(dragY) / height, 1)
         return ZStack {
             ForEach(next + [current]) { asset in
                 let isCurrent = asset.id == current.id
@@ -77,76 +76,66 @@ struct SwipeView: View {
                     .overlay(Color.black.opacity(isCurrent ? 0 : 0.55 * (1 - lift)))
                     .clipShape(RoundedRectangle(cornerRadius: 44, style: .continuous))
                     .scaleEffect(isCurrent ? 1 : 0.9 + 0.1 * lift)
-                    .rotationEffect(.degrees(isCurrent ? Double(dragX / width) * 12 : 0), anchor: .bottom)
-                    .offset(x: isCurrent ? dragX : 0, y: isCurrent ? skipY : 0)
+                    .offset(y: isCurrent ? dragY : 0)
             }
         }
     }
 
-    /// How far the top card travels to leave the screen; it is tilted, so a width is not enough.
-    private func offscreen(_ width: CGFloat) -> CGFloat { width * 1.5 }
+    /// Where the top card goes for a decision: off the top for 👹, off the bottom for 💖.
+    private func offscreen(_ decision: Decision, height: CGFloat) -> CGFloat {
+        decision == .trashed ? -height : height
+    }
 
-    private func drag(_ session: SwipeSession, width: CGFloat) -> some Gesture {
+    /// Up = delete, down = keep (the card follows only vertically); right = back to the album.
+    private func drag(_ session: SwipeSession, height: CGFloat) -> some Gesture {
         DragGesture(minimumDistance: 8)
             .onChanged { value in
                 guard !isAnimating else { return }
-                dragX = value.translation.width
+                // A mostly horizontal drag is the back swipe: the card stays put.
+                dragY = abs(value.translation.height) >= abs(value.translation.width) ? value.translation.height : 0
             }
             .onEnded { value in
                 guard !isAnimating else { return }
-                let dx = value.translation.width
-                if abs(dx) > commitDistance || abs(value.predictedEndTranslation.width) > flingDistance {
-                    commit(dx < 0 || (dx == 0 && value.predictedEndTranslation.width < 0) ? .trashed : .kept,
-                           session: session, width: width)
-                } else {
-                    withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) { dragX = 0 }
+                switch SwipeGesture.outcome(translation: value.translation, predictedEnd: value.predictedEndTranslation) {
+                case .trash: commit(.trashed, session: session, height: height)
+                case .keep: commit(.kept, session: session, height: height)
+                case .back:
+                    dragY = 0
+                    dismiss()
+                case .none:
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) { dragY = 0 }
                 }
             }
     }
 
-    private func commit(_ decision: Decision, session: SwipeSession, width: CGFloat) {
+    private func commit(_ decision: Decision, session: SwipeSession, height: CGFloat) {
         isAnimating = true
         let id = session.currentID
         withAnimation(.easeOut(duration: 0.26)) {
-            dragX = decision == .trashed ? -offscreen(width) : offscreen(width)
+            dragY = offscreen(decision, height: height)
         } completion: {
             withTransaction(Transaction(animation: nil)) {
                 session.commit(decision)
-                dragX = 0
+                dragY = 0
                 justDecidedID = id
             }
             isAnimating = false
         }
     }
 
-    /// A tap skips the photo without a decision: the card slides up and away.
-    private func skip(_ session: SwipeSession, height: CGFloat) {
-        guard !isAnimating else { return }
-        isAnimating = true
-        withAnimation(.easeOut(duration: 0.26)) {
-            skipY = -height
-        } completion: {
-            withTransaction(Transaction(animation: nil)) {
-                session.skip()
-                skipY = 0
-            }
-            isAnimating = false
-        }
-    }
-
-    private func undo(_ session: SwipeSession, width: CGFloat) {
+    private func undo(_ session: SwipeSession, height: CGFloat) {
         guard session.canUndo, !isAnimating, let last = session.lastCommitted else { return }
         isAnimating = true
         withTransaction(Transaction(animation: nil)) {
             session.undo()
             justDecidedID = nil
             // Start where the photo left the screen, then slide it back.
-            dragX = last == .trashed ? -offscreen(width) : offscreen(width)
+            dragY = offscreen(last, height: height)
         }
         // Next run loop, so the start position is rendered before the slide.
         DispatchQueue.main.async {
             withAnimation(.easeOut(duration: 0.25)) {
-                dragX = 0
+                dragY = 0
             } completion: {
                 isAnimating = false
             }
@@ -184,7 +173,7 @@ struct SwipeView: View {
                             .layoutPriority(-1)
                         Spacer(minLength: 0)
                         trashChip
-                        Chip("Undo", systemImage: "arrow.uturn.backward") { undo(session, width: proxy.size.width) }
+                        Chip("Undo", systemImage: "arrow.uturn.backward") { undo(session, height: proxy.size.height) }
                             .opacity(session.canUndo ? 1 : 0.4)
                             .disabled(!session.canUndo)
                     } }
@@ -207,13 +196,13 @@ struct SwipeView: View {
         }
     }
 
-    private func finished(_ session: SwipeSession, width: CGFloat) -> some View {
+    private func finished(_ session: SwipeSession, height: CGFloat) -> some View {
         VStack(spacing: 12) {
             Text("✨").font(.system(size: 52))
             Text("All done").font(.title2.bold())
             GlassGroup {
                 HStack(spacing: 10) {
-                    Chip("Undo", systemImage: "arrow.uturn.backward") { undo(session, width: width) }
+                    Chip("Undo", systemImage: "arrow.uturn.backward") { undo(session, height: height) }
                     trashChip
                     Chip("Back to album") { dismiss() }
                 }

@@ -10,7 +10,7 @@ struct AccessView: View {
             TitleSparkle(size: 56)
             Text("Median't needs your photos")
                 .font(.title2.bold())
-            Text("Swipe left to delete, right to keep. Your photos never leave your phone.")
+            Text("Swipe up to delete, down to keep. Your photos never leave your phone.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

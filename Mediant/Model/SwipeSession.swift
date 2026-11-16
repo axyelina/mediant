@@ -35,12 +35,6 @@ final class SwipeSession {
         index += 1
     }
 
-    /// Moves on without a decision; the photo keeps whatever it had, and there is nothing to undo.
-    func skip() {
-        guard !isFinished else { return }
-        index += 1
-    }
-
     func undo() {
         guard let step = history.popLast() else { return }
         store.set(step.previous, for: step.id)
