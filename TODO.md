@@ -59,6 +59,16 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
         reach the receiver, which Buy Me a Coffee / Ko-fi fees break.
       - 4 consumable tips, prices from `Product.displayPrice`, never hard-coded. A tip unlocks
         nothing — no features, badges or icons. One "thank you" after a tip, then silence.
+- [ ] **Zoom on the swipe screen.** Pinch to zoom the photo, to look at details before deciding.
+      Open questions before building (needs a short design first):
+      - Why / how far: reading text in screenshots, or checking faces and sharpness? That sets
+        the max zoom and whether videos zoom too.
+      - Gestures: a one-finger drag decides (up deletes, down keeps, right goes back). While
+        zoomed, that drag must pan the photo instead; how to get back to deciding (double tap,
+        pinch back to fit, or zoom resets at the edge?).
+      - Image quality: `AssetImage` loads the photo at screen size only, so a zoomed photo is
+        blurry. Load a bigger image (`ThumbnailLoader`) once the user zooms in.
+      - Videos: the card has the looping player and the scrub chip; zoom there or not.
 
 ## From Claude
 
