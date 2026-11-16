@@ -33,6 +33,18 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 
 ## From the user
 
+- [ ] **App Store header video (the first app preview).** Optional for review, but it is the
+      first thing in search results (it plays muted next to the first two screenshots). Chosen in
+      the brainstorm (2026-11-04): "result first" — open on the just-emptied Trash ("Done! 2.4 GB
+      freed"), then "Just swipe" and a few fast swipes, then albums with sizes, Empty with the one
+      iOS dialog, and end on the launch ✨ flying into the title. Soft glow and sparkles come from
+      the app itself (splash, sparkle edges); glowing captions and a touch dot are the only
+      overlays. Rules: real app footage only (App Review 2.3.4), no frame around the screen, no
+      "Free" or other price words, 15–30 s; check Apple's current app preview specs (size, fps)
+      before rendering. The storyboard draft was for horizontal swipes: redo it for up = delete,
+      down = keep. Photos: the dog set in `Design/AppStore/` (see its README). English first,
+      then Russian.
+
 - [ ] **Working with video.** Shipped: looping playback on the top card, scrub on the ▶ chip,
       🔊/🔇 chip, ▶ badge in the album grid. Still open: show the video size more prominently
       (videos are where the space is).
