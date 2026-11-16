@@ -121,7 +121,8 @@ in `~/.appstoreconnect/private_keys/` and `fastlane/.env` (gitignored); never re
 - **App Store Connect:** app record "Median't" (SKU `app.mediant`, primary language en-US) and
   the 4 tip in-app purchases exist. First accepted build: 1.0 (1), uploaded with `fastlane beta`
   from Xcode 27.2 on 2026-11-10, processing `VALID`, export compliance answered by the plist.
-  Not yet: TestFlight groups, TestFlight Test Information, privacy policy URL, App Store listing. Open items are in `TODO.md`
+  Latest build: 1.0 (2), uploaded the same way on 2026-11-17, processing `VALID`; `project.yml`
+  now has build number 3 (the next upload). Not yet: TestFlight groups, TestFlight Test Information, privacy policy URL, App Store listing. Open items are in `TODO.md`
   ("Before the first release").
 - **App Store Connect API key** (`fastlane/.env` → `.p8` in `~/.appstoreconnect/private_keys/`):
   App Manager role. It uploads builds and manages the tips; it cannot be relied on to create
