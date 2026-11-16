@@ -20,7 +20,10 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
       `fastlane beta` from Xcode 27.2, processing `VALID`). Still to do:
       - an internal tester group in App Store Connect › TestFlight, and add team members;
       - check the UI on iOS 26+ (the app now builds with the iOS 27.2 SDK: system sheets and
-        dialogs get the Liquid Glass look);
+        dialogs get the Liquid Glass look). The app's own controls (tab bar, chips, album
+        toolbar button) use Liquid Glass since 2026-11-16, checked on an iOS 27.2 simulator;
+        still to check: the iOS delete dialog, the privacy sheet, the reset confirmation, and
+        all of it on the phone;
       - external testers only: Test Information (description, feedback e-mail, review contact,
         privacy policy URL) and Beta App Review.
 - [ ] **Binary check again before the store release** (or after a new dependency or resource) —
