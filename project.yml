@@ -14,7 +14,7 @@ settings:
     MARKETING_VERSION: "1.0"
     # Paid individual team (Angelina Odegova). Development profiles last a year.
     DEVELOPMENT_TEAM: NDCC8HH7D8
-    CURRENT_PROJECT_VERSION: "2"
+    CURRENT_PROJECT_VERSION: "3"
 targets:
   Mediant:
     type: application
