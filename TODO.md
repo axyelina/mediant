@@ -16,8 +16,9 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [ ] **Privacy policy URL for App Store Connect.** The policy is in the app (Settings › Privacy,
       `PrivacyPolicyView`), but App Store Connect needs a public URL. Put the same text (English
       and Russian) on a web page, e.g. GitHub Pages, and add a contact (e-mail) there and in the app.
-- [ ] **TestFlight testers.** Build 1.0 (1) is in TestFlight (uploaded 2026-11-10 with
-      `fastlane beta` from Xcode 27.2, processing `VALID`). Still to do:
+- [ ] **TestFlight testers.** Builds 1.0 (1) (2026-11-10) and 1.0 (2) (2026-11-17, vertical
+      swipe, Liquid Glass, Instagram card) are in TestFlight, both uploaded with `fastlane beta`
+      from Xcode 27.2, processing `VALID`. Still to do:
       - an internal tester group in App Store Connect › TestFlight, and add team members;
       - check the UI on iOS 26+ (the app now builds with the iOS 27.2 SDK: system sheets and
         dialogs get the Liquid Glass look). The app's own controls (tab bar, chips, album
@@ -29,7 +30,8 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [ ] **Binary check again before the store release** (or after a new dependency or resource) —
       steps in the `testflight` skill. First check 2026-11-10: clean except `/Users/…` paths
       from GoogleDataTransport `__FILE__`, which `fastlane beta` now removes
-      (`-fmacro-prefix-map`); an Xcode Organizer archive still has them.
+      (`-fmacro-prefix-map`); an Xcode Organizer archive still has them. Second check
+      2026-11-17 (before 1.0 (2)): clean, only the Instagram link the app shows on purpose.
 
 ## From the user
 
@@ -115,6 +117,7 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 ## Shipped
 
 ### 2026-11-17
+- [x] TestFlight build 1.0 (2) with everything below; processing `VALID`.
 - [x] Vertical swipe on the swipe screen: up deletes, down keeps, right goes back to the album.
       The card moves only up/down with no tilt and flies off that edge; Undo brings it back from
       there. Sparkle edges on the top (delete) and bottom (keep). Tap to skip removed.
