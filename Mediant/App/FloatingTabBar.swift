@@ -12,23 +12,27 @@ struct FloatingTabBar: View {
         HStack(spacing: 3) {
             item(.albums, symbol: "photo.on.rectangle", label: "Albums")
             item(.trash, symbol: "trash", label: "Trash")
-                .overlay(alignment: .top) {
-                    if trashCount > 0 {
-                        Text("\(trashCount)")
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 4)
-                            .frame(minWidth: 16, minHeight: 16)
-                            .background(Capsule().fill(.red))
-                            .offset(x: 10, y: -5)
-                    }
-                }
             item(.settings, symbol: "gearshape", label: "Settings")
         }
         .padding(3)
         .frame(width: 134, height: Self.height)
         .contentShape(Capsule())
         .glassBackground(in: Capsule(), interactive: true)
+        // On the glass, not in it: inside, the glass tinted the badge with the pages sliding
+        // behind it and clipped it where it sticks out, so it blinked on every tab switch.
+        // The Trash icon is the middle one, so the bar's center is its center.
+        .overlay(alignment: .top) {
+            if trashCount > 0 {
+                Text("\(trashCount)")
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 4)
+                    .frame(minWidth: 16, minHeight: 16)
+                    .background(Capsule().fill(.red))
+                    .offset(x: 10, y: -2)
+                    .allowsHitTesting(false)
+            }
+        }
         // Simultaneous, so a drag that starts on an icon still switches tabs.
         .simultaneousGesture(
             DragGesture(minimumDistance: 10)
