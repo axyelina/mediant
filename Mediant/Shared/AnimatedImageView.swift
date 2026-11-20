@@ -81,8 +81,10 @@ private struct AnimationPlayer: UIViewRepresentable {
             stop()
             isPlaying = true
             let mine = generation
+            // Loop forever whatever loop count the file has, as the Photos app does.
+            let options = [kCGImageAnimationLoopCount: kCFNumberPositiveInfinity] as CFDictionary
             // ImageIO calls the block on the main queue for each frame until `stop` is set.
-            CGAnimateImageDataWithBlock(data as CFData, nil) { [weak self, weak view] _, image, stop in
+            CGAnimateImageDataWithBlock(data as CFData, options) { [weak self, weak view] _, image, stop in
                 MainActor.assumeIsolated {
                     guard let self, let view, self.generation == mine else {
                         stop.pointee = true

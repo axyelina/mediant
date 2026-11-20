@@ -1,15 +1,17 @@
 // Writes sample-ball.gif into the given folder: a pink ball moving across a dark frame inside a
 // white border, 12 frames of 0.08 s, looping forever. Drawn in code; no download.
-// Usage: swift make-gif.swift <outdir>
+// `once` writes sample-ball-once.gif instead: the file says "play one time" (the app must still loop it).
+// Usage: swift make-gif.swift <outdir> [once]
 import CoreGraphics
 import Foundation
 import ImageIO
 import UniformTypeIdentifiers
 
 let outDir = URL(fileURLWithPath: CommandLine.arguments[1])
-let url = outDir.appendingPathComponent("sample-ball.gif")
+let once = CommandLine.arguments.count > 2 && CommandLine.arguments[2] == "once"
+let url = outDir.appendingPathComponent(once ? "sample-ball-once.gif" : "sample-ball.gif")
 let size = 360, frames = 12
-let loop = [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFLoopCount: 0]] as CFDictionary
+let loop = [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFLoopCount: once ? 1 : 0]] as CFDictionary
 let delay = [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFDelayTime: 0.08]] as CFDictionary
 
 guard let destination = CGImageDestinationCreateWithURL(url as CFURL, UTType.gif.identifier as CFString, frames, nil),
