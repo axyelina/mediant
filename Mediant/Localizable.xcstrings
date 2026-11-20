@@ -813,6 +813,16 @@
         }
       }
     },
+    "Restore": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вернуть"
+          }
+        }
+      }
+    },
     "Restore (%lld)": {
       "localizations": {
         "ru": {

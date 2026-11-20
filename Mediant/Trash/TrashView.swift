@@ -11,6 +11,13 @@ struct TrashView: View {
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 3)
 
+    /// The Trash item open full screen in `TrashViewer`.
+    @State private var viewing: Viewing?
+    /// Kind and length of each Trash item, for the video mark on its tile.
+    @State private var infos: [String: AssetInfo] = [:]
+
+    private struct Viewing: Identifiable { let id: String }
+
     var body: some View {
         let trash = model.trash
         let ids = model.store.trashedIDs
@@ -48,6 +55,11 @@ struct TrashView: View {
             if !ids.isEmpty { bottomBar(trash) }
         }
         .task(id: ids) { await trash.refreshSize() }
+        .task(id: ids) {
+            infos = Dictionary(model.library.assets(withIDs: ids).map { ($0.id, $0) },
+                               uniquingKeysWith: { first, _ in first })
+        }
+        .fullScreenCover(item: $viewing) { TrashViewer(startID: $0.id) }
         .alert("Couldn't delete", isPresented: Binding(
             get: { trash.errorMessage != nil },
             set: { if !$0 { trash.errorMessage = nil } })
@@ -68,6 +80,16 @@ struct TrashView: View {
             .overlay(alignment: .bottomTrailing) {
                 Text("👹").font(.system(size: 12)).shadow(color: .black.opacity(0.8), radius: 2).padding(3)
             }
+            .overlay(alignment: .bottomLeading) {
+                if let info = infos[id], info.isVideo {
+                    Text("▶ \(VideoTime.string(info.duration))")
+                        .font(.system(size: 11, weight: .semibold))
+                        .monospacedDigit()
+                        .foregroundStyle(.white)
+                        .shadow(color: .black.opacity(0.8), radius: 2)
+                        .padding(4)
+                }
+            }
             .overlay {
                 if trash.isSelecting {
                     ZStack(alignment: .topTrailing) {
@@ -80,7 +102,9 @@ struct TrashView: View {
                 }
             }
             .contentShape(Rectangle())
-            .onTapGesture { if trash.isSelecting { trash.toggle(id) } }
+            .onTapGesture {
+                if trash.isSelecting { trash.toggle(id) } else { viewing = Viewing(id: id) }
+            }
     }
 
     /// Same line as the floating tab bar: Select / Cancel on the left, Empty / Restore on the right.
