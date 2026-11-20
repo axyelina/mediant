@@ -56,8 +56,11 @@ struct TrashView: View {
         }
         .task(id: ids) { await trash.refreshSize() }
         .task(id: ids) {
-            infos = Dictionary(model.library.assets(withIDs: ids).map { ($0.id, $0) },
-                               uniquingKeysWith: { first, _ in first })
+            // Off the main thread: this runs on every swipe up, and a big Trash is a slow fetch.
+            let library = model.library
+            let found = await Task.detached(priority: .utility) { library.assets(withIDs: ids) }.value
+            guard !Task.isCancelled else { return }
+            infos = Dictionary(found.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         }
         .fullScreenCover(item: $viewing) { TrashViewer(startID: $0.id) }
         .alert("Couldn't delete", isPresented: Binding(

@@ -41,7 +41,7 @@ struct TrashViewer: View {
         .ignoresSafeArea(edges: .vertical)
         .environment(playback)
         .sensoryFeedback(.impact(weight: .light), trigger: restoreCount)
-        .task(id: model.store.trashedIDs) { reload() }
+        .task(id: model.store.trashedIDs) { await reload() }
         .task(id: currentID) {
             currentSize = nil
             let id = currentID
@@ -52,9 +52,13 @@ struct TrashViewer: View {
 
     /// Follows the Trash: after a restore here, or when the library forgets the shown item, it
     /// shows the item that took its place (the previous one at the end); an empty Trash closes.
-    private func reload() {
+    private func reload() async {
         let oldIndex = index
-        let fresh = model.library.assets(withIDs: model.store.trashedIDs.reversed())
+        let ids = Array(model.store.trashedIDs.reversed())
+        let library = model.library
+        // Off the main thread: a big Trash is a slow PhotoKit fetch.
+        let fresh = await Task.detached(priority: .userInitiated) { library.assets(withIDs: ids) }.value
+        guard !Task.isCancelled else { return }
         items = fresh
         guard !fresh.contains(where: { $0.id == currentID }) else { return }
         if fresh.isEmpty {
@@ -117,12 +121,14 @@ struct TrashViewer: View {
 
     private func browse(_ step: Int, from index: Int, width: CGFloat) {
         guard let target = neighbor(of: index, step: step) else { return springBack() }
+        // By id, not index: a Restore or a library change during the slide can shorten the list.
+        let targetID = items[target].id
         isAnimating = true
         withAnimation(.easeOut(duration: 0.24)) {
             dragX = step > 0 ? -(width + Self.pageGap) : width + Self.pageGap
         } completion: {
             withTransaction(Transaction(animation: nil)) {
-                currentID = items[target].id
+                if items.contains(where: { $0.id == targetID }) { currentID = targetID }
                 dragX = 0
             }
             isAnimating = false
@@ -130,6 +136,7 @@ struct TrashViewer: View {
     }
 
     private func restore(_ index: Int) {
+        guard !isAnimating else { return }
         let remaining = items.filter { $0.id != currentID }
         let next = TrashBrowse.index(afterRestoring: index, count: items.count).map { remaining[$0].id }
         model.trash.restore(currentID)
