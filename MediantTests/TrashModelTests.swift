@@ -127,4 +127,13 @@ struct TrashModelTests {
         trash.endJustEmptied()
         #expect(trash.justEmptied == nil)
     }
+
+    @Test func restoreOneTakesOnlyThatItem() {
+        store.set(.trashed, for: "a")
+        store.set(.trashed, for: "b")
+        let trash = TrashModel(store: store, library: library, stats: stats)
+        trash.restore("a")
+        #expect(store.trashedIDs == ["b"])
+        #expect(store.decision(for: "a") == nil)
+    }
 }

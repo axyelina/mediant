@@ -43,6 +43,12 @@ final class TrashModel {
         isSelecting = false
     }
 
+    /// Takes one item out of the Trash (the viewer's Restore); it becomes undecided.
+    func restore(_ id: String) {
+        store.restore([id])
+        selection.remove(id)
+    }
+
     func restoreSelected() {
         store.restore(Array(selection))
         cancelSelecting()

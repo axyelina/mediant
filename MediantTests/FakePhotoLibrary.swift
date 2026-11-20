@@ -18,6 +18,10 @@ final class FakePhotoLibrary: PhotoLibrary, @unchecked Sendable {
     func requestAccess() async -> AccessLevel { level }
     func albums() -> [AlbumInfo] { albumList }
     func assets(inAlbum id: String) -> [AssetInfo] { assetsByAlbum[id] ?? [] }
+    func assets(withIDs ids: [String]) -> [AssetInfo] {
+        let all = assetsByAlbum.values.joined()
+        return ids.compactMap { id in all.first { $0.id == id } }
+    }
     func fileSize(ofAsset id: String) -> Int64? {
         singleSizeCalls += 1
         return sizes[id]

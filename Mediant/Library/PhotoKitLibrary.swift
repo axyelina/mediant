@@ -49,6 +49,17 @@ final class PhotoKitLibrary: PhotoLibrary {
         guard let collection = PHAssetCollection.fetchAssetCollections(
             withLocalIdentifiers: [id], options: nil).firstObject else { return [] }
         let fetch = PHAsset.fetchAssets(in: collection, options: Self.newestFirst)
+        return Self.infos(fetch)
+    }
+
+    func assets(withIDs ids: [String]) -> [AssetInfo] {
+        guard !ids.isEmpty else { return [] }
+        let byID = Dictionary(Self.infos(PHAsset.fetchAssets(withLocalIdentifiers: ids, options: nil))
+            .map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        return ids.compactMap { byID[$0] }
+    }
+
+    private static func infos(_ fetch: PHFetchResult<PHAsset>) -> [AssetInfo] {
         var result: [AssetInfo] = []
         result.reserveCapacity(fetch.count)
         fetch.enumerateObjects { asset, _, _ in

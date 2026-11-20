@@ -35,6 +35,8 @@ protocol PhotoLibrary: AnyObject, Sendable {
     func albums() -> [AlbumInfo]
     /// Newest first.
     func assets(inAlbum id: String) -> [AssetInfo]
+    /// The assets with these ids, in the given order; ids no longer in the library are left out.
+    func assets(withIDs ids: [String]) -> [AssetInfo]
     func fileSize(ofAsset id: String) -> Int64?
     /// Size of every asset in the album in one pass; values in `cached` are reused, not measured again.
     /// Stops early (partial result) when the current task is cancelled.
