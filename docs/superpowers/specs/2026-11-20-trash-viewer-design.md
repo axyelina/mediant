@@ -48,5 +48,5 @@ enough to be sure), and take a single item back out on the spot.
 - `TrashViewer` (new, `Mediant/Trash/`): shown with `fullScreenCover` from `TrashView`, dark
   style forced (black screen), its own `VideoPlayback`. The item list follows
   `store.trashedIDs`, so it stays right if the Trash changes.
-- New text "Restore" (Russian "Восстановить") in `Localizable.xcstrings`.
+- New text "Restore" (Russian "Вернуть") in `Localizable.xcstrings`.
 - Nothing new leaves the phone: no privacy policy or privacy manifest change.

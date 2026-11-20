@@ -120,4 +120,24 @@ struct VideoPlaybackTests {
         playback.play(item(), id: "a", duration: 10)
         #expect(playback.player?.rate == 0)
     }
+
+    /// The Trash viewer has its own player; a swipe screen behind it picks up the sound choice
+    /// made there when it shows again.
+    @Test func comingBackPicksUpTheSoundChoiceMadeElsewhere() {
+        let swipe = makePlayback()
+        swipe.play(item(), id: "a", duration: 10)
+        swipe.setHidden(true)
+        makePlayback().toggleMuted()
+        swipe.setHidden(false)
+        #expect(!swipe.isMuted)
+        #expect(swipe.player?.isMuted == false)
+    }
+
+    @Test func volumeUpWhileHiddenChangesNothing() {
+        let playback = makePlayback()
+        playback.play(item(), id: "a", duration: 10)
+        playback.setHidden(true)
+        playback.volumeChanged(from: 0.4, to: 0.5)
+        #expect(playback.isMuted)
+    }
 }

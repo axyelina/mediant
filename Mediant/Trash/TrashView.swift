@@ -62,7 +62,9 @@ struct TrashView: View {
             guard !Task.isCancelled else { return }
             infos = Dictionary(found.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         }
-        .fullScreenCover(item: $viewing) { TrashViewer(startID: $0.id) }
+        .fullScreenCover(item: $viewing) { viewing in
+            TrashViewer(startID: viewing.id, items: ids.reversed().compactMap { infos[$0] })
+        }
         .alert("Couldn't delete", isPresented: Binding(
             get: { trash.errorMessage != nil },
             set: { if !$0 { trash.errorMessage = nil } })

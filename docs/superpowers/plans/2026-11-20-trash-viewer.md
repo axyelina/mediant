@@ -14,7 +14,7 @@
 
 - Only `PhotoKitLibrary` / `ThumbnailLoader` import Photos; logic takes `PhotoLibrary`, tested with `FakePhotoLibrary`.
 - Deleting stays only `TrashModel.emptyTrash()`; the viewer never deletes and adds no confirmation.
-- Every UI text in `Localizable.xcstrings` with Russian; new key `Restore` → `Восстановить`.
+- Every UI text in `Localizable.xcstrings` with Russian; new key `Restore` → `Вернуть`.
 - After adding files: `xcodegen generate` (the run script does it when `project.yml` is newer; new files need it explicitly).
 - Build / test only on `Median't iPhone 16`: `.claude/skills/run-sim/scripts/run.sh [--test]`.
 - Commits as `axyelina <axyelina@gmail.com>` (repo-local), ending with the Co-Authored-By line.
@@ -61,6 +61,6 @@
 
 - [ ] **Step 1: Viewer.** Items = `model.library.assets(withIDs: store.trashedIDs.reversed())` (grid order), recomputed when `trashedIDs` changes; current id kept in state, index found by id (fallback: `TrashBrowse` neighbor, or dismiss when empty). Carousel and edge-back like `SwipeView` (`.next` / `.previous` / `.back`; `.trash` / `.keep` spring back). Top: `Chip("‹ Back")`. Bottom row: size label (+ `VideoChip` and mute chip for videos), `Spacer`, `Chip("Restore")` → `trash.restore(id)`, light impact haptic, move to `TrashBrowse.index(afterRestoring:count:)` or dismiss. Own `@State VideoPlayback`, `.environment(\.colorScheme, .dark)`, black background.
 - [ ] **Step 2: Grid.** `TrashView.tile`: tap outside Select mode sets the presented id; add the album grid's `▶ 0:20` video mark (needs `AssetInfo` for tiles: look up once per `ids` change with `assets(withIDs:)`).
-- [ ] **Step 3: Strings and docs.** Add `Restore` / `Восстановить`; update `CLAUDE.md` code map and the design doc's Trash section.
+- [ ] **Step 3: Strings and docs.** Add `Restore` / `Вернуть`; update `CLAUDE.md` code map and the design doc's Trash section.
 - [ ] **Step 4: Verify on the sim.** `run.sh`; trash a photo and a video on the swipe screen; in the Trash: tap opens, left / right browse, video plays with chips, edge swipe and Back close, Restore moves to the next item and the 👹 count drops, restoring the last item closes the viewer; Select mode tap only selects. `run.sh --test` still passes.
 - [ ] **Step 5:** Commit `feat: full-screen Trash viewer with single restore`.

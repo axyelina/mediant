@@ -82,8 +82,9 @@ final class VideoPlayback {
     }
 
     /// A volume-up press while a video plays muted turns its sound on, the same as the 🔊 chip.
+    /// A hidden player ignores it: the press is for the video on screen.
     func volumeChanged(from old: Float, to new: Float) {
-        guard new > old, isMuted, player != nil else { return }
+        guard new > old, isMuted, player != nil, !isHidden else { return }
         toggleMuted()
     }
 
@@ -95,8 +96,16 @@ final class VideoPlayback {
 
     func setHidden(_ hidden: Bool) {
         isHidden = hidden
+        // Another player (the Trash viewer) may have changed the saved sound choice meanwhile.
+        if !hidden { isMuted = defaults.object(forKey: Self.mutedKey) as? Bool ?? true }
         guard let player else { return }
-        if hidden { player.pause() } else if !isPaused && !isScrubbing { player.play() }
+        if hidden {
+            player.pause()
+        } else {
+            applyAudioSession()
+            player.isMuted = isMuted
+            if !isPaused && !isScrubbing { player.play() }
+        }
     }
 
     func beginScrub() {

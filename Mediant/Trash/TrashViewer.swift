@@ -18,8 +18,11 @@ struct TrashViewer: View {
     @State private var restoreCount = 0
     @State private var playback = VideoPlayback()
 
-    init(startID: String) {
+    /// `items`: what the Trash grid already knows, so the first frame shows the photo; the
+    /// viewer then loads the Trash itself and follows it.
+    init(startID: String, items: [AssetInfo] = []) {
         _currentID = State(initialValue: startID)
+        _items = State(initialValue: items)
     }
 
     private var index: Int? { items.firstIndex { $0.id == currentID } }
