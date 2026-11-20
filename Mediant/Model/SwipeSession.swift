@@ -61,6 +61,14 @@ final class SwipeSession {
         isWrapped = step.wasWrapped
     }
 
+    /// The photo a sideways swipe shows: the neighbor in album order (`step` 1 = next, -1 =
+    /// previous), nil past either end or when the run is finished. Browsing decides nothing.
+    func neighborIndex(_ step: Int) -> Int? {
+        guard !isFinished else { return nil }
+        let target = index + step
+        return assetIDs.indices.contains(target) ? target : nil
+    }
+
     func jump(to newIndex: Int) {
         guard !assetIDs.isEmpty else { return }
         index = min(max(newIndex, 0), assetIDs.count - 1)

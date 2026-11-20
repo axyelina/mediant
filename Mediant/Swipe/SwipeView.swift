@@ -9,6 +9,8 @@ struct SwipeView: View {
     @State private var session: SwipeSession?
     /// How far the top card has moved: up (< 0) to delete, down (> 0) to keep.
     @State private var dragY: CGFloat = 0
+    /// How far a sideways drag has moved the card: left (< 0) to the next photo, right to the previous.
+    @State private var dragX: CGFloat = 0
     @State private var isAnimating = false
     @State private var justDecidedID: String?
     @State private var currentSize: Int64?
@@ -17,20 +19,21 @@ struct SwipeView: View {
     var body: some View {
         GeometryReader { proxy in
             let height = proxy.size.height
+            let width = proxy.size.width
             ZStack {
                 Color.black
                 if let session {
                     if session.isFinished {
                         finished(session, height: height)
                     } else {
-                        pages(session, height: height)
-                            .gesture(drag(session, height: height))
+                        pages(session, width: width, height: height)
+                            .gesture(drag(session, width: width, height: height))
                     }
                     overlay(session)
                     // Over the overlay: its bottom gradient and bar would hide the bottom band.
                     // Sparkles take no taps, so the chips under them still work.
                     if !session.isFinished {
-                        SparkleEdge(side: .top, color: Color(red: 0x47 / 255, green: 0x01 / 255, blue: 0x12 / 255), // #470112
+                        SparkleEdge(side: .top, color: .black,
                                     progress: dragY < 0 ? progress : 0)
                         SparkleEdge(side: .bottom, color: Color(red: 0x75 / 255, green: 0x01 / 255, blue: 0x3D / 255), // #75013d
                                     progress: dragY > 0 ? progress : 0)
@@ -66,49 +69,83 @@ struct SwipeView: View {
 
     /// The current photo is a card on top: it follows the finger up or down. The next one waits
     /// behind it, smaller and darker, and comes forward as the top card leaves.
+    /// A sideways drag is a carousel instead: the card moves with the finger and its neighbor in
+    /// album order comes in from the side.
     /// Pages are keyed by photo id, so the next page keeps its loaded image when it becomes current.
-    private func pages(_ session: SwipeSession, height: CGFloat) -> some View {
+    private func pages(_ session: SwipeSession, width: CGFloat, height: CGFloat) -> some View {
         let current = route.assets[session.index]
         // After the last photo the run goes on with unsorted ones, so "next" is not always index + 1.
-        let next = session.upcomingIndex.map { [route.assets[$0]] } ?? []
+        let behind = dragX == 0 ? session.upcomingIndex : nil
+        let side = dragX == 0 ? nil : session.neighborIndex(dragX < 0 ? 1 : -1)
         let lift = min(abs(dragY) / height, 1)
+        let sideOffset = dragX < 0 ? dragX + width + Self.pageGap : dragX - width - Self.pageGap
         return ZStack {
-            ForEach(next + [current]) { asset in
+            ForEach([behind, side].compactMap { $0.map { route.assets[$0] } } + [current]) { asset in
                 let isCurrent = asset.id == current.id
+                let isSide = side.map { route.assets[$0].id == asset.id } ?? false
                 PhotoPage(asset: asset, plays: isCurrent)
-                    .overlay(Color.black.opacity(isCurrent ? 0 : 0.55 * (1 - lift)))
+                    .overlay(Color.black.opacity(isCurrent || isSide ? 0 : 0.55 * (1 - lift)))
                     .clipShape(RoundedRectangle(cornerRadius: 44, style: .continuous))
-                    .scaleEffect(isCurrent ? 1 : 0.9 + 0.1 * lift)
-                    .offset(y: isCurrent ? dragY : 0)
+                    .scaleEffect(isCurrent || isSide ? 1 : 0.9 + 0.1 * lift)
+                    .offset(x: isCurrent ? dragX : isSide ? sideOffset : 0, y: isCurrent ? dragY : 0)
             }
         }
     }
+
+    /// The space between two cards in the sideways carousel.
+    private static let pageGap: CGFloat = 12
 
     /// Where the top card goes for a decision: off the top for 👹, off the bottom for 💖.
     private func offscreen(_ decision: Decision, height: CGFloat) -> CGFloat {
         decision == .trashed ? -height : height
     }
 
-    /// Up = delete, down = keep (the card follows only vertically); right = back to the album.
-    private func drag(_ session: SwipeSession, height: CGFloat) -> some Gesture {
+    /// Up = delete, down = keep; left / right = the next / previous photo, with no decision.
+    private func drag(_ session: SwipeSession, width: CGFloat, height: CGFloat) -> some Gesture {
         DragGesture(minimumDistance: 8)
             .onChanged { value in
                 guard !isAnimating else { return }
-                // A mostly horizontal drag is the back swipe: the card stays put.
-                dragY = abs(value.translation.height) >= abs(value.translation.width) ? value.translation.height : 0
+                // The bigger axis decides which way the card follows.
+                let isVertical = abs(value.translation.height) >= abs(value.translation.width)
+                dragY = isVertical ? value.translation.height : 0
+                let dx = isVertical ? 0 : value.translation.width
+                // No photo on that side: the card only gives a little.
+                dragX = session.neighborIndex(dx < 0 ? 1 : -1) == nil ? dx / 4 : dx
             }
             .onEnded { value in
                 guard !isAnimating else { return }
                 switch SwipeGesture.outcome(translation: value.translation, predictedEnd: value.predictedEndTranslation) {
                 case .trash: commit(.trashed, session: session, height: height)
                 case .keep: commit(.kept, session: session, height: height)
-                case .back:
-                    dragY = 0
-                    dismiss()
-                case .none:
-                    withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) { dragY = 0 }
+                case .next: browse(1, session: session, width: width)
+                case .previous: browse(-1, session: session, width: width)
+                case .none: springBack()
                 }
             }
+    }
+
+    private func springBack() {
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+            dragY = 0
+            dragX = 0
+        }
+    }
+
+    /// Slides the neighbor in from the side and makes it current. Decides nothing, so no Undo step.
+    private func browse(_ step: Int, session: SwipeSession, width: CGFloat) {
+        guard let target = session.neighborIndex(step) else { return springBack() }
+        isAnimating = true
+        dragY = 0
+        withAnimation(.easeOut(duration: 0.24)) {
+            // The neighbor sits one card away, so this puts it exactly in the middle.
+            dragX = step > 0 ? -(width + Self.pageGap) : width + Self.pageGap
+        } completion: {
+            withTransaction(Transaction(animation: nil)) {
+                session.jump(to: target)
+                dragX = 0
+            }
+            isAnimating = false
+        }
     }
 
     private func commit(_ decision: Decision, session: SwipeSession, height: CGFloat) {

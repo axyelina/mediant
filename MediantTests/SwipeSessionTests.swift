@@ -145,4 +145,24 @@ struct SwipeSessionTests {
         session.jump(to: -5)
         #expect(session.index == 0)
     }
+
+    @Test func neighborsFollowAlbumOrderWithoutDeciding() {
+        let session = SwipeSession(assetIDs: ["a", "b", "c"], startIndex: 1, store: store)
+        #expect(session.neighborIndex(1) == 2)
+        #expect(session.neighborIndex(-1) == 0)
+        session.jump(to: 2)
+        #expect(session.neighborIndex(1) == nil)
+        session.jump(to: 0)
+        #expect(session.neighborIndex(-1) == nil)
+        #expect(store.decision(for: "b") == nil)
+        #expect(!session.canUndo)
+    }
+
+    @Test func noNeighborsWhenFinished() {
+        let session = SwipeSession(assetIDs: ["a"], startIndex: 0, store: store)
+        session.commit(.kept)
+        #expect(session.isFinished)
+        #expect(session.neighborIndex(1) == nil)
+        #expect(session.neighborIndex(-1) == nil)
+    }
 }

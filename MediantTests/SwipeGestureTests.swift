@@ -28,23 +28,24 @@ struct SwipeGestureTests {
         #expect(outcome(0, 40, predicted: CGSize(width: 0, height: 60)) == .none)
     }
 
-    @Test func rightSwipeGoesBack() {
-        #expect(outcome(100, 10) == .back)
-        #expect(outcome(40, 0, predicted: CGSize(width: 200, height: 0)) == .back)
+    @Test func rightSwipeShowsPrevious() {
+        #expect(outcome(100, 10) == .previous)
+        #expect(outcome(40, 0, predicted: CGSize(width: 200, height: 0)) == .previous)
     }
 
-    @Test func shortSlowRightDragDoesNotGoBack() {
+    @Test func leftSwipeShowsNext() {
+        #expect(outcome(-100, 10) == .next)
+        #expect(outcome(-40, 0, predicted: CGSize(width: -200, height: 0)) == .next)
+    }
+
+    @Test func shortSlowSideDragDoesNothing() {
         #expect(outcome(40, 0, predicted: CGSize(width: 60, height: 0)) == .none)
-    }
-
-    @Test func leftSwipeDoesNothing() {
-        #expect(outcome(-100, 0) == .none)
-        #expect(outcome(-40, 0, predicted: CGSize(width: -200, height: 0)) == .none)
+        #expect(outcome(-40, 0, predicted: CGSize(width: -60, height: 0)) == .none)
     }
 
     @Test func diagonalUsesBiggerAxis() {
         #expect(outcome(60, -100) == .trash)
-        #expect(outcome(100, -60) == .back)
+        #expect(outcome(100, -60) == .previous)
         // A tie counts as vertical.
         #expect(outcome(100, -100) == .trash)
     }
