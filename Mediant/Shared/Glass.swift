@@ -14,7 +14,7 @@ extension View {
                 shape.fill(.ultraThinMaterial)
                 if let tint { shape.fill(tint.opacity(0.22)) }
             }
-            .overlay(shape.strokeBorder((tint ?? .white).opacity(tint == nil ? 0.14 : 0.35), lineWidth: 1))
+            .overlay(shape.strokeBorder((tint ?? .primary).opacity(tint == nil ? 0.14 : 0.35), lineWidth: 1))
         }
     }
 }

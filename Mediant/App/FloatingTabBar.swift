@@ -53,10 +53,10 @@ struct FloatingTabBar: View {
         } label: {
             Image(systemName: symbol)
                 .font(.system(size: 15, weight: .medium))
-                .foregroundStyle(selection == tab ? .white : .secondary)
+                .foregroundStyle(selection == tab ? .primary : .secondary)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background {
-                    if selection == tab { Capsule().fill(.white.opacity(0.14)) }
+                    if selection == tab { Capsule().fill(.primary.opacity(0.14)) }
                 }
                 .contentShape(Capsule())
         }

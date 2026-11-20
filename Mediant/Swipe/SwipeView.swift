@@ -37,6 +37,8 @@ struct SwipeView: View {
                     }
                 }
             }
+            // The screen is black in both appearances, so its chips and texts stay dark-styled.
+            .environment(\.colorScheme, .dark)
         }
         .ignoresSafeArea(edges: .vertical)
         .toolbar(.hidden, for: .navigationBar)

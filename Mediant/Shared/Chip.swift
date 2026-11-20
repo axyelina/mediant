@@ -24,7 +24,7 @@ struct Chip: View {
                 Text(text)
             }
             .font(.system(size: 13, weight: .semibold))
-            .foregroundStyle(tint ?? .white)
+            .foregroundStyle(tint ?? .primary)
             .padding(.horizontal, 12)
             .frame(height: 32)
             .contentShape(Capsule())
