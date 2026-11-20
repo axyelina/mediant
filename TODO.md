@@ -90,9 +90,8 @@ subscription, no tracking, no per-swipe delete dialog, compact controls in thumb
 - [ ] "Biggest first" order for an album, or a "Large videos" smart source — fastest way to free space.
 
 ### Swiping
-- [ ] "Decide later": pass a photo without marking it. Swipe up now deletes and tap to skip was
-      removed (2026-11-17), so it needs a new way (a chip?); the run already comes back to
-      undecided photos at the end.
+- [x] "Decide later": pass a photo without marking it — swipe left / right browses with no
+      decision (2026-11-20); the run still comes back to undecided photos at the end.
 - [ ] Burst photos and Live Photos: show the count of frames / the "LIVE" badge so the user knows
       what they delete.
 - [ ] "On this day" / by-month source: swipe through one month at a time, a natural session size.
