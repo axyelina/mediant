@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// One full-screen photo or video. The whole item always shows (aspect-fit) over a blurred copy.
-/// A video shows its poster frame; it plays in a loop only while `plays` (the top card).
+/// A video shows its poster frame and a GIF its still picture; they play in a loop only while
+/// `plays` (the top card).
 struct PhotoPage: View {
     let asset: AssetInfo
     var plays = false
@@ -16,6 +17,9 @@ struct PhotoPage: View {
             AssetImage(id: asset.id, contentMode: .fit)
             if plays && asset.isVideo {
                 LoopingVideo(asset: asset)
+            }
+            if plays && asset.isAnimated {
+                AnimatedImageView(id: asset.id)
             }
         }
         .clipped()

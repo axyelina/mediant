@@ -53,6 +53,12 @@ struct AlbumGridView: View {
                                         .foregroundStyle(.white)
                                         .shadow(color: .black.opacity(0.8), radius: 2)
                                         .padding(4)
+                                } else if asset.isAnimated {
+                                    Text(verbatim: "GIF")
+                                        .font(.system(size: 11, weight: .semibold))
+                                        .foregroundStyle(.white)
+                                        .shadow(color: .black.opacity(0.8), radius: 2)
+                                        .padding(4)
                                 }
                             }
                     }
