@@ -46,6 +46,22 @@ final class ThumbnailLoader {
         return box.item
     }
 
+    /// The original file data of an image (a GIF to animate); downloads it from iCloud when
+    /// needed. Nil for a video or a failed load.
+    func imageData(for id: String) async -> Data? {
+        guard let asset = asset(for: id), asset.mediaType == .image else { return nil }
+        let options = PHImageRequestOptions()
+        options.deliveryMode = .highQualityFormat
+        options.version = .original
+        options.isNetworkAccessAllowed = true
+        let manager = manager
+        return await withCheckedContinuation { (continuation: CheckedContinuation<Data?, Never>) in
+            manager.requestImageDataAndOrientation(for: asset, options: options) { data, _, _, _ in
+                continuation.resume(returning: data)
+            }
+        }
+    }
+
     /// Fetches the PHAssets for many ids in one query off the main actor, so cells don't each query.
     func prefetch(_ ids: [String]) async {
         let missing = ids.filter { assets[$0] == nil }

@@ -65,7 +65,8 @@ final class PhotoKitLibrary: PhotoLibrary {
         fetch.enumerateObjects { asset, _, _ in
             let aspect = asset.pixelHeight > 0 ? Double(asset.pixelWidth) / Double(asset.pixelHeight) : 1
             result.append(AssetInfo(id: asset.localIdentifier, aspect: aspect,
-                                    isVideo: asset.mediaType == .video, duration: asset.duration))
+                                    isVideo: asset.mediaType == .video, duration: asset.duration,
+                                    isAnimated: asset.playbackStyle == .imageAnimated))
         }
         return result
     }

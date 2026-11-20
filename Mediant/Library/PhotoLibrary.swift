@@ -21,6 +21,8 @@ struct AssetInfo: Identifiable, Hashable {
     let aspect: Double
     let isVideo: Bool
     let duration: TimeInterval
+    /// An animated image (a GIF): it plays full screen; grids mark it "GIF".
+    var isAnimated = false
 }
 
 enum DeleteError: Error {

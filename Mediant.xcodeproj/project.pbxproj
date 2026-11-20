@@ -55,6 +55,7 @@
 		7EF4056E458A2DD04C1F027F /* VideoPlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C57B7D3AB481D52C357C73 /* VideoPlayback.swift */; };
 		7F752C965CC97EB77076A182 /* FakeTipStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB543E4BDC5D4163CA9C7634 /* FakeTipStore.swift */; };
 		8358BA470BBD99DEFE0E4F1F /* FloatingTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854BA78EEDC49F4F1C6D64C3 /* FloatingTabBar.swift */; };
+		84AF3B92A8D47F9EE9C17BEC /* AnimatedImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3B2B06FB569BD0E5F0201A /* AnimatedImageTests.swift */; };
 		878D311039B51251B6F1DC44 /* Glass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ECE53F7E5442D60438B941 /* Glass.swift */; };
 		88909D6ECBBF08456A1DB3C6 /* AlbumOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C580EA7787A56A8D59989453 /* AlbumOrder.swift */; };
 		90A74C7C422D8768658B0F92 /* SwipeSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F262B57EB936D37E5D6FC508 /* SwipeSessionTests.swift */; };
@@ -96,6 +97,7 @@
 		EFD59C9E2E249F266DFE2F20 /* SwipeGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FC5ABB2FC07F86CDAEA52 /* SwipeGesture.swift */; };
 		F8F146944C7BCAD72CCD6D46 /* VideoChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34CF208F84D5FB318096324 /* VideoChip.swift */; };
 		F9BFFA33DC9D45F5079F5D23 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546E9F75E86C23A57490AF4E /* RootView.swift */; };
+		FA19E69D5E1896F71360831C /* AnimatedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E67A68499C29A41F3732E0 /* AnimatedImage.swift */; };
 		FC6A31CCB5F7E99F559C2839 /* VideoPlaybackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37AF4CF122A661D00503B634 /* VideoPlaybackTests.swift */; };
 		FE70965FAE9D255EAC735065 /* PhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD5CB41372FAC9EE3F0CBA71 /* PhotoLibrary.swift */; };
 /* End PBXBuildFile section */
@@ -112,6 +114,7 @@
 
 /* Begin PBXFileReference section */
 		04D45246AD07112AC23B807E /* AlbumSizes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumSizes.swift; sourceTree = "<group>"; };
+		04E67A68499C29A41F3732E0 /* AnimatedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedImage.swift; sourceTree = "<group>"; };
 		09B1946BE9394A45217D5590 /* VideoTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoTime.swift; sourceTree = "<group>"; };
 		0DECFBFB4F7877183073163E /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0DF25DA03F55B8498FBFD915 /* TrashModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashModelTests.swift; sourceTree = "<group>"; };
@@ -202,6 +205,7 @@
 		F416AA8FF3F6F37FA5300C08 /* AppLanguageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguageTests.swift; sourceTree = "<group>"; };
 		F6D15CD87947B2C39FE87846 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		FAAF56233406D2E54DE8D043 /* SparkleShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleShape.swift; sourceTree = "<group>"; };
+		FD3B2B06FB569BD0E5F0201A /* AnimatedImageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedImageTests.swift; sourceTree = "<group>"; };
 		FFFAADD9DD74E8BF057A8A7B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -314,6 +318,7 @@
 			children = (
 				C91AEA651B09AF98E286EDCA /* AlbumFilter.swift */,
 				C580EA7787A56A8D59989453 /* AlbumOrder.swift */,
+				04E67A68499C29A41F3732E0 /* AnimatedImage.swift */,
 				9EA126C4C6976E8E36BF9B09 /* AppLanguage.swift */,
 				E012775299F2BC4CEA5BD46E /* ByteFormat.swift */,
 				DCE08EC501AE1D107F730A48 /* CleanupStats.swift */,
@@ -338,6 +343,7 @@
 				DA7CC638F34E922CD77981F1 /* AlbumFilterTests.swift */,
 				54027219526A60FE9BCE03FB /* AlbumOrderTests.swift */,
 				AFDB848C852B704127DB781A /* AlbumSizesTests.swift */,
+				FD3B2B06FB569BD0E5F0201A /* AnimatedImageTests.swift */,
 				F416AA8FF3F6F37FA5300C08 /* AppLanguageTests.swift */,
 				85A57719C73959F8333D509A /* AppModelTests.swift */,
 				A63478135307D4B7799434EA /* ByteFormatTests.swift */,
@@ -580,6 +586,7 @@
 				2F6ACCF78BA09783E5BB3A82 /* AlbumFilterTests.swift in Sources */,
 				C1695A850B6B02B36C86B7A2 /* AlbumOrderTests.swift in Sources */,
 				3EABAA36A27145C83CA406A6 /* AlbumSizesTests.swift in Sources */,
+				84AF3B92A8D47F9EE9C17BEC /* AnimatedImageTests.swift in Sources */,
 				BD0351F942DC764810E51B2C /* AppLanguageTests.swift in Sources */,
 				568365783573E3308853CDE4 /* AppModelTests.swift in Sources */,
 				3A73B3FB9F8BED499C173AF3 /* ByteFormatTests.swift in Sources */,
@@ -615,6 +622,7 @@
 				76263E2550D3EA78B34DEA1F /* AlbumRow.swift in Sources */,
 				1DC2CB0A54371B74E2CD7B7A /* AlbumSizes.swift in Sources */,
 				A56DA79844D355E7CD05D1F3 /* AlbumsView.swift in Sources */,
+				FA19E69D5E1896F71360831C /* AnimatedImage.swift in Sources */,
 				B284AF5B4D8107DCE39A8F52 /* AppLanguage.swift in Sources */,
 				AF94477DAD6993A1DFB1B8A9 /* AppModel.swift in Sources */,
 				345B70225A4B3B7F88FF8F20 /* AssetImage.swift in Sources */,
