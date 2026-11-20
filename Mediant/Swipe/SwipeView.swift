@@ -101,6 +101,7 @@ struct SwipeView: View {
     }
 
     /// Up = delete, down = keep; left / right = the next / previous photo, with no decision.
+    /// Right from the left screen edge = back to the album.
     private func drag(_ session: SwipeSession, width: CGFloat, height: CGFloat) -> some Gesture {
         DragGesture(minimumDistance: 8)
             .onChanged { value in
@@ -108,17 +109,24 @@ struct SwipeView: View {
                 // The bigger axis decides which way the card follows.
                 let isVertical = abs(value.translation.height) >= abs(value.translation.width)
                 dragY = isVertical ? value.translation.height : 0
-                let dx = isVertical ? 0 : value.translation.width
+                // The back swipe from the left edge leaves the card in place.
+                let isBack = SwipeGesture.startsAtBackEdge(x: value.startLocation.x) && value.translation.width > 0
+                let dx = isVertical || isBack ? 0 : value.translation.width
                 // No photo on that side: the card only gives a little.
                 dragX = session.neighborIndex(dx < 0 ? 1 : -1) == nil ? dx / 4 : dx
             }
             .onEnded { value in
                 guard !isAnimating else { return }
-                switch SwipeGesture.outcome(translation: value.translation, predictedEnd: value.predictedEndTranslation) {
+                switch SwipeGesture.outcome(startX: value.startLocation.x, translation: value.translation,
+                                            predictedEnd: value.predictedEndTranslation) {
                 case .trash: commit(.trashed, session: session, height: height)
                 case .keep: commit(.kept, session: session, height: height)
                 case .next: browse(1, session: session, width: width)
                 case .previous: browse(-1, session: session, width: width)
+                case .back:
+                    dragY = 0
+                    dragX = 0
+                    dismiss()
                 case .none: springBack()
                 }
             }
