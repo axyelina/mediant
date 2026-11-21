@@ -44,6 +44,10 @@ protocol PhotoLibrary: AnyObject, Sendable {
     /// Stops early (partial result) when the current task is cancelled.
     func fileSizes(inAlbum id: String, cached: [String: Int64?]) -> [String: Int64?]
     func existingIDs(among ids: [String]) -> Set<String>
+    /// Writes the item's file (the edited version when there is one, else the original; a video
+    /// stays a video) into `directory` with its own file name, downloading from iCloud when
+    /// needed. Returns the file URL.
+    func exportFile(ofAsset id: String, to directory: URL) async throws -> URL
     /// Shows the iOS confirmation dialog. Throws `DeleteError.declined` when the user declines.
     /// Photos that cannot be deleted (shared or synced) are skipped. Returns the ids really deleted.
     func delete(_ ids: [String]) async throws -> [String]

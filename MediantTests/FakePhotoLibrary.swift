@@ -18,6 +18,16 @@ final class FakePhotoLibrary: PhotoLibrary, @unchecked Sendable {
     func requestAccess() async -> AccessLevel { level }
     func albums() -> [AlbumInfo] { albumList }
     func assets(inAlbum id: String) -> [AssetInfo] { assetsByAlbum[id] ?? [] }
+    /// Set to make `exportFile` fail.
+    var exportError: Error?
+
+    func exportFile(ofAsset id: String, to directory: URL) async throws -> URL {
+        if let exportError { throw exportError }
+        let url = directory.appendingPathComponent("\(id).jpg")
+        try Data("fake".utf8).write(to: url)
+        return url
+    }
+
     func assets(withIDs ids: [String]) -> [AssetInfo] {
         let all = assetsByAlbum.values.joined()
         return ids.compactMap { id in all.first { $0.id == id } }

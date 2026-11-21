@@ -135,4 +135,20 @@ final class PhotoKitLibrary: PhotoLibrary {
         default: .denied
         }
     }
+
+    func exportFile(ofAsset id: String, to directory: URL) async throws -> URL {
+        guard let asset = PHAsset.fetchAssets(withLocalIdentifiers: [id], options: nil).firstObject
+        else { throw CocoaError(.fileNoSuchFile) }
+        let resources = PHAssetResource.assetResources(for: asset)
+        // The current version first (edited, if the user edited it in Photos), else the original.
+        let order: [PHAssetResourceType] = asset.mediaType == .video
+            ? [.fullSizeVideo, .video] : [.fullSizePhoto, .photo]
+        guard let resource = order.lazy.compactMap({ type in resources.first { $0.type == type } }).first
+        else { throw CocoaError(.fileNoSuchFile) }
+        let url = directory.appendingPathComponent(resource.originalFilename)
+        let options = PHAssetResourceRequestOptions()
+        options.isNetworkAccessAllowed = true
+        try await PHAssetResourceManager.default().writeData(for: resource, toFile: url, options: options)
+        return url
+    }
 }
