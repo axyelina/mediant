@@ -46,7 +46,6 @@ struct SwipeView: View {
         .ignoresSafeArea(edges: .vertical)
         .toolbar(.hidden, for: .navigationBar)
         .environment(playback)
-        .sensoryFeedback(.impact(weight: .light), trigger: session?.index)
         .onAppear {
             if session == nil {
                 session = SwipeSession(assetIDs: route.assets.map(\.id), startIndex: route.startIndex, store: model.store)
