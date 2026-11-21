@@ -197,7 +197,10 @@ struct SwipeView: View {
                 HStack {
                     Chip("‹ Back") { dismiss() }
                     Spacer()
-                    if let id = session.currentID { ShareChip(id: id).id(id) }
+                    if !session.isFinished {
+                        let asset = route.assets[session.index]
+                        ShareChip(asset: asset).id(asset.id)
+                    }
                 }
                 .padding(.horizontal, 12)
                 .padding(.top, proxy.safeAreaInsets.top + 52)

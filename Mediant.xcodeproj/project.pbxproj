@@ -43,6 +43,7 @@
 		568365783573E3308853CDE4 /* AppModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A57719C73959F8333D509A /* AppModelTests.swift */; };
 		56A5DAC30E111CAC27502AED /* LoopingVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28671C3045B388A90D0C03C /* LoopingVideo.swift */; };
 		56F87360147A9269D144D9BC /* LaunchArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9A5730B48A83BAB327B858 /* LaunchArt.swift */; };
+		57F209D3D3CC9CCB085E68D6 /* MediaKindTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B74603E00F816DA26E38E52E /* MediaKindTests.swift */; };
 		5B1CBE778224462E2E875E86 /* SwipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2EF1A587CF8B22CB68A5FD /* SwipeView.swift */; };
 		67E63F9ABBB40F4A71E593F6 /* TipCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF609E86FB61D2F3119EEB6 /* TipCard.swift */; };
 		697110AF00A5E5D2A64DC089 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6D15CD87947B2C39FE87846 /* PrivacyPolicyView.swift */; };
@@ -80,6 +81,7 @@
 		BDF8BB6F8F6273217B7A1361 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = CC6CB65918FD9C02A021813E /* Localizable.xcstrings */; };
 		BFE2524A11F9737BAFF83040 /* TipSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E44B90B2DF9578334F57E6 /* TipSize.swift */; };
 		C1695A850B6B02B36C86B7A2 /* AlbumOrderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54027219526A60FE9BCE03FB /* AlbumOrderTests.swift */; };
+		C2CA2655C46041683A796FC8 /* MediaKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EBB5ADBCBB967344FC1773 /* MediaKind.swift */; };
 		C408A26C2877F14D9576821F /* StoreKitTipStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 982DDCD09206D58B6CFFAAA1 /* StoreKitTipStore.swift */; };
 		C6514F56C5D836AE6D08BE79 /* FireworksPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3D57E5D6922B8F668577AF /* FireworksPlan.swift */; };
 		C6B66A159C6258EF58BE7001 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = F710E882CFE02CF0AE199041 /* FirebaseCrashlytics */; };
@@ -185,6 +187,8 @@
 		AA802C76682386D812EA129A /* ThumbnailLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailLoader.swift; sourceTree = "<group>"; };
 		AF3D57E5D6922B8F668577AF /* FireworksPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireworksPlan.swift; sourceTree = "<group>"; };
 		AFDB848C852B704127DB781A /* AlbumSizesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumSizesTests.swift; sourceTree = "<group>"; };
+		B6EBB5ADBCBB967344FC1773 /* MediaKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaKind.swift; sourceTree = "<group>"; };
+		B74603E00F816DA26E38E52E /* MediaKindTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaKindTests.swift; sourceTree = "<group>"; };
 		B966FF0D78C2AD5D228B994D /* TipStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipStore.swift; sourceTree = "<group>"; };
 		BB543E4BDC5D4163CA9C7634 /* FakeTipStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeTipStore.swift; sourceTree = "<group>"; };
 		BD5CB41372FAC9EE3F0CBA71 /* PhotoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibrary.swift; sourceTree = "<group>"; };
@@ -335,6 +339,7 @@
 				3F7D283517554BB3A2827263 /* Decision.swift */,
 				2BD7C31EE7E1AEFDDDBCA0D2 /* DecisionStore.swift */,
 				AF3D57E5D6922B8F668577AF /* FireworksPlan.swift */,
+				B6EBB5ADBCBB967344FC1773 /* MediaKind.swift */,
 				695BF444204ECCEC4C128D73 /* SharedFiles.swift */,
 				231FC5ABB2FC07F86CDAEA52 /* SwipeGesture.swift */,
 				193059841FE73FA07627E93F /* SwipeSession.swift */,
@@ -364,6 +369,7 @@
 				BB543E4BDC5D4163CA9C7634 /* FakeTipStore.swift */,
 				36267727288734F43433C77A /* FireworksPlanTests.swift */,
 				8F530D0E120C59DE789626A5 /* LaunchArtTests.swift */,
+				B74603E00F816DA26E38E52E /* MediaKindTests.swift */,
 				3B16DEFFE999DB671EA9126E /* SharedFilesTests.swift */,
 				2532B53E986EE09841C67283 /* StoreKitTipStoreTests.swift */,
 				5C55FC54362417B1604DE215 /* SwipeGestureTests.swift */,
@@ -608,6 +614,7 @@
 				7F752C965CC97EB77076A182 /* FakeTipStore.swift in Sources */,
 				DCE06FBED79E8570E565FF36 /* FireworksPlanTests.swift in Sources */,
 				179E9308DA080B68CE601AD0 /* LaunchArtTests.swift in Sources */,
+				57F209D3D3CC9CCB085E68D6 /* MediaKindTests.swift in Sources */,
 				78283DF7C68DD70D209B276E /* SharedFilesTests.swift in Sources */,
 				AF8177C83C87FF2C157F2575 /* StoreKitTipStoreTests.swift in Sources */,
 				14F4E92C461750E31CFD8817 /* SwipeGestureTests.swift in Sources */,
@@ -653,6 +660,7 @@
 				878D311039B51251B6F1DC44 /* Glass.swift in Sources */,
 				56F87360147A9269D144D9BC /* LaunchArt.swift in Sources */,
 				56A5DAC30E111CAC27502AED /* LoopingVideo.swift in Sources */,
+				C2CA2655C46041683A796FC8 /* MediaKind.swift in Sources */,
 				7E66BE37DFF1CDE3952D2681 /* MediantApp.swift in Sources */,
 				3175F719A367D74687A7C0DB /* NotificationCenterClient.swift in Sources */,
 				7DC5BB4C334CAC51771C6412 /* PhotoKitLibrary.swift in Sources */,

@@ -953,12 +953,32 @@
         }
       }
     },
+    "The GIF could not be loaded. Check the connection and try again.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось загрузить GIF. Проверьте подключение и попробуйте ещё раз."
+          }
+        }
+      }
+    },
     "The photo could not be loaded. Check the connection and try again.": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
             "value": "Не удалось загрузить фото. Проверьте подключение и попробуйте ещё раз."
+          }
+        }
+      }
+    },
+    "The video could not be loaded. Check the connection and try again.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось загрузить видео. Проверьте подключение и попробуйте ещё раз."
           }
         }
       }

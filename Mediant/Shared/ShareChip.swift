@@ -5,10 +5,11 @@ import UIKit
 /// A tap exports the item's real file (`SharedFiles`), with a spinner in the chip meanwhile,
 /// then opens the iOS share sheet; the copy is deleted when the sheet closes. A failed load
 /// shows an alert. A tap while it loads does nothing. The load stops when the chip goes away;
-/// give the chip `.id(itemID)` so a new item gets a new chip.
+/// give the chip `.id(asset.id)` so a new item gets a new chip.
 struct ShareChip: View {
     @Environment(AppModel.self) private var model
-    let id: String
+    let asset: AssetInfo
+    private var id: String { asset.id }
 
     @State private var isLoading = false
     @State private var failed = false
@@ -33,7 +34,11 @@ struct ShareChip: View {
         .alert("Couldn't share", isPresented: $failed) {
             Button("OK", role: .cancel) {}
         } message: {
-            Text("The photo could not be loaded. Check the connection and try again.")
+            switch MediaKind(asset) {
+            case .photo: Text("The photo could not be loaded. Check the connection and try again.")
+            case .video: Text("The video could not be loaded. Check the connection and try again.")
+            case .gif: Text("The GIF could not be loaded. Check the connection and try again.")
+            }
         }
     }
 

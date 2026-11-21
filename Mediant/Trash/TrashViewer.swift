@@ -155,7 +155,7 @@ struct TrashViewer: View {
                 HStack {
                     Chip("‹ Back") { dismiss() }
                     Spacer()
-                    ShareChip(id: asset.id).id(asset.id)
+                    ShareChip(asset: asset).id(asset.id)
                 }
                 .padding(.horizontal, 12)
                 .padding(.top, proxy.safeAreaInsets.top + 52)
