@@ -28,7 +28,7 @@ struct PrivacyPolicyView: View {
                 neverCollects
 
                 topic("How it works", systemImage: "iphone") {
-                    Text("The app reads your library on your iPhone to show the photos you swipe. Nothing is uploaded or copied anywhere. With iCloud Photos, iOS can download a photo from iCloud to show it; that stays between your iPhone and Apple. When you tap Share, the app makes a temporary copy of that photo for the iOS share sheet. It goes only where you send it, and the app deletes the copy after.")
+                    Text("The app reads your library on your iPhone to show the photos you swipe. Nothing is uploaded anywhere. With iCloud Photos, iOS can download a photo from iCloud to show it; that stays between your iPhone and Apple. When you tap Share, the app makes a temporary copy of that photo or video for the iOS share sheet. It goes only where you send it, and the app deletes the copy when you close the sheet (or, at the latest, when you share the next time).")
                 }
                 topic("Saved on your iPhone", systemImage: "internaldrive") {
                     Text("The app keeps a few things in its own storage: what you kept or put in the Trash, the space you freed, album sizes, your language and the reminder setting. They are part of your iPhone backup like other app data and go away when you delete the app.")

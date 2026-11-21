@@ -963,12 +963,12 @@
         }
       }
     },
-    "The app reads your library on your iPhone to show the photos you swipe. Nothing is uploaded or copied anywhere. With iCloud Photos, iOS can download a photo from iCloud to show it; that stays between your iPhone and Apple. When you tap Share, the app makes a temporary copy of that photo for the iOS share sheet. It goes only where you send it, and the app deletes the copy after.": {
+    "The app reads your library on your iPhone to show the photos you swipe. Nothing is uploaded anywhere. With iCloud Photos, iOS can download a photo from iCloud to show it; that stays between your iPhone and Apple. When you tap Share, the app makes a temporary copy of that photo or video for the iOS share sheet. It goes only where you send it, and the app deletes the copy when you close the sheet (or, at the latest, when you share the next time).": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Приложение читает медиатеку на вашем iPhone, чтобы показать фото, которые вы листаете. Ничего не загружается и никуда не копируется. С Фото iCloud iOS может скачать фото из iCloud, чтобы его показать; это остаётся между вашим iPhone и Apple. Когда вы нажимаете «Поделиться», приложение делает временную копию этого фото для меню «Поделиться» iOS. Копия уходит только туда, куда вы её отправите, и после этого приложение её удаляет."
+            "value": "Приложение читает медиатеку на вашем iPhone, чтобы показать фото, которые вы листаете. Ничего никуда не загружается. С Фото iCloud iOS может скачать фото из iCloud, чтобы его показать; это остаётся между вашим iPhone и Apple. Когда вы нажимаете «Поделиться», приложение делает временную копию этого фото или видео для меню «Поделиться» iOS. Копия уходит только туда, куда вы её отправите, и приложение удаляет её, когда вы закрываете меню (или, самое позднее, когда вы делитесь в следующий раз)."
           }
         }
       }

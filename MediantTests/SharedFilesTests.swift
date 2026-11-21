@@ -41,4 +41,16 @@ struct SharedFilesTests {
         await #expect(throws: CocoaError.self) { try await files.prepare("a") }
         #expect(folders().isEmpty)
     }
+
+    @Test func aNewShareDeletesCopiesLeftFromEarlierShares() async throws {
+        // A copy stays when the app is killed while sharing, or when the sheet could not open.
+        let old = base.appendingPathComponent("old")
+        try FileManager.default.createDirectory(at: old, withIntermediateDirectories: true)
+        try Data("x".utf8).write(to: old.appendingPathComponent("IMG_1.HEIC"))
+        let files = SharedFiles(library: library, baseDirectory: base)
+        let url = try await files.prepare("a")
+        #expect(!FileManager.default.fileExists(atPath: old.path))
+        #expect(folders().count == 1)
+        #expect(FileManager.default.fileExists(atPath: url.path))
+    }
 }

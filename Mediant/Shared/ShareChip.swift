@@ -4,13 +4,15 @@ import UIKit
 /// The share chip at the top right of the full-screen photo (swipe screen and Trash viewer).
 /// A tap exports the item's real file (`SharedFiles`), with a spinner in the chip meanwhile,
 /// then opens the iOS share sheet; the copy is deleted when the sheet closes. A failed load
-/// shows an alert. A tap while it loads does nothing.
+/// shows an alert. A tap while it loads does nothing. The load stops when the chip goes away;
+/// give the chip `.id(itemID)` so a new item gets a new chip.
 struct ShareChip: View {
     @Environment(AppModel.self) private var model
     let id: String
 
     @State private var isLoading = false
     @State private var failed = false
+    @State private var loading: Task<Void, Never>?
 
     var body: some View {
         Button(action: share) {
@@ -27,6 +29,7 @@ struct ShareChip: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Share")
+        .onDisappear { loading?.cancel() }
         .alert("Couldn't share", isPresented: $failed) {
             Button("OK", role: .cancel) {}
         } message: {
@@ -38,18 +41,19 @@ struct ShareChip: View {
         guard !isLoading else { return }
         isLoading = true
         let files = SharedFiles(library: model.library)
-        Task {
+        loading = Task {
             defer { isLoading = false }
             do {
                 let url = try await files.prepare(id)
-                guard let presenter = Self.topViewController() else { return files.finish(url) }
+                // The user left this item meanwhile: no sheet for it.
+                guard !Task.isCancelled, let presenter = Self.topViewController() else { return files.finish(url) }
                 let sheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
                 sheet.completionWithItemsHandler = { _, _, _, _ in Task { @MainActor in files.finish(url) } }
                 // iPad needs an anchor; on iPhone it is ignored.
                 sheet.popoverPresentationController?.sourceView = presenter.view
                 presenter.present(sheet, animated: true)
             } catch {
-                failed = true
+                if !Task.isCancelled { failed = true }
             }
         }
     }
