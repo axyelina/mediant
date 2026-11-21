@@ -453,6 +453,16 @@
         }
       }
     },
+    "Couldn't share": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось поделиться"
+          }
+        }
+      }
+    },
     "Crash reports": {
       "localizations": {
         "ru": {
@@ -593,12 +603,12 @@
         }
       }
     },
-    "Last updated: November 10, 2026": {
+    "Last updated: November 21, 2026": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Обновлено: 10 ноября 2026 г."
+            "value": "Обновлено: 21 ноября 2026 г."
           }
         }
       }
@@ -833,6 +843,16 @@
         }
       }
     },
+    "Share": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Поделиться"
+          }
+        }
+      }
+    },
     "Saved on your iPhone": {
       "localizations": {
         "ru": {
@@ -933,12 +953,22 @@
         }
       }
     },
-    "The app reads your library on your iPhone to show the photos you swipe. Nothing is uploaded or copied anywhere. With iCloud Photos, iOS can download a photo from iCloud to show it; that stays between your iPhone and Apple.": {
+    "The photo could not be loaded. Check the connection and try again.": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Приложение читает медиатеку на вашем iPhone, чтобы показать фото, которые вы листаете. Ничего не загружается и никуда не копируется. С Фото iCloud iOS может скачать фото из iCloud, чтобы его показать; это остаётся между вашим iPhone и Apple."
+            "value": "Не удалось загрузить фото. Проверьте подключение и попробуйте ещё раз."
+          }
+        }
+      }
+    },
+    "The app reads your library on your iPhone to show the photos you swipe. Nothing is uploaded or copied anywhere. With iCloud Photos, iOS can download a photo from iCloud to show it; that stays between your iPhone and Apple. When you tap Share, the app makes a temporary copy of that photo for the iOS share sheet. It goes only where you send it, and the app deletes the copy after.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приложение читает медиатеку на вашем iPhone, чтобы показать фото, которые вы листаете. Ничего не загружается и никуда не копируется. С Фото iCloud iOS может скачать фото из iCloud, чтобы его показать; это остаётся между вашим iPhone и Apple. Когда вы нажимаете «Поделиться», приложение делает временную копию этого фото для меню «Поделиться» iOS. Копия уходит только туда, куда вы её отправите, и после этого приложение её удаляет."
           }
         }
       }

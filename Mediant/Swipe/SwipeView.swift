@@ -197,6 +197,7 @@ struct SwipeView: View {
                 HStack {
                     Chip("‹ Back") { dismiss() }
                     Spacer()
+                    if let id = session.currentID { ShareChip(id: id) }
                 }
                 .padding(.horizontal, 12)
                 .padding(.top, proxy.safeAreaInsets.top + 52)
